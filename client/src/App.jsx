@@ -3,7 +3,9 @@ import './App.css';
 import {BrowserRouter as Switch, Link, Route, Router} from 'react-router-dom'
 // import { Switch, Route } from 'react-router';
 
-import UserProfile from './userProfile/UserProfile';
+// import UserProfile from './userProfile/UserProfile';
+import Layout from './component/Layout';
+
 //import Login from './Login';
 
 
@@ -23,7 +25,7 @@ class App extends Component {
                     exact={true}
                     path="/"
                     component={props => (
-                        <UserProfile
+                        <Layout
                             {...props}
                             timestamp={new Date().toString()}
                             onHeaderTitleChange={this.handleHeaderTitleChange}

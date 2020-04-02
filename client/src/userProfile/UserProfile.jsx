@@ -1,29 +1,19 @@
 import React, { Component, Fragment } from 'react';
-
-import {DatePicker} from '@progress/kendo-dateinputs-react-wrapper';
 import {MaskedTextBox} from '@progress/kendo-inputs-react-wrapper';
 import { ComboBox, DropDownList } from '@progress/kendo-react-dropdowns';
 import { Dialog, DialogActionsBar } from '@progress/kendo-react-dialogs';
-import { Menu } from '@progress/kendo-react-layout';
-import { AutoComplete } from '@progress/kendo-react-dropdowns';
-
-
-
 import {TabStrip, TabStripTab} from '@progress/kendo-react-layout';
-// import {AvatarUploader} from 'react-avatar-uploader';
-// import AvatarUploader from '../../src';
 import '@progress/kendo-ui';
-// import '@progress/kendo-theme-default/all.css';
 import '@progress/kendo-theme-default';
 // import {BrowserRouter as Router, Link, Route } from 'react-router-dom'
 // import {Button} from "./components/Button";
 import { Button } from '@progress/kendo-react-buttons';
 import avatar from './img_avatar.jpg'; // with import
 
-
 import {saveUser} from'./UserService';
 import TopBar from '../component/TopBar';
-
+import Course from '../course/Course';
+import QAndA from '../course/Course';
 
 class UserProfile extends Component {
     constructor(props) {
@@ -34,9 +24,6 @@ class UserProfile extends Component {
             program: "",
             email: "",
             regNumber: 0,
-
-            //Tab selected
-            selected: 0,
 
             //drop down selected data
             selectedType: null,
@@ -142,9 +129,7 @@ class UserProfile extends Component {
         })
     };
 
-    handleSelect = (e) => {
-        this.setState({selected: e.selected})
-    };
+
 
     readURL = event => {
         var image = document.getElementById('imageUpload');
@@ -164,18 +149,7 @@ class UserProfile extends Component {
 
     render(){
         return (
-
-<div >
-    <TopBar headerTitle=" "
-            // displayName={this.props.displayName} logoutCallback={this.props.logoutCallback}
-        />
-
-    <div className="container-fluid">
-                <div className="main-card">
-
-                <TabStrip selected={this.state.selected} onSelect={this.handleSelect}>
-
-                    <TabStripTab title="User Profile">
+            <div className="container-fluid">
 
                         {/*mt = margin top mb = margin buttom*/}
                         <div className="main-heading mt-4 mb-4"> <b> USER DETAILS </b></div>
@@ -431,50 +405,7 @@ class UserProfile extends Component {
 
                         </div>
 
-                    </TabStripTab>
-
-
-
-                    <TabStripTab title="Course Details">
-                        {/*mt = margin top mb = margin buttom*/}
-                        <div className="main-heading mt-4 mb-4"> <b> COURSE DETAILS </b></div>
-                        <div className="row">
-                            <div className="col-md-3 course-navigation">
-                                <h6>My Course List</h6>
-                            </div>
-
-                            <div className="col-md-9">
-                                <div className="row">
-                                    <h6> EEX6598-Software Construction </h6>
-                                    <p> Hello and welcome to the course!
-                                        You have logged into the course on EEI6567 - Software Architecture and Design of the Bachelor of Software Engineering. This course comprises of System software and different areas of operating system management such as Processor management, Memory Management, Device management, File management, Network organization and System management.
-
-                                        In this course students will learn how to analyze and design large scale software systems and apply different architecture styles to software design, identify and define quality attributes for a software system, address functional and non-functional requirements in the architecture and measure architecturally significant quality attributes and metrics.
-
-                                        This course is comprised of 10 units namely, </p>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </TabStripTab>
-
-
-
-                    <TabStripTab title="Q And A">
-                        <p>
-                            sdfjuhgf
-                        </p>
-                    </TabStripTab>
-
-                </TabStrip>
-
-
-
-
-            </div>
-            </div>
-            </div>
+                </div>
         );
     }
 }

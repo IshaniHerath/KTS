@@ -11,11 +11,8 @@ class TopBar extends Component {
     render() {
         return (
         <div className="top-bar">
-
                 <div className="page-title">Knowledge Transferring System</div>
-
                 <div className="vertical-menu-seperator" />
-
                 <div className="global-search">
                     <div className="row">
                         <div className="mr-5">
