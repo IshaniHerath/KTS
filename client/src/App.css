@@ -14,6 +14,11 @@
   color: white;
 }
 
+.img-avatar{
+    vertical-align: middle;
+    border-radius: 50%;
+}
+
 .App-title {
   font-size: 1.5em;
 }
@@ -58,6 +63,68 @@
 
 .row + .row {
   margin-top: 5px;
+}
+
+
+
+.k-tabstrip .k-animation-container {
+  width: 90%;
+}
+
+.top-bar {
+
+  /*background: #ffffff;*/
+  /*color: #42c1d2 !important;*/
+
+  /*background: #104260;*/
+  /*color: #ffffff !important;*/
+
+  background: #42c1d2;
+
+  /*border: 1px solid #104260;*/
+
+  height: 48px;
+  padding: 10px;
+  /*width: 90%;*/
+  -webkit-box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.3);
+}
+
+.course-navigation{
+  background: #bceef5;
+}
+
+.top-bar .global-search {
+  float: right;
+}
+
+.searchbar {
+  border-color: #104260 !important;
+}
+
+.top-bar > div {
+  display: inline-block;
+}
+
+.top-bar-wrapper {
+  position: fixed;
+  width: inherit;
+  height: 48px;
+  z-index: 2;
+}
+
+.top-bar .page-title {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.85rem;
+  opacity: 0.5;
+  margin-top: 5px;
+  margin-left: 6px;
+}
+
+.top-bar .vertical-menu-seperator {
+  display: none;
 }
 
 @keyframes App-logo-spin {
