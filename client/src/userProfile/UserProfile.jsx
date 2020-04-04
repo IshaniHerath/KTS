@@ -1,8 +1,7 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, useEffect, useState } from 'react';
 import {MaskedTextBox} from '@progress/kendo-inputs-react-wrapper';
 import { ComboBox, DropDownList } from '@progress/kendo-react-dropdowns';
 import { Dialog, DialogActionsBar } from '@progress/kendo-react-dialogs';
-import {TabStrip, TabStripTab} from '@progress/kendo-react-layout';
 import '@progress/kendo-ui';
 import '@progress/kendo-theme-default';
 // import {BrowserRouter as Router, Link, Route } from 'react-router-dom'
@@ -11,9 +10,38 @@ import { Button } from '@progress/kendo-react-buttons';
 import avatar from './img_avatar.jpg'; // with import
 
 import {saveUser} from'./UserService';
-import TopBar from '../component/TopBar';
-import Course from '../course/Course';
-import QAndA from '../course/Course';
+import RaisedButton from "material-ui/RaisedButton";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+
+// const ListTodo = () => {
+//     console.log("XXXXXXXXXXXXXXXXXXXXXXXX");
+//
+//     const [allowances, setAllowances] = useState([]);
+//     useEffect(() => {
+//         console.log("XXXXXXXXXXXXXXXXXXXXXXXX");
+//         fetch("http://localhost:5000/userProfile/")
+//             .then(data => {
+//                 console.log(data.json);
+//                 return data.json();
+//             })
+//             .then(data => {
+//                 setAllowances(data);
+//             })
+//             .catch(err => {
+//                 console.log("err : ", err);
+//             });
+//     },[]);
+
+// };
+
+//true
+// // Add this in node_modules/react-dom/index.js
+// window.React1 = require('react');
+//
+// // Add this in your component file
+// require('react-dom');
+// window.React2 = require('react');
+// console.log(window.React1 === window.React2);
 
 class UserProfile extends Component {
     constructor(props) {
@@ -34,12 +62,10 @@ class UserProfile extends Component {
         }
     }
 
-
     componentDidMount() {
         window.scrollTo(0, 0);
         this.isMount = true;
         // this.setHeaderTitle();
-
     }
 
     handleOnChangeCombo = event => {
@@ -55,7 +81,6 @@ class UserProfile extends Component {
     };
 
     handleSubmit = event => {
-
         //Do not refresh the page
         event.preventDefault();
 
@@ -108,7 +133,8 @@ class UserProfile extends Component {
                             })
                     })
             }
-      };
+    };
+
 
     toggleDialog = (message, title) => {
         this.setState({
@@ -117,7 +143,6 @@ class UserProfile extends Component {
             dialogTitle: title,
         });
     };
-
 
     onClickCancel = event => {
         this.setState({
@@ -128,8 +153,6 @@ class UserProfile extends Component {
             selectedType: ""
         })
     };
-
-
 
     readURL = event => {
         var image = document.getElementById('imageUpload');
@@ -317,48 +340,31 @@ class UserProfile extends Component {
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
 
 
 
                                 <div className="row">
+                                     {/*<div className="col-md-12 btn-align-right">*/}
+                                         <MuiThemeProvider>
+                                             <React.Fragment>
+                                                 <RaisedButton
+                                                     className={"rbtn-primary"}
+                                                     primary = {true}
+                                                     variant="contained"
+                                                     onClick={this.handleSubmit}
+                                                 >SAVE</RaisedButton>
 
-                                     <div className="col-md-12 btn-align-right">
-
-
-                                         <button className={"btn btn-light"} onClick={this.onClickCancel}>
-                                             CANCEL
-                                         </button>
-
-                                            {/*<Button*/}
-                                            {/*    onClick={this.onClickCancel}*/}
-                                            {/*    type="button"*/}
-                                            {/*    // buttonStyle="btn--primary--outline"*/}
-                                            {/*    // buttonSize="btn--medium"*/}
-                                            {/*    // primary={true}*/}
-                                            {/*>*/}
-                                            {/*    CANCEL*/}
-                                            {/*</Button>*/}
-
-                                         <button className={"btn btn-primary"} onClick={this.handleSubmit}>
-                                             SAVE
-                                         </button>
-
-
-                                            {/*<Button*/}
-                                            {/*    onClick={this.handleSubmit}*/}
-                                            {/*    type="submit"*/}
-                                            {/*    primary={true}*/}
-                                            {/*    // buttonStyle="btn--primary--solid"*/}
-                                            {/*    // buttonSize="btn--medium"*/}
-                                            {/*>*/}
-                                            {/*    SAVE*/}
-                                            {/*</Button>*/}
-                                        </div>
-
+                                                 <RaisedButton
+                                                     className={"rbtn-primary"}
+                                                     color="primary"
+                                                     variant="contained"
+                                                     onClick={this.onClickCancel}
+                                                 >CANCEL</RaisedButton>
+                                             </React.Fragment>
+                                        </MuiThemeProvider>
+                                    {/*</div>*/}
                                 </div>
-
 
                             </div>
 
@@ -368,13 +374,42 @@ class UserProfile extends Component {
 
                         <div className="main-heading">My Courses </div>
                             <div className="row">
-                                <div className="col-md-3">
-                                    <div className="row">
-                                        <div className="col-md-5">
-                                            course list here
-                                        </div>
-                                    </div>
-                                </div>
+                                course list here
+                                <Fragment>
+                                    <table className="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Firstname</th>
+                                            <th>Lastname</th>
+                                            <th>Email</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>John</td>
+                                            <td>Doe</td>
+                                            <td>john@example.com</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Mary</td>
+                                            <td>Moe</td>
+                                            <td>mary@example.com</td>
+                                        </tr>
+                                        <tr>
+                                            <td>July</td>
+                                            <td>Dooley</td>
+                                            <td>july@example.com</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </Fragment>
+                                {/*<div className="col-md-3">*/}
+                                {/*    <div className="row">*/}
+                                {/*        <div className="col-md-5">*/}
+                                {/*            course list here*/}
+                                {/*        </div>*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
                             </div>
 
                         <div>
