@@ -114,12 +114,31 @@
   box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.3);
 }
 
+.course-main{
+  text-align: left;
+  /*Left: 4,*/
+}
+
 .course-navigation{
   background: #bceef5;
 }
 
+.styles-nested{
+  text-align: inherit;
+  padding : 40px;
+  border-left-width: 60px;
+}
+
+.appBar-dialog{
+  position: relative;
+}
+
 .top-bar .global-search {
   float: right;
+}
+
+.toolbar-button{
+  float: right !important;
 }
 
 .top-bar{
