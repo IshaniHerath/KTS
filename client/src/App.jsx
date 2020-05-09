@@ -7,6 +7,8 @@ import Layout from './component/Layout';
 import Course from './course/Course';
 import Login from './login/Login';
 import Register from './register/Register';
+import Home from './ui/dashboard/Home';
+import SideBar from './ui/dashboard/SideBar';
 
 import './App.css';
 
@@ -18,9 +20,9 @@ class App extends Component {
                 <Switch>
                     <Route
                         exact={true}
-                        path="/"
+                        path="/home"
                         component={props => (
-                            <Layout
+                            <Home
                                 {...props}
                                 timestamp={new Date().toString()}
                                 onHeaderTitleChange={this.handleHeaderTitleChange}
@@ -29,9 +31,20 @@ class App extends Component {
                     />
                     <Route
                         exact={true}
-                        path="/login"
+                        path="/sidebar"
                         component={props => (
-                            <Login
+                            <SideBar
+                                {...props}
+                                timestamp={new Date().toString()}
+                                onHeaderTitleChange={this.handleHeaderTitleChange}
+                            />
+                        )}
+                    />
+                    <Route
+                        exact={true}
+                        path="/"
+                        component={props => (
+                            <Layout
                                 {...props}
                                 timestamp={new Date().toString()}
                                 onHeaderTitleChange={this.handleHeaderTitleChange}
