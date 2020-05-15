@@ -1,185 +1,268 @@
 .App {
-  text-align: center;
+    text-align: center;
 }
 
-.xxx{
-  align-items: center;
-  justify-content: center;
+.xxx {
+    align-items: center;
+    justify-content: center;
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+    animation: App-logo-spin infinite 20s linear;
+    height: 80px;
 }
 
 .App-header {
-  background-color: #020022;
-  height: 50px;
-  padding: 20px;
-  color: white;
+    background-color: #020022;
+    height: 50px;
+    padding: 20px;
+    color: white;
 }
 
-.img-avatar{
-    vertical-align: middle;
+.img-avatar {
+    /*vertical-align: middle;*/
     border-radius: 50%;
+    /*object-fit: cover;*/
 }
 
 .App-title {
-  font-size: 1.5em;
+    font-size: 1.5em;
 }
 
 .App-intro {
-  font-size: large;
+    font-size: large;
 }
 
 .main-seperator {
-  border-bottom: 2px solid #ffa300;
-  width: calc(100% + 30px);
-  margin: 20px -15px;
+    border-bottom: 2px solid #ffa300;
+    width: calc(100% + 30px);
+    margin: 20px -15px;
 }
 
 
 .main-card {
-  border-radius: 4px;
-  padding: 15px;
-  margin: 15px;
-  -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
-  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    /*height: 22px;*/
+    border-radius: 4px;
+    padding: 15px;
+    margin: 15px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
 }
 
-.login-size{
-  width: 40%;
-  text-align: center;
-  margin: 10% 30%;
-  /*top left right*/
-  float: bottom;
-  alignment: center;
-  align-content: center;
-  align-self: center;
-  alignment-baseline: center;
+.login-size {
+    width: 40%;
+    text-align: center;
+    margin: 10% 30%;
+    /*top left right*/
+    float: bottom;
+    alignment: center;
+    align-content: center;
+    align-self: center;
+    alignment-baseline: center;
 }
 
 .main-heading {
-  font-size: 1.4rem;
-  margin-bottom: 15px;
-  font-weight: 300;
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    font-weight: 300;
 }
 
 .mandatory::after {
-  content: "*";
+    content: "*";
 }
 
-.btn-align-right{
-  float: right !important;
+.btn-align-right {
+    float: right !important;
 
 }
 
 .btn-align-right button, .btn-align-right a {
-  float: left;
+    float: left;
 }
 
-.btn-align-right button + button, .btn-align-right a + a{
-  margin-right: 5px;
+.btn-align-right button + button, .btn-align-right a + a {
+    margin-right: 5px;
 }
 
-.rbtn-primary{
- margin: 15px;
+.rbtn-primary {
+    margin: 15px;
 }
 
 .row + .row {
-  margin-top: 5px;
+    margin-top: 5px;
 }
 
 .k-tabstrip .k-animation-container {
-  width: 90%;
+    width: 90%;
 }
 
 .top-bar {
-  /*background: #ffffff;*/
-  /*color: #42c1d2 !important;*/
+    /*background: #ffffff;*/
+    /*color: #42c1d2 !important;*/
 
-  /*background: #104260;*/
-  color: #ffffff !important;
+    /*background: #104260;*/
+    color: #ffffff !important;
 
-  background: #42c1d2;
+    background: #42c1d2;
 
-  /*border: 1px solid #104260;*/
+    /*border: 1px solid #104260;*/
 
-  height: 60px;
-  padding: 10px;
-  /*width: 90%;*/
-  -webkit-box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.3);
-  box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    height: 60px;
+    padding: 10px;
+    /*width: 90%;*/
+    -webkit-box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.3);
 }
 
-.course-main{
-  text-align: left;
-  /*Left: 4,*/
+.course-main {
+    text-align: left;
+    /*Left: 4,*/
 }
 
-.course-navigation{
-  background: #bceef5;
+.course-navigation {
+    background: #bceef5;
 }
 
-.styles-nested{
-  text-align: inherit;
-  padding : 40px;
-  border-left-width: 60px;
+.styles-nested {
+    text-align: inherit;
+    padding: 40px;
+    border-left-width: 60px;
 }
 
-.appBar-dialog{
-  position: relative;
+.appBar-dialog {
+    position: relative;
 }
 
 .top-bar .global-search {
-  float: right;
+    float: left;
 }
 
-.toolbar-button{
-  float: right !important;
+.chip-dp {
+    float: right;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
-.top-bar{
-  text-align: center;
-
+.main-card-cover {
+    height: 300px;
+    border-radius: 4px;
+    /*padding: 15px;*/
+    margin: 15px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
 }
+
+.main-cover-large {
+    width: fit-content;
+    /*height: fit-content;*/
+    height: 300px;
+    object-fit: cover;
+
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+.cover-button {
+    position: absolute;
+    top: 300px;
+    left: 0;
+    float: bottom;
+}
+
+.dp-button{
+    position: absolute;
+    top: 250px;
+    left: 40%;
+    float: bottom;
+}
+
+.main-dp-large {
+    width: 200px;
+    height: 200px;
+    /*object-fit:cover;*/
+    border-radius: 100%;
+
+    position: absolute;
+    top: 150px;
+    left: 40%;
+}
+
+.upload-button {
+    float: left;
+    /*float: right;*/
+}
+
+/*userProf*/
+.cover-picture {
+    width: fit-content;
+    /*maxWidth: 345;*/
+}
+
+.tooltip {
+    font-size: 11px;
+}
+
+.toolbar-button {
+    float: right !important;
+}
+
+.top-bar {
+    text-align: center;
+}
+
+.message-icon {
+    float: right !important;
+}
+
 .top-bar .icon {
-  float: left;
+    float: left;
 }
 
 .searchbar {
-  border-color: #104260 !important;
+    border-color: #104260 !important;
 }
 
 .top-bar > div {
-  display: inline-block;
+    display: inline-block;
 }
 
 .top-bar-wrapper {
-  position: fixed;
-  width: inherit;
-  height: 48px;
-  z-index: 2;
+    position: fixed;
+    width: inherit;
+    height: 48px;
+    z-index: 2;
 }
 
 .top-bar .page-title {
-  font-size: 20px !important;
-  color: #104260 !important;
-  text-transform: uppercase;
-  font-weight: 700;
-  /*font-size: 0.85rem;*/
-  opacity: 0.5;
-  margin-top: 5px;
-  margin-left: 6px;
+    font-size: 20px !important;
+    color: #104260 !important;
+    text-transform: uppercase;
+    font-weight: 700;
+    /*font-size: 0.85rem;*/
+    opacity: 0.5;
+    margin-top: 5px;
+    margin-left: 6px;
 }
 
 .top-bar .vertical-menu-seperator {
-  display: none;
+    display: none;
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+.cover-media {
+    height: 140px;
 }
