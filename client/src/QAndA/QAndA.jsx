@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 
 class QAndA extends Component {
 
@@ -36,8 +38,9 @@ class QAndA extends Component {
         return (
             <div>
                <h1 className = 'text-center mt-5'>Post Page</h1>
+                <BottomNavigationAction label="Favorites" value="favorites" icon={<FavoriteIcon />} />
 
-               <form className='d-flex mt-5 mb-5' onSubmit = {this.submitHandler}>
+                <form className='d-flex mt-5 mb-5' onSubmit = {this.submitHandler}>
                
                     <input type = 'text' 
                         className = 'form-control ml-5'
