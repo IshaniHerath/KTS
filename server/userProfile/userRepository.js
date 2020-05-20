@@ -6,11 +6,11 @@ const userContext = {};
  * @returns {array} list of Courses
  */
 userContext.getCourses = async () => {
-    const userId = 12;
+    const userId = 73;
 
     try {
         const allUser = await pool.query(
-            'select c.name , c.code from "course" as c INNER JOIN "user_course" as t on c.id = t."cid" where t.uid =' + userId + ';'
+            'select c.name , c.code from "Course" as c INNER JOIN "user_course" as t on c.id = t."cid" where t.uid =' + userId + ';'
         );
         return (allUser.rows);
         // res.send (allUser.rows);
@@ -26,13 +26,26 @@ userContext.getCourses = async () => {
 userContext.getDepartments = async () => {
     try {
         const allDepartments = await pool.query(
-            'select id, name from "department";'
+            'select id, name from "Department";'
         );
         return (allDepartments.rows);
     } catch (e) {
         console.log(e.message);
     }
 };
+
+userContext.getTypes = async () => {
+    try {
+        const allTypes = await pool.query(
+            'select id, name from "UserType";'
+        );
+        return (allTypes.rows);
+    } catch (e) {
+        console.log(e.message);
+    }
+};
+
+
 
 /**
  * saveUserDetails - Save User details
@@ -43,7 +56,7 @@ userContext.saveUserDetails = async (user) => {
         console.log("User : ", user);
         try {
             const newUser = await pool.query(
-                'insert into "userProfile" (name, email, type, regnumber, programid) values ($1 , $2 , $3 , $4 , $5) RETURNING id ;',
+                'insert into "UserProfile" (name, email, type, regnumber, programid) values ($1 , $2 , $3 , $4 , $5) RETURNING id ;',
                 [user.UserName, user.Email, user.Type, user.regNumber, user.ProgramId]
             );
             console.log("newUser : ", newUser.rows);
@@ -57,7 +70,7 @@ userContext.saveUserDetails = async (user) => {
         console.log("User : ", user);
         try {
             const newUser = await pool.query(
-                'insert into "userProfile" (name, email, type, programid , departmentid) values ($1 , $2 , $3 , $4 , $5) RETURNING id ;',
+                'insert into "UserProfile" (name, email, type, programid , departmentid) values ($1 , $2 , $3 , $4 , $5) RETURNING id ;',
                 [user.UserName, user.Email, user.Type, user.ProgramId, user.DepartmentId]
             );
         } catch (e) {
@@ -68,7 +81,7 @@ userContext.saveUserDetails = async (user) => {
         console.log("User : ", user);
         try {
             const newUser = await pool.query(
-                'insert into "userProfile" (name, email, type) values ($1 , $2 , $3) RETURNING id ;',
+                'insert into "UserProfile" (name, email, type) values ($1 , $2 , $3) RETURNING id ;',
                 [user.UserName, user.Email, user.Type]
             );
         } catch (e) {

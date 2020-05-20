@@ -39,7 +39,6 @@
     margin: 20px -15px;
 }
 
-
 .main-card {
     /*height: 22px;*/
     border-radius: 4px;
@@ -74,7 +73,6 @@
 
 .btn-align-right {
     float: right !important;
-
 }
 
 .btn-align-right button, .btn-align-right a {

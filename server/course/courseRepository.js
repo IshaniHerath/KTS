@@ -8,7 +8,7 @@ const userContext = {};
 userContext.getPrograms = async () => {
     try {
         const allPrograms = await pool.query(
-            'select id, name from "program";'
+            'select id, name from "Program";'
         );
         return (allPrograms.rows);
         // res.send (allUser.rows);
