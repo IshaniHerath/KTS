@@ -33,6 +33,7 @@ class UserProfile extends Component {
             AllPrograms: [],
             items: [],
             AllDepartments: [],
+            AllTypes: [],
             // isLoaded: false,
 
             // Other
@@ -51,6 +52,7 @@ class UserProfile extends Component {
         this.populateCourses();
         this.populatePrograms();
         this.populateDepartments();
+        this.populateUserType();
     }
 
     populatePrograms() {
@@ -80,6 +82,16 @@ class UserProfile extends Component {
             .then(data => {
                 this.setState({
                     AllDepartments: data
+                });
+            });
+    }
+
+    populateUserType() {
+        fetch('http://localhost:5000/userProfile/getTypes')
+            .then(res => res.json())
+            .then(data => {
+                this.setState({
+                    AllTypes: data
                 });
             });
     }
@@ -114,27 +126,25 @@ class UserProfile extends Component {
         }
 
         if (field === 'selectedProgram' && valueObj) {
-            this.setState({
-                selectedProgram: valueObj
-            })
+            if (this.isMount) {
+                this.setState({
+                    selectedProgram: valueObj
+                })
+            }
         }
 
         if (field === 'selectedType' && valueObj) {
-            this.setState({
-                selectedType: valueObj,
-                // isVisaCountryErrorMessageVisible: false
-            });
-
-            if (valueObj === "Student") {
-                this.state.typeId = 1;
-            }
-            if (valueObj === "Lecturer") {
-                this.state.typeId = 2;
-            }
-            if (valueObj === "Other") {
-                this.state.typeId = 3;
+            if (this.isMount) {
+                console.log("valueObj : ", valueObj)
+                this.setState({
+                    selectedType: valueObj.name,
+                    typeId: valueObj.id,
+                });
             }
         }
+
+        console.log("selectedType", this.state.selectedType)
+        console.log("typeId", this.state.typeId)
     };
 
     handleOnChange = event => {
@@ -267,7 +277,7 @@ class UserProfile extends Component {
         var {items} = this.state;
 
         if (this.state.redirectToUserSearch === true) {
-            return <Redirect to="/userProfile"/>;
+            return <Redirect to="/"/>;
         }
         return (
             <div className="container-fluid">
@@ -306,22 +316,20 @@ class UserProfile extends Component {
 
                                     <div className="col-md-6">
                                         <div className="row">
-                                            {/*<div className="col-md-5">*/}
                                             <label className="mandatory">Type:</label>
-                                            {/*</div>*/}
-                                            {/*<div className="col-md-7">*/}
+
                                             <ComboBox
-                                                data={this.state.types}
+                                                textField="name"
+                                                dataItemKey="id"
+                                                data={this.state.AllTypes}
                                                 value={this.state.selectedType}
                                                 onChange={this.handleOnChangeCombo}
                                                 name="selectedType"
                                                 placeholder="Please Select"
                                                 filterable={true}
-                                                // onFilterChange={this.filterChangeCombo}
                                                 //       popupSettings={this.popupSet}
                                                 required={true}
                                             />
-                                            {/*</div>*/}
                                         </div>
                                     </div>
                                 </div>
@@ -330,10 +338,8 @@ class UserProfile extends Component {
                                     {(this.state.selectedType === "Student") && (
                                         <div className="col-md-6">
                                             <div className="row">
-                                                {/*<div className="col-md-5">*/}
                                                 <label htmlFor="" className="mandatory">Reg No:</label>
-                                                {/*</div>*/}
-                                                {/*<div className="col-md-7">*/}
+
                                                 <Input className="mandatory"
                                                        placeholder="Register Number"
                                                        value={this.state.regNumber}
@@ -351,11 +357,8 @@ class UserProfile extends Component {
                                     {(this.state.selectedType === "Lecturer") && (
                                         <div className="col-md-6">
                                             <div className="row">
-                                                {/*<div className="col-md-5">*/}
                                                 <label htmlFor="" className="mandatory">Department : </label>
-                                                {/*</div>*/}
 
-                                                {/*<div className="col-md-7">*/}
                                                 <ComboBox
                                                     data={this.state.AllDepartments}
                                                     textField="name"
@@ -508,238 +511,6 @@ class UserProfile extends Component {
 
 
                 <div className="row">
-                    {/*<div className="col-md-12">*/}
-                    {/*    <div className="row">*/}
-                    {/*        <div className="sub-card">*/}
-                    {/*            <div className="col-md-12">*/}
-
-                    {/*                <div className="row">*/}
-                    {/*                    <div className="col-md-6">*/}
-                    {/*                        <div className="row">*/}
-                    {/*                            /!*   <div className="col-md-6">*!/*/}
-                    {/*                            <label htmlFor="" className="mandatory">*/}
-                    {/*                                Name:*/}
-                    {/*                            </label>*/}
-                    {/*                            /!*</div>*!/*/}
-
-                    {/*                            /!*<div className="col-md-6">*!/*/}
-                    {/*                            <Input*/}
-                    {/*                                placeholder="Full Name"*/}
-                    {/*                                value={this.state.fullName}*/}
-                    {/*                                name="FirstName"*/}
-                    {/*                                onChange={this.handleOnChange}*/}
-                    {/*                                required={true}*/}
-                    {/*                            />*/}
-                    {/*                            /!*</div>*!/*/}
-                    {/*                        </div>*/}
-                    {/*                    </div>*/}
-
-                    {/*                    <div className="col-md-6">*/}
-                    {/*                        <div className="row">*/}
-                    {/*                            /!*<div className="col-md-5">*!/*/}
-                    {/*                            <label className="mandatory">Type:</label>*/}
-                    {/*                            /!*</div>*!/*/}
-                    {/*                            /!*<div className="col-md-7">*!/*/}
-                    {/*                            <ComboBox*/}
-                    {/*                                data={this.state.types}*/}
-                    {/*                                value={this.state.selectedType}*/}
-                    {/*                                onChange={this.handleOnChangeCombo}*/}
-                    {/*                                name="selectedType"*/}
-                    {/*                                placeholder="Please Select"*/}
-                    {/*                                filterable={true}*/}
-                    {/*                                // onFilterChange={this.filterChangeCombo}*/}
-                    {/*                                //       popupSettings={this.popupSet}*/}
-                    {/*                                required={true}*/}
-                    {/*                            />*/}
-                    {/*                            /!*</div>*!/*/}
-                    {/*                        </div>*/}
-                    {/*                    </div>*/}
-                    {/*                </div>*/}
-
-                    {/*                <div className="row">*/}
-                    {/*                    {(this.state.selectedType === "Student") && (*/}
-                    {/*                        <div className="col-md-6">*/}
-                    {/*                            <div className="row">*/}
-                    {/*                                /!*<div className="col-md-5">*!/*/}
-                    {/*                                <label htmlFor="" className="mandatory">Reg No:</label>*/}
-                    {/*                                /!*</div>*!/*/}
-                    {/*                                /!*<div className="col-md-7">*!/*/}
-                    {/*                                <Input className="mandatory"*/}
-                    {/*                                       placeholder="Register Number"*/}
-                    {/*                                       value={this.state.regNumber}*/}
-                    {/*                                       name="regNumber"*/}
-                    {/*                                       required={true}*/}
-                    {/*                                       onChange={this.handleOnChange}*/}
-                    {/*                                    // type="Numeric"*/}
-                    {/*                                    // maxLength= '9'*/}
-                    {/*                                />*/}
-                    {/*                                /!*</div>*!/*/}
-                    {/*                            </div>*/}
-                    {/*                        </div>*/}
-                    {/*                    )}*/}
-
-                    {/*                    {(this.state.selectedType === "Lecturer") && (*/}
-                    {/*                        <div className="col-md-6">*/}
-                    {/*                            <div className="row">*/}
-                    {/*                                /!*<div className="col-md-5">*!/*/}
-                    {/*                                <label htmlFor="" className="mandatory">Department : </label>*/}
-                    {/*                                /!*</div>*!/*/}
-
-                    {/*                                /!*<div className="col-md-7">*!/*/}
-                    {/*                                <ComboBox*/}
-                    {/*                                    data={this.state.AllDepartments}*/}
-                    {/*                                    textField="name"*/}
-                    {/*                                    dataItemKey="id"*/}
-                    {/*                                    value={this.state.selectedDepartment}*/}
-                    {/*                                    onChange={this.handleOnChangeCombo}*/}
-                    {/*                                    name="selectedDepartment"*/}
-                    {/*                                    placeholder="Please Select"*/}
-                    {/*                                    filterable={true}*/}
-                    {/*                                    // onFilterChange={this.filterChangeCombo}*/}
-                    {/*                                    //       popupSettings={this.popupSet}*/}
-                    {/*                                    required={true}*/}
-                    {/*                                />*/}
-                    {/*                                /!*</div>*!/*/}
-                    {/*                            </div>*/}
-                    {/*                        </div>*/}
-                    {/*                    )}*/}
-
-                    {/*                    {(this.state.selectedType === "Student") && (*/}
-                    {/*                        <div className="col-md-6">*/}
-                    {/*                            <div className="row">*/}
-                    {/*                                /!*<div className="col-md-5">*!/*/}
-                    {/*                                <label htmlFor="" className="mandatory">Program:</label>*/}
-                    {/*                                /!*</div>*!/*/}
-                    {/*                                /!*<div className="col-md-7" id="statusToolTip">*!/*/}
-                    {/*                                <ComboBox*/}
-                    {/*                                    data={this.state.AllPrograms}*/}
-                    {/*                                    textField="name"*/}
-                    {/*                                    dataItemKey="id"*/}
-                    {/*                                    value={this.state.selectedProgram}*/}
-                    {/*                                    onChange={this.handleOnChangeCombo}*/}
-                    {/*                                    name="selectedProgram"*/}
-                    {/*                                    placeholder="Please Select"*/}
-                    {/*                                    filterable={true}*/}
-                    {/*                                    // onFilterChange={this.filterChangeCombo}*/}
-                    {/*                                    //       popupSettings={this.popupSet}*/}
-                    {/*                                    required={true}*/}
-                    {/*                                />*/}
-                    {/*                                /!*</div>*!/*/}
-                    {/*                            </div>*/}
-                    {/*                        </div>*/}
-                    {/*                    )}*/}
-                    {/*                    {(this.state.selectedType === "Lecturer") && (*/}
-                    {/*                        <div className="col-md-6">*/}
-                    {/*                            <div className="row">*/}
-                    {/*                                /!*<div className="col-md-5">*!/*/}
-                    {/*                                <label htmlFor="" className="mandatory">Program:</label>*/}
-                    {/*                                /!*</div>*!/*/}
-                    {/*                                /!*<div className="col-md-7" id="statusToolTip">*!/*/}
-                    {/*                                <ComboBox*/}
-                    {/*                                    data={this.state.AllPrograms}*/}
-                    {/*                                    textField="name"*/}
-                    {/*                                    dataItemKey="id"*/}
-                    {/*                                    value={this.state.selectedProgram}*/}
-                    {/*                                    onChange={this.handleOnChangeCombo}*/}
-                    {/*                                    name="selectedProgram"*/}
-                    {/*                                    placeholder="Please Select"*/}
-                    {/*                                    filterable={true}*/}
-                    {/*                                    // onFilterChange={this.filterChangeCombo}*/}
-                    {/*                                    //       popupSettings={this.popupSet}*/}
-                    {/*                                    required={true}*/}
-                    {/*                                />*/}
-                    {/*                                /!*</div>*!/*/}
-                    {/*                            </div>*/}
-                    {/*                        </div>*/}
-                    {/*                    )}*/}
-                    {/*                </div>*/}
-
-                    {/*                <div className="row">*/}
-
-                    {/*                    <div className="col-md-6">*/}
-                    {/*                        <div className="row">*/}
-                    {/*                            /!*<div className="col-md-5">*!/*/}
-                    {/*                            <Label htmlFor="" className="mandatory">Email:</Label>*/}
-                    {/*                            /!*</div>*!/*/}
-                    {/*                            <div id="statusToolTip">*/}
-                    {/*                                <Input className="mandatory"*/}
-                    {/*                                       placeholder="example@gmail.com"*/}
-                    {/*                                       value={this.state.email}*/}
-                    {/*                                       name="Email"*/}
-                    {/*                                       required={true}*/}
-                    {/*                                       onChange={this.handleOnChange}*/}
-                    {/*                                />*/}
-                    {/*                            </div>*/}
-                    {/*                        </div>*/}
-                    {/*                    </div>*/}
-                    {/*                </div>*/}
-
-                    {/*                <div className="row">*/}
-                    {/*                    <div className="btn-align-right">*/}
-                    {/*                        <MuiThemeProvider>*/}
-                    {/*                            <React.Fragment>*/}
-                    {/*                                <RaisedButton*/}
-                    {/*                                    className={"rbtn-primary"}*/}
-                    {/*                                    primary={true}*/}
-                    {/*                                    variant="contained"*/}
-                    {/*                                    onClick={this.handleSubmit}*/}
-                    {/*                                >SAVE</RaisedButton>*/}
-
-                    {/*                                <RaisedButton*/}
-                    {/*                                    className={"rbtn-primary"}*/}
-                    {/*                                    color="primary"*/}
-                    {/*                                    variant="contained"*/}
-                    {/*                                    onClick={this.onClickCancel}*/}
-                    {/*                                >RESET</RaisedButton>*/}
-                    {/*                            </React.Fragment>*/}
-                    {/*                        </MuiThemeProvider>*/}
-                    {/*                    </div>*/}
-                    {/*                </div>*/}
-                    {/*            </div>*/}
-                    {/*        </div>*/}
-                    {/*    </div>*/}
-
-                    {/*<div className="row">*/}
-                    {/*    < div className="sub-card">*/}
-                    {/*        <div className="col-md-12">*/}
-                    {/*            <div className="main-heading">My Courses</div>*/}
-                    {/*            <div className="row">*/}
-                    {/*                <Fragment>*/}
-                    {/*                    <table className="table table-striped">*/}
-                    {/*                        <thead>*/}
-                    {/*                        <tr>*/}
-                    {/*                            <th>Course Code</th>*/}
-                    {/*                            <th>Course Name</th>*/}
-                    {/*                        </tr>*/}
-                    {/*                        </thead>*/}
-                    {/*                        <tbody>*/}
-                    {/*                        {items.map(item => (*/}
-                    {/*                            <tr>*/}
-                    {/*                                <td>{item.code}</td>*/}
-                    {/*                                <td>{item.name}</td>*/}
-                    {/*                            </tr>*/}
-                    {/*                        ))}*/}
-                    {/*                        </tbody>*/}
-                    {/*                    </table>*/}
-                    {/*                </Fragment>*/}
-                    {/*            </div>*/}
-                    {/*        </div>*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
-                    {/*</div>*/}
-
-
-                    {/*<div className="col-md-12">*/}
-                    {/*    <div className="row">*/}
-                    {/*        <div className="sub-card">*/}
-                    {/*            <div className="col-md-12">*/}
-                    {/*                <h1> this is post area </h1>*/}
-                    {/*            </div>*/}
-                    {/*        </div>*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
-                    {/*</div>*/}
-
 
                     <div>
                         {this.state.visible === true && (

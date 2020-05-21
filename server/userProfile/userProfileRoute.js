@@ -13,6 +13,10 @@ router.get('/getDepartments', async (req, res) => {
   res.send (await userRepository.getDepartments());
 });
 
+router.get('/getUserTypes', async (req, res) => {
+  res.send (await userRepository.getUserTypes());
+});
+
 router.post('/', async (req, res) => {
   res.send (await userRepository.saveUserDetails(req.body));
   // res.end();
