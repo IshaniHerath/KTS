@@ -34,18 +34,17 @@ userContext.getDepartments = async () => {
     }
 };
 
-userContext.getTypes = async () => {
+userContext.getUserTypes = async () => {
     try {
-        const allTypes = await pool.query(
-            'select id, name from "UserType";'
+        const allUserTypes = await pool.query(
+            'select typeid, name from "UserType";'
         );
-        return (allTypes.rows);
+        console.log("allUserTypes : ", allUserTypes);
+        return (allUserTypes.rows);
     } catch (e) {
-        console.log(e.message);
+        console.log("ERROR!!", e.message);
     }
 };
-
-
 
 /**
  * saveUserDetails - Save User details
