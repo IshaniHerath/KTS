@@ -19,7 +19,7 @@ app.use((req,res,next) =>{
 
 app.use(express.json());
 app.use('/userProfile', userRoute);
-app.use('/Register', registerRoute);
+app.use('/register', registerRoute);
 app.use('/courses', courseRoute);
 app.use('/posts' , postRouts);
 

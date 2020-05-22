@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import AppBar from 'material-ui/AppBar'
-import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 import Input from "@material-ui/core/Input";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import {ComboBox} from "@progress/kendo-react-dropdowns";
+import {Dialog, DialogActionsBar} from "@progress/kendo-react-dialogs";
+import Redirect from "react-router-dom/Redirect";
 
 class Register extends Component {
     constructor(props) {
@@ -17,17 +17,39 @@ class Register extends Component {
 
         this.state = {
             userName: "",
-            // email: "",
+            email: "",
             typeId: 0,
-            // regNumber: "",
-            // password: "",
+            regNumber: 0,
+            password: "",
+            rePassword: "",
 
-            // showPassword: false,
+            isInCorrectPassword: false,
+            visible: false,
 
+            showPassword: false,
+            //drop down
+            AllTypes: [],
 
+            redirectToLogin: false,
             //drop down selected data
             selectedType: null,
         }
+    }
+
+    componentDidMount() {
+        window.scrollTo(0, 0);
+        this.isMount = true;
+        this.populateUserType();
+    }
+
+    populateUserType() {
+        fetch('http://localhost:5000/userProfile/getUserTypes')
+            .then(res => res.json())
+            .then(data => {
+                this.setState({
+                    AllTypes: data
+                });
+            });
     }
 
     handleOnChange = event => {
@@ -38,7 +60,6 @@ class Register extends Component {
                 fullName: event.target.value,
                 isFormDirty: true,
             });
-            console.log("this.state.fullName ", this.state.fullName);
         }
         if (field === "regNumber") {
             this.setState({
@@ -46,41 +67,24 @@ class Register extends Component {
                 isFormDirty: true,
             });
         }
-        console.log("this.state.regNumber ", this.state.regNumber);
-
         if (field === "Password") {
             this.setState({
                 password: event.target.value,
                 isFormDirty: true,
             });
         }
-        console.log("this.state.password ", this.state.password);
-
         if (field === "RePassword") {
             this.setState({
                 rePassword: event.target.value,
                 isFormDirty: true,
             });
-
-            if (this.state.password ===this.state.rePassword){
-                this.setState({
-                    isCorrectPassword: true,
-                    isFormDirty: true,
-                });
-            }
-
-            console.log("this.state.rePassword ", this.state.rePassword);
-            console.log("this.state.isCorrectPassword ", this.state.isCorrectPassword);
         }
-
-
         if (field === "Email") {
             this.setState({
                 email: event.target.value,
                 isFormDirty: true,
             });
         }
-        console.log("this.state.email ", this.state.email);
     };
 
     handleOnChangeCombo = event => {
@@ -89,74 +93,94 @@ class Register extends Component {
 
         if (field === 'selectedType' && valueObj) {
             this.setState({
-                selectedType: valueObj
+                selectedType: valueObj,
+                typeId: valueObj.typeid
             })
         }
     };
 
     handleSubmit = event => {
-            console.log("check check ");
-            //Do not refresh the page
-            event.preventDefault();
+        //Do not refresh the page
+        event.preventDefault();
 
-            if (this.isMount) {
-                this.setState(
-                    () => {
-                        var userProfile = {};
+        if (this.isMount) {
+            this.setState(
+                () => {
+                    var userProfile = {};
 
-                        if (this.state.selectedType === 'Student') {
-                            userProfile = {
-                                UserName: this.state.fullName,
-                                Email: this.state.email,
-                                Type: this.state.typeId,
-                                RegNumber: this.state.regNumber,
-                                Password: this.state.password,
-                                Status: "pending",
-                            };
-                        } else if (this.state.selectedType === 'Lecturer') {
-                            userProfile = {
-                                UserName: this.state.userName,
-                                ProgramId: this.state.selectedProgram.id,
-                                DepartmentId: this.state.selectedDepartment.id,
-                                Type: this.state.typeId,
-                                Email: this.state.email,
-                                Status: "pending",
+                    if (this.state.password !== this.state.rePassword) {
+                        this.state.password = null;
+                    }
 
-                            };
-                        } else if (this.state.selectedType === 'Other') {
-                            userProfile = {
-                                UserName: this.state.userName,
-                                Type: this.state.typeId,
-                                Email: this.state.email,
-                                Status: "pending",
+                    if (this.state.selectedType.name === 'Student') {
+                        userProfile = {
+                            UserName: this.state.fullName,
+                            Email: this.state.email,
+                            Type: this.state.typeId,
+                            RegNumber: this.state.regNumber,
+                            Password: this.state.password,
+                            StatusId: 1,
+                        };
+                    } else if (this.state.selectedType.name === 'Lecturer' || this.state.selectedType.name === 'Other') {
+                        userProfile = {
+                            UserName: this.state.userName,
+                            Type: this.state.typeId,
+                            Email: this.state.email,
+                            StatusId: 1,
+                        };
+                    }
 
-                            };
+                    console.log("userProfile : ", userProfile)
+
+                    let uId = 0;
+                    fetch('http://localhost:5000/register/', {
+                        method: 'POST',
+                        body: JSON.stringify(userProfile),
+                        headers: {
+                            'Content-Type': 'application/json'
                         }
-
-                        console.log("userProfile : " ,userProfile)
-
-                        let uId = 0;
-                        fetch('http://localhost:5000/Resister/', {
-                            method: 'POST',
-                            body: JSON.stringify(userProfile),
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                data.forEach(function (userdata) {
-                                    uId = userdata.id;
-                                    console.log("uId : ", uId)
-                                });
-                                // this.setState({
-                                // isLoaded: true,
-                                // userId: uId,
-                                // })
-                            });
-
                     })
-            }
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(function (userdata) {
+                                uId = userdata.id;
+                                console.log("uId : ", uId)
+                            });
+                            const message = 'The user profile has been successfully created';
+                            const title = 'Success';
+                            this.toggleDialog(message, title);
+                        })
+
+                        .catch(error => {
+                            this.setState({
+                                isInCorrectPassword: true,
+                            });
+                            const message = "Password Doesn't match!!";
+                            const title = 'Error';
+                            this.toggleDialog(message, title);
+                        });
+                })
+        }
+    };
+
+    toggleDialog = (message, title) => {
+        this.setState({
+            visible: !this.state.visible,
+            dialogMessage: message,
+            dialogTitle: title,
+        });
+        this.onClickCancel();
+    };
+
+    onClickCancel = event => {
+        this.setState({
+            fullName: "",
+            email: "",
+            regNumber: 0,
+            selectedType: "",
+            password: "",
+            rePassword: "",
+        })
     };
 
     handleClickShowPassword = () => {
@@ -174,7 +198,18 @@ class Register extends Component {
         event.preventDefault();
     };
 
+    redirectToLogin = () => {
+        this.setState({
+            redirectToLogin: true
+        });
+    };
+
     render() {
+
+        if (this.state.redirectToLogin === true) {
+            return <Redirect to="/login"/>;
+        }
+
         return (
             <div>
                 <div className="main-card login-size">
@@ -198,30 +233,6 @@ class Register extends Component {
                     />
 
                     <br/>
-                    <br/>
-
-                    <label htmlFor="" className="mandatory">Type :</label>
-                    <Select
-                        labelId="demo-simple-select-placeholder-label-label"
-                        id="demo-simple-select-placeholder-label"
-                        data={this.state.types}
-                        // labelId="demo-simple-select-label"
-                        // id="demo-simple-select"
-                        // value={"age"}
-                        // onChange={handleChange}
-                        style={{width: '50%'}}
-                    >
-                        <MenuItem value=""> <em>Please Select</em> </MenuItem>
-                        <MenuItem value={1}> Student</MenuItem>
-                        <MenuItem value={2}> Lecturer</MenuItem>
-                        <MenuItem value={3}> Other</MenuItem>
-                    </Select>
-                    {/*</div>*/}
-                    {console.log(" data =", this.state.types)}
-
-
-                    {console.log(" value =", this.value)}
-                    <br/>
 
                     <label htmlFor="" className="mandatory">Email:</label>
                     <Input className="mt-3"
@@ -234,21 +245,40 @@ class Register extends Component {
                            value={this.state.email}
                     />
                     <br/>
+                    <br/>
 
-                    <label htmlFor="" className="mandatory">Register No : </label>
-                    <Input className="mt-3"
-                           placeholder="Enter your Register Number"
-                           name="regNumber"
-                           onChange={this.handleOnChange}
-                           required={true}
-                           style={{width: '50%'}}
-                           margin="normal"
-                           value={this.state.regNumber}
+                    <label htmlFor="" className="mandatory">Type :</label>
+                    <ComboBox
+                        textField="name"
+                        dataItemKey="typeid"
+                        data={this.state.AllTypes}
+                        value={this.state.selectedType}
+                        onChange={this.handleOnChangeCombo}
+                        name="selectedType"
+                        placeholder="Please Select"
+                        filterable={true}
+                        //       popupSettings={this.popupSet}
+                        required={true}
                     />
 
                     <br/>
 
-                    <label htmlFor="" className="mandatory">Password : </label>
+                    {(this.state.selectedType && this.state.selectedType.name === "Student") && (
+                        <div>
+                            <label htmlFor="" className="mandatory">Register No : </label>
+                            < Input className="mt-3"
+                                    placeholder="Enter your Register Number"
+                                    name="regNumber"
+                                    onChange={this.handleOnChange}
+                                    required={true}
+                                    style={{width: '50%'}}
+                                    margin="normal"
+                                    value={this.state.regNumber}
+                            />
+                        </div>
+                    )}
+
+                    < label htmlFor="" className="mandatory">Password : </label>
                     <Input className="mt-3"
                            value={this.state.password}
                            placeholder="Enter Password"
@@ -264,7 +294,7 @@ class Register extends Component {
                                        onClick={this.handleClickShowPassword}
                                        onMouseDown={this.handleMouseDownPassword}
                                    >
-                                       {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
+                                       {this.state.showPassword ? <Visibility/> : <VisibilityOff/>}
                                    </IconButton>
                                </InputAdornment>
                            }
@@ -303,11 +333,34 @@ class Register extends Component {
                         </MuiThemeProvider>
                     </div>
                 </div>
-            </div>
-        )
-            ;
-    }
 
+                <div>
+                    {(this.state.visible === true || this.state.isInCorrectPassword === true) && (
+                        <Dialog
+                            title={this.state.dialogTitle}
+                            onClose={this.toggleDialog}
+                            width="300px">
+                            <p style={{margin: "25px", textAlign: "center"}}>
+                                {this.state.dialogMessage}
+                            </p>
+                            <DialogActionsBar>
+                                <button
+                                    className="k-button modal-primary"
+                                    onClick={
+                                        // this.toggleDialog
+                                        this.state.dialogTitle === "Error" || this.state.dialogTitle === "Upload Status"
+                                            ? this.toggleDialog
+                                            : this.redirectToLogin
+                                    }>
+                                    OK
+                                </button>
+                            </DialogActionsBar>
+                        </Dialog>
+                    )}
+                </div>
+            </div>
+        );
+    }
 }
 
 export default Register;
