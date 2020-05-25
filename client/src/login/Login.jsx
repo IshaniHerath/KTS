@@ -48,8 +48,6 @@ class Login extends Component {
 
     handleClickShowPassword = () => {
         this.setState({
-            // ...values,
-            // password:
             showPassword: !this.state.showPassword
         });
     };
