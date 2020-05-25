@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import '@progress/kendo-ui';
 import '@progress/kendo-theme-default';
 
