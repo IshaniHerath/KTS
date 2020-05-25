@@ -7,8 +7,8 @@ import Layout from './component/Layout';
 import Course from './course/Course';
 import Login from './login/Login';
 import Register from './register/Register';
-import Home from './ui/dashboard/Home';
-import SideBar from './ui/dashboard/SideBar';
+//import Home from './ui/dashboard/Home';
+//import SideBar from './ui/dashboard/SideBar';
 
 import './App.css';
 
@@ -18,7 +18,7 @@ class App extends Component {
         <div className="App">
             <BrowserRouter >
                 <Switch>
-                    <Route
+                    {/* <Route
                         exact={true}
                         path="/home"
                         component={props => (
@@ -28,8 +28,8 @@ class App extends Component {
                                 onHeaderTitleChange={this.handleHeaderTitleChange}
                             />
                         )}
-                    />
-                    <Route
+                    /> */}
+                    {/* <Route
                         exact={true}
                         path="/sidebar"
                         component={props => (
@@ -39,7 +39,7 @@ class App extends Component {
                                 onHeaderTitleChange={this.handleHeaderTitleChange}
                             />
                         )}
-                    />
+                    /> */}
                     <Route
                         exact={true}
                         path="/"
