@@ -3,6 +3,7 @@ const app = express();
 
 const userRoute = require('./userProfile/userProfileRoute');
 const registerRoute = require('./register/registerRoute');
+const loginRoute = require('./login/loginRoute');
 const courseRoute = require('./course/courseRoute');
 const postRouts = require('./Q&A/q&aRout');
 const likeRouts = require('./Q&A/Like/likeRouts');
@@ -24,6 +25,7 @@ app.use((req,res,next) =>{
 app.use(express.json());
 app.use('/userProfile', userRoute);
 app.use('/register', registerRoute);
+app.use('/login', loginRoute);
 app.use('/courses', courseRoute);
 app.use('/posts' , postRouts);
 app.use('/likes' , likeRouts);

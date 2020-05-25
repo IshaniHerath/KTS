@@ -27,6 +27,7 @@ class Register extends Component {
             visible: false,
 
             showPassword: false,
+            showRePassword: false,
             //drop down
             AllTypes: [],
 
@@ -130,7 +131,7 @@ class Register extends Component {
                         };
                     }
 
-                    console.log("userProfile : ", userProfile)
+                    console.log("userProfile : ", userProfile);
 
                     let uId = 0;
                     fetch('http://localhost:5000/register/', {
@@ -184,14 +185,15 @@ class Register extends Component {
     };
 
     handleClickShowPassword = () => {
-        // console.log("showPassword 11 : ", this.state.showPassword);
         this.setState({
-            // ...values,
-            // password:
-            showPassword: !this.state.showPassword
-
+            showPassword: !this.state.showPassword,
         });
-        console.log("showPassword : ", this.state.showPassword);
+    };
+
+    handleClickShowRePassword = () => {
+        this.setState({
+            showRePassword: !this.state.showRePassword
+        });
     };
 
     handleMouseDownPassword = (event) => {
@@ -287,6 +289,8 @@ class Register extends Component {
                            required={true}
                            style={{width: '50%'}}
                            margin="normal"
+                           id="standard-adornment-password"
+                           type={this.state.showPassword ? 'text' : 'password'}
                            endAdornment={
                                <InputAdornment position="end">
                                    <IconButton
@@ -310,6 +314,19 @@ class Register extends Component {
                            placeholder="Re-Enter Password"
                            margin="normal"
                            style={{width: '50%'}}
+                           id="standard-adornment-password"
+                           type={this.state.showRePassword ? 'text' : 'password'}
+                           endAdornment={
+                               <InputAdornment position="end">
+                                   <IconButton
+                                       aria-label="toggle password visibility"
+                                       onClick={this.handleClickShowRePassword}
+                                       onMouseDown={this.handleMouseDownPassword}
+                                   >
+                                       {this.state.showRePassword ? <Visibility/> : <VisibilityOff/>}
+                                   </IconButton>
+                               </InputAdornment>
+                           }
                     />
                     <br/>
                     <div>
