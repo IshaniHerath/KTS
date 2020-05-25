@@ -21,6 +21,7 @@ class Login extends Component {
             status: 0,
             credential: [],
 
+            isErrorMessageVisible: false,
             visible: false,
             redirectToHome: false,
 
@@ -76,36 +77,77 @@ class Login extends Component {
         event.preventDefault();
         this.setState(
             () => {
-                var Email = this.state.email;
-                fetch('http://localhost:5000/login/' + Email)
-                    .then(res => res.json()
-                        .then(res => {
-                            var credential = [];
-                            res.forEach(function (credentials) {
-                                credential = {
-                                    Password: credentials.password,
-                                    Status: credentials.status,
-                                };
-                            });
+                if (!this.validation()) {
+                    this.setState({
+                        isErrorMessageVisible: true
+                    });
+                    this.setState({
+                        visible: true
+                    });
+                    this.toggleDialog('Please fix the highlighted errors to continue', 'Error');
+                } else {
+                    this.setState({
+                        isErrorMessageVisible: false
+                    });
 
-                            this.setState({
-                                dbPassword: credential.Password,
-                                status: credential.Status
-                            });
-
-                            if (this.state.dbPassword === this.state.password && this.state.status === 2) {
-                                this.setState({
-                                    redirectToHome: true
+                    var Email = this.state.email;
+                    fetch('http://localhost:5000/login/' + Email)
+                        .then(res => res.json()
+                            .then(res => {
+                                var credential = [];
+                                res.forEach(function (credentials) {
+                                    credential = {
+                                        Password: credentials.password,
+                                        Status: credentials.status,
+                                    };
                                 });
-                            }
-                            if (this.state.dbPassword !== this.state.password) {
-                                const message = 'The Password/email address you have entered is incorrect';
-                                const title = 'Error';
-                                this.toggleDialog(message, title);
-                            }
-                        })
-                    )
+
+                                this.setState({
+                                    dbPassword: credential.Password,
+                                    status: credential.Status
+                                });
+
+                                if (this.state.dbPassword === this.state.password && this.state.status === 2) {
+                                    this.setState({
+                                        redirectToHome: true
+                                    });
+                                }
+                                if (this.state.dbPassword !== this.state.password) {
+                                    const message = 'The Password/email address you have entered is incorrect';
+                                    const title = 'Error';
+                                    this.toggleDialog(message, title);
+                                }
+                            })
+                        )
+                }
             })
+    };
+
+    validateProperty = value => {
+        console.log("value : ", value);
+        if (value) {
+            return 'd-none';
+        } else {
+            return 'inline-error';
+        }
+    };
+
+    validation = () => {
+        if (
+            this.validateProperty(this.state.email)
+                .toString()
+                .includes('error')
+        ) {
+            return false;
+        } else if (
+            this.validateProperty(this.state.password)
+                .toString()
+                .includes('error')
+        ) {
+            return false;
+        } else {
+            return true;
+        }
     };
 
     render() {
@@ -131,6 +173,11 @@ class Login extends Component {
                                    margin="normal"
                                    value={this.state.email}
                             />
+                            {this.state.isErrorMessageVisible === true ? (
+                                <span className={this.validateProperty(this.state.email)}>
+                    Please enter your name
+                  </span>
+                            ) : null}
 
                             <br/>
                             <br/>
@@ -155,6 +202,11 @@ class Login extends Component {
                                     </InputAdornment>
                                 }
                             />
+                            {this.state.isErrorMessageVisible === true ? (
+                                <span className={this.validateProperty(this.state.password)}>
+                    Please enter your name
+                  </span>
+                            ) : null}
 
                             <br/>
                             <br/>
