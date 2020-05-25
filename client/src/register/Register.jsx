@@ -215,7 +215,6 @@ class Register extends Component {
     };
 
     validateProperty = value => {
-        console.log("value : ", value);
         if (value) {
             return 'd-none';
         } else {
