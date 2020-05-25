@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 
 const userRoute = require('./userProfile/userProfileRoute');
+const registerRoute = require('./register/registerRoute');
+const courseRoute = require('./course/courseRoute');
 const postRouts = require('./Q&A/q&aRout');
 const likeRouts = require('./Q&A/Like/likeRouts');
 const thumbsUpRouts = require('./Q&A/thumbsUpAndDown/thumbsUpRouts');
@@ -21,13 +23,13 @@ app.use((req,res,next) =>{
 
 app.use(express.json());
 app.use('/userProfile', userRoute);
+app.use('/register', registerRoute);
+app.use('/courses', courseRoute);
 app.use('/posts' , postRouts);
 app.use('/likes' , likeRouts);
 app.use('/thumbsUp' , thumbsUpRouts);
 app.use('/thumbsDown' , thumbsDownRouts);
 app.use('/replies' , repliesRout);
-
-
 
 //callback function
 app.get('/', (req, res)=>{
