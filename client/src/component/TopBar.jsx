@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { AutoComplete } from '@progress/kendo-react-dropdowns';
 import '@progress/kendo-ui';
 import '@progress/kendo-theme-default';
