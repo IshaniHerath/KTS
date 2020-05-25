@@ -1,20 +1,14 @@
 const express = require('express');
-const Router = express.Router();
+const QAndARouter = express.Router();
 const postRepository = require('./q&aRepository');
 
-Router.use(express.json());
-
-
-//get all post data
-Router.get('/',async(req,res)=>{
+QAndARouter.get('/', async(req,res) => {
     res.send(await postRepository.getPostData());
 });
-
-//add post data 
-Router.post('/addpost' , async(req,res)=>{
+QAndARouter.post('/',async(req,res) => {
     await postRepository.addPostData(req.body);
+    res.end();
 });
 
 
-
-module.exports = Router;
+module.exports = QAndARouter;
