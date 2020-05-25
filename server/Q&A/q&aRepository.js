@@ -5,7 +5,7 @@ const postData = {};
 //get all post Data
 postData.getPostData = async()=>{
     try{
-        const allusers = await pool.query('SELECT * FROM posts;');
+        const allusers = await pool.query('SELECT * FROM posts ORDER BY post_id DESC;');
         return allusers.rows;
     }catch(err){
         console.log(err.message);

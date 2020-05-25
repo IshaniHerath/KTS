@@ -57,7 +57,6 @@ class Layout extends Component {
 
                             <TabStripTab title="Q And A">
                                 <QAndA headerTitle=" "/>
-
                             </TabStripTab>
 
                         </TabStrip>

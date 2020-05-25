@@ -3,6 +3,10 @@ const app = express();
 
 const userRoute = require('./userProfile/userProfileRoute');
 const postRouts = require('./Q&A/q&aRout');
+const likeRouts = require('./Q&A/Like/likeRouts');
+const thumbsUpRouts = require('./Q&A/thumbsUpAndDown/thumbsUpRouts');
+const thumbsDownRouts = require('./Q&A/thumbsUpAndDown/thumbsDownRouts');
+const repliesRout = require('./Q&A/replies/repliesRout');
 
 app.use((req,res,next) =>{
     res.setHeader('Access-Control-Allow-Origin' , '*');
@@ -18,6 +22,10 @@ app.use((req,res,next) =>{
 app.use(express.json());
 app.use('/userProfile', userRoute);
 app.use('/posts' , postRouts);
+app.use('/likes' , likeRouts);
+app.use('/thumbsUp' , thumbsUpRouts);
+app.use('/thumbsDown' , thumbsDownRouts);
+app.use('/replies' , repliesRout);
 
 
 
