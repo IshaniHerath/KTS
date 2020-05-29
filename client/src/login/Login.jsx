@@ -19,11 +19,13 @@ class Login extends Component {
             password: "",
             dbPassword: "",
             status: 0,
+            type: 0,
             credential: [],
 
             isErrorMessageVisible: false,
             visible: false,
             redirectToHome: false,
+            redirectToAdminPage: false,
 
             // other
             showPassword: false,
@@ -99,23 +101,42 @@ class Login extends Component {
                                     credential = {
                                         Password: credentials.password,
                                         Status: credentials.status,
+                                        Type: credentials.type,
                                     };
                                 });
-
                                 this.setState({
                                     dbPassword: credential.Password,
-                                    status: credential.Status
+                                    status: credential.Status,
+                                    type: credential.Type
                                 });
 
+                                //status approved
                                 if (this.state.dbPassword === this.state.password && this.state.status === 2) {
-                                    this.setState({
-                                        redirectToHome: true
-                                    });
+                                    //Student, Lecturer, Other users
+                                    if (this.state.type === 1 || this.state.type === 2 || this.state.type === 3) {
+                                        this.setState({
+                                            redirectToHome: true
+                                        });
+                                    }
+                                    //admin user
+                                    if (this.state.type === 4) {
+                                        this.setState({
+                                            redirectToAdminPage: true
+                                        });
+                                    }
                                 }
                                 if (this.state.dbPassword !== this.state.password) {
-                                    const message = 'The Password/email address you have entered is incorrect';
-                                    const title = 'Error';
-                                    this.toggleDialog(message, title);
+                                    this.toggleDialog('The Password/email address you have entered is incorrect', 'Error');
+                                }
+
+                                //Status pending
+                                if (this.state.status === 1) {
+                                    this.toggleDialog('Your user type request is Pending. Please try later', 'Error');
+                                }
+
+                                //Status Rejected
+                                if (this.state.status === 3) {
+                                    this.toggleDialog('Your user type request is Rejected. Please register again with different user type', 'Error');
                                 }
                             })
                         )
@@ -154,6 +175,11 @@ class Login extends Component {
         if (this.state.redirectToHome === true) {
             return <Redirect to="/"/>;
         }
+
+        if (this.state.redirectToAdminPage === true){
+            return <Redirect to= '/admin'/>;
+        }
+
         return (
             <div>
                 <MuiThemeProvider>

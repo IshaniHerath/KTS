@@ -5,6 +5,7 @@ import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import Layout from './component/Layout';
 import Login from './login/Login';
 import Register from './register/Register';
+import Admin from './admin/Admin';
 import Home from './ui/dashboard/Home';
 
 import './App.css';
@@ -55,7 +56,16 @@ class App extends Component {
                                 <Register
                                     {...props}
                                     timestamp={new Date().toString()}
-                                    onHeaderTitleChange={this.handleHeaderTitleChange}
+                                />
+                            )}
+                        />
+                        <Route
+                            exact={true}
+                            path="/admin"
+                            component={props => (
+                                <Admin
+                                    {...props}
+                                    timestamp={new Date().toString()}
                                 />
                             )}
                         />
