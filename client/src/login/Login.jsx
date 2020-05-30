@@ -19,10 +19,13 @@ class Login extends Component {
             password: "",
             dbPassword: "",
             status: 0,
+            type: 0,
             credential: [],
 
+            isErrorMessageVisible: false,
             visible: false,
             redirectToHome: false,
+            redirectToAdminPage: false,
 
             // other
             showPassword: false,
@@ -76,42 +79,107 @@ class Login extends Component {
         event.preventDefault();
         this.setState(
             () => {
-                var Email = this.state.email;
-                fetch('http://localhost:5000/login/' + Email)
-                    .then(res => res.json()
-                        .then(res => {
-                            var credential = [];
-                            res.forEach(function (credentials) {
-                                credential = {
-                                    Password: credentials.password,
-                                    Status: credentials.status,
-                                };
-                            });
+                if (!this.validation()) {
+                    this.setState({
+                        isErrorMessageVisible: true
+                    });
+                    this.setState({
+                        visible: true
+                    });
+                    this.toggleDialog('Please fix the highlighted errors to continue', 'Error');
+                } else {
+                    this.setState({
+                        isErrorMessageVisible: false
+                    });
 
-                            this.setState({
-                                dbPassword: credential.Password,
-                                status: credential.Status
-                            });
-
-                            if (this.state.dbPassword === this.state.password && this.state.status === 2) {
-                                this.setState({
-                                    redirectToHome: true
+                    var Email = this.state.email;
+                    fetch('http://localhost:5000/login/' + Email)
+                        .then(res => res.json()
+                            .then(res => {
+                                var credential = [];
+                                res.forEach(function (credentials) {
+                                    credential = {
+                                        Password: credentials.password,
+                                        Status: credentials.status,
+                                        Type: credentials.type,
+                                    };
                                 });
-                            }
-                            if (this.state.dbPassword !== this.state.password) {
-                                const message = 'The Password/email address you have entered is incorrect';
-                                const title = 'Error';
-                                this.toggleDialog(message, title);
-                            }
-                        })
-                    )
+                                this.setState({
+                                    dbPassword: credential.Password,
+                                    status: credential.Status,
+                                    type: credential.Type
+                                });
+
+                                //status approved
+                                if (this.state.dbPassword === this.state.password && this.state.status === 2) {
+                                    //Student, Lecturer, Other users
+                                    if (this.state.type === 1 || this.state.type === 2 || this.state.type === 3) {
+                                        this.setState({
+                                            redirectToHome: true
+                                        });
+                                    }
+                                    //admin user
+                                    if (this.state.type === 4) {
+                                        this.setState({
+                                            redirectToAdminPage: true
+                                        });
+                                    }
+                                }
+                                if (this.state.dbPassword !== this.state.password) {
+                                    this.toggleDialog('The Password/email address you have entered is incorrect', 'Error');
+                                }
+
+                                //Status pending
+                                if (this.state.status === 1) {
+                                    this.toggleDialog('Your user type request is Pending. Please try later', 'Error');
+                                }
+
+                                //Status Rejected
+                                if (this.state.status === 3) {
+                                    this.toggleDialog('Your user type request is Rejected. Please register again with different user type', 'Error');
+                                }
+                            })
+                        )
+                }
             })
+    };
+
+    validateProperty = value => {
+        console.log("value : ", value);
+        if (value) {
+            return 'd-none';
+        } else {
+            return 'inline-error';
+        }
+    };
+
+    validation = () => {
+        if (
+            this.validateProperty(this.state.email)
+                .toString()
+                .includes('error')
+        ) {
+            return false;
+        } else if (
+            this.validateProperty(this.state.password)
+                .toString()
+                .includes('error')
+        ) {
+            return false;
+        } else {
+            return true;
+        }
     };
 
     render() {
         if (this.state.redirectToHome === true) {
             return <Redirect to="/"/>;
         }
+
+        if (this.state.redirectToAdminPage === true){
+            return <Redirect to= '/admin'/>;
+        }
+
         return (
             <div>
                 <MuiThemeProvider>
@@ -131,6 +199,11 @@ class Login extends Component {
                                    margin="normal"
                                    value={this.state.email}
                             />
+                            {this.state.isErrorMessageVisible === true ? (
+                                <span className={this.validateProperty(this.state.email)}>
+                    Please enter your name
+                  </span>
+                            ) : null}
 
                             <br/>
                             <br/>
@@ -155,6 +228,11 @@ class Login extends Component {
                                     </InputAdornment>
                                 }
                             />
+                            {this.state.isErrorMessageVisible === true ? (
+                                <span className={this.validateProperty(this.state.password)}>
+                    Please enter your name
+                  </span>
+                            ) : null}
 
                             <br/>
                             <br/>

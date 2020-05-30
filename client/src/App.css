@@ -182,6 +182,14 @@
     left: 0;
 }
 
+.inline-error {
+    font-size: 0.80rem;
+    color: #eb3f27;
+    /*border: 1px solid red;*/
+    font-style: italic;
+    padding-top: 5px;
+}
+
 .cover-button {
     position: absolute;
     top: 300px;
@@ -353,7 +361,6 @@ border-color: rgb(0, 238, 255);
         transform: rotate(360deg);
     }
 }
-
 
 .cover-media {
     height: 140px;
