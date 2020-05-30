@@ -35,7 +35,7 @@ class QAndA extends Component {
     render() {
         return (
             <div>
-               <h1 className = 'text-center mt-5'>Post Page</h1>
+               <h1 className = 'text-center mt-5'>Q AND A</h1>
                 
 
                <form className='d-flex mt-5 mb-5' onSubmit = {this.submitHandler}>
@@ -44,7 +44,7 @@ class QAndA extends Component {
                         className = 'form-control ml-1 mr-1 '
                         ref = {this.postContentEl}
                     />
-                    <button className = 'btn btn-success mr-5'>Add</button>
+                    <button className = 'btn btn-primary mr-5'>Add</button>
                </form>
                <QAndAPosts />
                

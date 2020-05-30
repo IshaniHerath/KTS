@@ -5,8 +5,14 @@ const thumbsUpRepository = require('./thumbsUpRepository');
 Router.use(express.json());
 
 //get Thumbs Up Count
-Router.get('/',async(req,res)=>{
-    res.send(await thumbsUpRepository.getThumbsUpData());
+Router.get('/up/:post_id',async(req,res)=>{
+    res.send(await thumbsUpRepository.getThumbsUpData(req.params.post_id));
+
+});
+
+Router.get('/down/:post_id',async(req,res)=>{
+    res.send(await thumbsUpRepository.getThumbsDownData(req.params.post_id));
+
 });
 
 //add Thumbs Up data 

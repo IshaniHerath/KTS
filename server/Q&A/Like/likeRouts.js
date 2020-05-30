@@ -4,15 +4,14 @@ const likeRout = require('./likeRepository');
 
 Router.use(express.json());
 
-//get like count
-Router.get('/',async(req,res)=>{
-    res.send(await likeRout.getLikeData());
-});
-
 //Add like count
 Router.post('/' , async(req,res)=>{
     await likeRout.addLikeData(req.body);
     res.end();
+});
+
+Router.get('/:post_id',async(req,res) => {
+    res.send(await likeRout.getLikeData(req.params.post_id));
 });
 
 module.exports = Router;
