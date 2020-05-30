@@ -10,10 +10,11 @@ const likeRouts = require('./Q&A/Like/likeRouts');
 const thumbsUpRouts = require('./Q&A/thumbsUpAndDown/thumbsUpRouts');
 const thumbsDownRouts = require('./Q&A/thumbsUpAndDown/thumbsDownRouts');
 const repliesRout = require('./Q&A/replies/repliesRout');
+const adminRoute = require('./admin/adminRoute');
 
 app.use((req,res,next) =>{
     res.setHeader('Access-Control-Allow-Origin' , '*');
-    res.setHeader('Access-Control-Allow-Methods' , 'POST,GET,OPTIONS');
+    res.setHeader('Access-Control-Allow-Methods' , 'POST,GET,OPTIONS,PUT');
     res.setHeader('Access-Control-Allow-Headers' , 'Content-Type');
 
     if(req.method === 'OPTION'){
@@ -32,6 +33,7 @@ app.use('/likes' , likeRouts);
 app.use('/thumbsUp' , thumbsUpRouts);
 app.use('/thumbsDown' , thumbsDownRouts);
 app.use('/replies' , repliesRout);
+app.use('/admin', adminRoute);
 
 //callback function
 app.get('/', (req, res)=>{
