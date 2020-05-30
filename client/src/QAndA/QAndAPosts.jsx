@@ -4,6 +4,8 @@ import AddReplies from './AddReplies';
 import ThumbsUp from './ThumbsUp';
 import ThumbsDown from './ThumbsDown';
 import Likes from './Likes';
+import DeletePost from './DeletePost';
+
 
 class QAndAPosts extends Component {
 
@@ -31,13 +33,24 @@ class QAndAPosts extends Component {
             return(
                 <div>
                     {items.map(item => (
-                    <div className='box'>
-                        <Likes post_id = {item.post_id}/>
-                        <ThumbsUp post_id = {item.post_id} />
-                        <ThumbsDown post_id = {item.post_id} />
-                        <p className='postlabel'>{item.post_content}</p>    
-                        <AddReplies postid = {item.post_id} />    
+                    <div className='post-card'>
+                        <div className='postlabel'>
+                            <Likes post_id = {item.post_id}/>
+                            <ThumbsUp post_id = {item.post_id} />
+                            <ThumbsDown post_id = {item.post_id} />
+                            <DeletePost post_id = {item.post_id}/>
+                        </div>
+                        <div>
+                        <h6 className='postname'>{item.user_name}</h6>
+                        </div>
+                        <div>
+                            <p className='postp'>{item.post_content}</p>
+                        </div>  
                         <Replies postid = {item.post_id}/>
+
+                        <div className='postlabel'>  
+                            <AddReplies postid = {item.post_id} /> 
+                        </div> 
                         
                     </div>  
                        ))}

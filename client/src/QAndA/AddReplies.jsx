@@ -35,8 +35,8 @@ class AddReplies extends Component {
        // var {isLoaded, items} = this.state;
         return(
             <form onSubmit = {this.submitHandler}>
-                <textarea className = 'textarea' ref = {this.replayContentEl}/>
-                <button className = 'btn btn-outline-primary mt-2 mb-5'>Submit</button>
+                <textarea className = 'textarea' ref = {this.replayContentEl}/><br />
+                <button className = 'btn btn-primary mt-2 mb-5'>Submit</button>
             </form>
         );
     }

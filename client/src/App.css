@@ -165,6 +165,8 @@
     /*box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);*/
 }
 
+
+
 .float-right {
     float: right;
 }
@@ -278,25 +280,78 @@
 padding: 2px 6px 4px 6px;
 color: #555555;
 background-color: #eeeeee;
-border: #dddddd 2px solid;
 margin-top: 15px;
 margin-bottom: 15px;
+border: none;
 }
+
+.replaybox {
+    padding: 2px 6px 4px 6px;
+    color: #000000;
+    background-color: #eeeeee;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    
+    }
 
 .textarea{
   font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; 
 font-size: 16px; 
-background: black; 
-color: white;
+background: rgb(225, 243, 248); 
+color: rgb(0, 0, 0);
 border-style: solid;
 border-width: 1px;
 border-radius: 1px;
-border-color: #FFD700;
+border-color: rgb(0, 238, 255);
 }
 
 .postlabel{
   text-align: left;
 }
+
+.postname{
+    text-align: left;
+    color: #42c1d2;
+  }
+
+.postp{
+    width: 50%;
+}
+.iconsallignment{
+    text-align: left;
+    display:inline;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.thumbsUpDownIcone{
+    cursor: pointer;
+    color: #043e55;
+}
+
+.likeIcone{
+    cursor: pointer;
+    color: darkred;
+   }
+
+.deleteButton{
+    margin-left: 450px;
+}
+
+.post-card {
+    /*height: 22px;*/
+    width: 50%;
+    border-radius: 4px;
+    padding: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    /*-moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);*/
+    /*box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);*/
+}
+   
 
 @keyframes App-logo-spin {
     from {
