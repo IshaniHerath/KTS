@@ -128,13 +128,14 @@ class Admin extends Component {
                                             <td>{item.statusname}</td>
                                             <td>
                                                 <button
-                                                    className="mt-3 mr-3"
+                                                    className="mr-3  btn  btn-primary"
                                                     value={i}
                                                     onClick={this.handleAccept}
                                                 >
                                                     Accept
                                                 </button>
                                                 <button
+                                                    className={"btn btn-secondary"}
                                                     value={i}
                                                     onClick={this.handleReject}
                                                 >
