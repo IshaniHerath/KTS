@@ -3,9 +3,10 @@ const pool = require('../../connection');
 const likeData = {};
 
 //get like count
-likeData.getLikeData = async()=>{
+likeData.getLikeData = async(post_id)=>{
     try{
-        const allLikes = await pool.query('SELECT COUNT(*) FROM likes;');
+        const allLikes = await pool.query('SELECT COUNT(*) FROM likes where post_id = $1;',
+        [post_id]);
         console.log(allLikes.rows);
         return allLikes.rows;
         

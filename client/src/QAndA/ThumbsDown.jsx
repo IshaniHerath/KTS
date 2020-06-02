@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { GoThumbsdown } from "react-icons/go";
+import { MdThumbDown } from "react-icons/md";
 class ThumbsDown extends Component {
 
     constructor(props){
@@ -32,13 +32,32 @@ class ThumbsDown extends Component {
         });
     };
 
+    componentDidMount(){
+        var post_id = this.props.post_id;
+        //var postid = 54;
+        console.log(post_id);
+        fetch('http://localhost:5000/thumbsUp/down/'+post_id)
+            .then(res => res.json())
+            .then(json => {
+               this.setState({
+                   isLoaded: true,
+                   items: json,
+               }) 
+            });
+    }
+
 
     render(){
         var {isLoaded, items} = this.state;
         return(
-            <form onSubmit = {this.submitHandler}>
-                <button className = 'btn btn-success mb-5'>Thumbs Down</button>
-            </form>
+            <div className='iconsallignment'>
+            <MdThumbDown size='1rem' className='thumbsUpDownIcone' onClick={this.submitHandler} />
+            {items.map(item => (
+                    
+                    <label>{item.count}</label>
+                   
+            ))}
+            </div>
         );
     }
 }

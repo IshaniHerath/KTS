@@ -14,7 +14,7 @@ const adminRoute = require('./admin/adminRoute');
 
 app.use((req,res,next) =>{
     res.setHeader('Access-Control-Allow-Origin' , '*');
-    res.setHeader('Access-Control-Allow-Methods' , 'POST,GET,OPTIONS,PUT');
+    res.setHeader('Access-Control-Allow-Methods' , 'POST,GET,OPTIONS,PUT,DELETE');
     res.setHeader('Access-Control-Allow-Headers' , 'Content-Type');
 
     if(req.method === 'OPTION'){

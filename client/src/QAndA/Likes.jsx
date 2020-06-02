@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { AiFillHeart } from "react-icons/ai";
 class Likes extends Component {
 
     constructor(props){
@@ -27,17 +27,35 @@ class Likes extends Component {
             headers: {
                 'Content-Type': 'application/json'
             }
-
         });
     };
 
+    componentDidMount(){
+        var post_id = this.props.post_id;
+        //var postid = 54;
+        console.log(`post_id is ${post_id}`);
+        fetch('http://localhost:5000/likes/'+post_id)
+            .then(res => res.json())
+            .then(json => {
+               this.setState({
+                   isLoaded: true,
+                   items: json,
+               }) 
+            });
+    }
 
+    
     render(){
         var {isLoaded, items} = this.state;
         return(
-            <form onSubmit = {this.submitHandler}>
-                <button className = 'btn btn-success mb-5'>Like</button>
-            </form>
+          <div className='iconsallignment'> 
+              <AiFillHeart size='1rem' className='likeIcone' onClick={this.submitHandler} /> 
+              {items.map(item => (
+                    
+                    <label>{item.count}</label>
+                   
+            ))}
+         </div>
         );
     }
 }

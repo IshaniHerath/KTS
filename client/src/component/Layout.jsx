@@ -48,6 +48,9 @@ class Layout extends Component {
                                 <QAndA headerTitle=" "/>
                             </TabStripTab>
 
+                            <TabStripTab title="Groups">
+                                <QAndA headerTitle=" "/>
+                            </TabStripTab>
                         </TabStrip>
                     </div>
                 </div>

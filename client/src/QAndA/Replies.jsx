@@ -27,10 +27,10 @@ class Replies extends Component {
         render(){
             var {isLoaded, items} = this.state;
             return(
-                <div className='box'>
+                <div className='sub-card'>
                     <h6>Replies</h6>
                      {items.map(item => (
-                        <div>
+                        <div className='box'>
                             <label>{item.replay_content}</label>
                         </div>   
                        ))}
