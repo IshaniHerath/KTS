@@ -79,10 +79,10 @@ class Course extends Component {
                 {/*mt = margin top mb = margin buttom*/}
                 <div className="main-heading mt-4 mb-4"> <b> COURSE DETAILS </b></div>
                 <div className="row">
-                    <div className="col-md-3 course-navigation">
+                    <div className=" course-navigation col sub-card">
                         <h6>My Course List</h6>
                         <ul>
-                            <li> EEI6560-Software Project Management </li>
+                            <li> <a href=""> EEI6560-Software Project Management </a></li>
                             <li> EEI6565-Artificial Intelligent Technology </li>
                             <li> EEI6567-Software Architecture and design </li>
                         </ul>

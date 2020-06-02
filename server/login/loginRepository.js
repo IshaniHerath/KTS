@@ -2,11 +2,9 @@ const pool = require('../connection');
 const userContext = {};
 
 userContext.checkLoginDetails = async (req, res) => {
-    const email = req;
-
     try {
         const user = await pool.query(
-            'select status, password, type from "UserRegister" where email =' + "'" + email + "'" + ';'
+            'select status, password, type from "UserProfile" where email =' + "'" + req + "'" + ';'
         );
         return (user.rows);
     } catch (e) {

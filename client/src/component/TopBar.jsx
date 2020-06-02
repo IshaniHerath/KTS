@@ -4,8 +4,8 @@ import '@progress/kendo-ui';
 import '@progress/kendo-theme-default';
 import { Button } from '@progress/kendo-react-buttons';
 import Avatar from '@material-ui/core/Avatar';
-//import logo from './kts crop.png';
-//import dp from './img_avatar.jpg';
+import logo from './kts crop.png';
+import dp from './img_avatar.jpg';
 import Chip from '@material-ui/core/Chip';
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
@@ -20,13 +20,13 @@ class TopBar extends Component {
     render() {
         return (
         <div className="top-bar">
-                <div className = "icon">
-                    <Avatar alt="Remy Sharp" 
+                <div className = "mt-3 icon">
+                    <Avatar alt="Remy Sharp" src={logo}
                             // className={classes.large}
                     />
                 </div>
 
-            <div className="global-search" >
+            <div className="mt-3 global-search" >
                 <div className="row">
                     <div className="mr-3">
                         <label>Search:</label>
@@ -50,11 +50,11 @@ class TopBar extends Component {
                 </div>
             </div>
 
-            <div className="page-title">Knowledge Transferring System</div>
+            <div className="page-title mt-3">Knowledge Transferring System</div>
 
-            <div className = "chip-dp">
+            <div className = "mt-3 chip-dp">
                 <Tooltip title="My Profile" font-size={20}>
-                    <Chip avatar={<Avatar alt="Natacha" />}
+                    <Chip avatar={<Avatar alt="Natacha" src={dp} />}
                         // avatar={<Avatar>M</Avatar>}
                         label="Ishani"
                           onClick={this.handleClick}

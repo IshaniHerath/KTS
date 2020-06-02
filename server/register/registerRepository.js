@@ -10,7 +10,7 @@ userContext.saveRegisterDetails = async (user) => {
         console.log("User : ", user);
         try {
             const newUser = await pool.query(
-                'insert into "UserRegister" (name, email, type, regnumber, password, status) values ($1 , $2 , $3 , $4 , $5, $6) RETURNING id ;',
+                'insert into "UserProfile" (name, email, type, regnumber, password, status) values ($1 , $2 , $3 , $4 , $5, $6) RETURNING id ;',
                 [user.UserName, user.Email, user.Type, user.RegNumber, user.Password, user.StatusId]
             );
             console.log("newUser : ", newUser.rows);
@@ -24,9 +24,10 @@ userContext.saveRegisterDetails = async (user) => {
         console.log("User : ", user);
         try {
             const newUser = await pool.query(
-                'insert into "UserRegister" (name, email, type, password, status) values ($1 , $2 , $3 , $5, $6) RETURNING id ;',
+                'insert into "UserProfile" (name, email, type, password, status) values ($1 , $2 , $3 , $5, $6) RETURNING id ;',
                 [user.UserName, user.Email, user.Type, user.Password, user.Status]
             );
+            return (newUser.rows);
         } catch (e) {
             console.log(e.message);
         }

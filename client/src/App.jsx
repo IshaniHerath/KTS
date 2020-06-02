@@ -6,7 +6,6 @@ import Layout from './component/Layout';
 import Login from './login/Login';
 import Register from './register/Register';
 import Admin from './admin/Admin';
-import Home from './ui/dashboard/Home';
 
 import './App.css';
 
@@ -16,17 +15,6 @@ class App extends Component {
             <div className="App">
                 <BrowserRouter>
                     <Switch>
-                        <Route
-                            exact={true}
-                            path="/home"
-                            component={props => (
-                                <Home
-                                    {...props}
-                                    timestamp={new Date().toString()}
-                                    onHeaderTitleChange={this.handleHeaderTitleChange}
-                                />
-                            )}
-                        />
                         <Route
                             exact={true}
                             path="/"

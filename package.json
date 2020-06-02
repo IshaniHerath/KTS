@@ -1,0 +1,24 @@
+{
+  "name": "kts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "cd client && npm run start",
+    "server": "nodemon ./server/index.js",
+    "dev": "concurrently \"yarn server\" \"yarn client\"",
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@progress/kendo-data-query": "^1.5.3",
+    "@progress/kendo-react-data-tools": "^3.14.0",
+    "@progress/kendo-react-dateinputs": "^3.14.0",
+    "@progress/kendo-react-grid": "^3.14.0"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.1"
+  }
+}

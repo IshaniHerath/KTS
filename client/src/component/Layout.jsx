@@ -7,6 +7,7 @@ import TopBar from './TopBar';
 import UserProfile from '../userProfile/UserProfile';
 import Course from '../course/Course';
 import QAndA from '../QAndA/QAndA';
+import Group from '../group/Group';
 
 class Layout extends Component {
     constructor(props) {
@@ -48,6 +49,9 @@ class Layout extends Component {
                                 <QAndA headerTitle=" "/>
                             </TabStripTab>
 
+                            <TabStripTab title="Groups">
+                                <Group headerTitle=" "/>
+                            </TabStripTab>
                         </TabStrip>
                     </div>
                 </div>
