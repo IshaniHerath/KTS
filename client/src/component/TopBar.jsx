@@ -20,13 +20,13 @@ class TopBar extends Component {
     render() {
         return (
         <div className="top-bar">
-                <div className = "icon">
+                <div className = "mt-3 icon">
                     <Avatar alt="Remy Sharp" src={logo}
                             // className={classes.large}
                     />
                 </div>
 
-            <div className="global-search" >
+            <div className="mt-3 global-search" >
                 <div className="row">
                     <div className="mr-3">
                         <label>Search:</label>
@@ -50,9 +50,9 @@ class TopBar extends Component {
                 </div>
             </div>
 
-            <div className="page-title">Knowledge Transferring System</div>
+            <div className="page-title mt-3">Knowledge Transferring System</div>
 
-            <div className = "chip-dp">
+            <div className = "mt-3 chip-dp">
                 <Tooltip title="My Profile" font-size={20}>
                     <Chip avatar={<Avatar alt="Natacha" src={dp} />}
                         // avatar={<Avatar>M</Avatar>}

@@ -464,7 +464,7 @@ class UserProfile extends Component {
                     <div className="col">
                         <div className="col sub-card">
                             <div className="col-md-12">
-                                <h1> this is post area </h1>
+                                <h1> this is Dashboard/Upcoming section area </h1>
                             </div>
                         </div>
                     </div>
