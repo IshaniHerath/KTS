@@ -83,8 +83,8 @@ class Course extends Component {
                         <h6>My Course List</h6>
                         <ul>
                             <li> <a href=""> EEI6560-Software Project Management </a></li>
-                            <li> EEI6565-Artificial Intelligent Technology </li>
-                            <li> EEI6567-Software Architecture and design </li>
+                            <li> <a href=""> EEI6565-Artificial Intelligent Technology </a></li>
+                            <li> <a href=""> EEI6567-Software Architecture and design </a></li>
                         </ul>
                         </div>
 

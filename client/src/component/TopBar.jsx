@@ -41,7 +41,7 @@ class TopBar extends Component {
                         />
                     </div>
                     <div className="search-btn">
-                        <Tooltip title="Search" font-size={10}>
+                        <Tooltip title="Search">
                             <Button type="submit" icon="search" look="bare" onClick={this.handleSubmit} />
                             {/*{this.state.isSearchResultVisible && this.globalSearchResult(this.state.searchResult)}*/}
                         </Tooltip>
@@ -53,7 +53,7 @@ class TopBar extends Component {
             <div className="page-title mt-3">Knowledge Transferring System</div>
 
             <div className = "mt-3 chip-dp">
-                <Tooltip title="My Profile" font-size={20}>
+                <Tooltip title="My Profile" >
                     <Chip avatar={<Avatar alt="Natacha" src={dp} />}
                         // avatar={<Avatar>M</Avatar>}
                         label="Ishani"

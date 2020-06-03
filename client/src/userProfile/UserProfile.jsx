@@ -244,6 +244,13 @@ class UserProfile extends Component {
         });
     };
 
+    //TODO
+    handleLinkClick = (e) => {
+        console.log("UUUUUUUUUUUUUUUUUUUu")
+        this.state.selected = 1;
+        // e.preventDefault();
+    }
+
     onClickCancel = event => {
         //Modify this as reset to previous values
         this.setState({
@@ -261,6 +268,11 @@ class UserProfile extends Component {
         if (this.state.redirectToUserSearch === true) {
             return <Redirect to="/"/>;
         }
+
+        if (this.state.redirectToAdminPage === true) {
+            return <Redirect to='/admin'/>;
+        }
+
         return (
             <div className="container-fluid">
                 <UserImageSection className="mb-4" headerTitle=" "/>
@@ -275,12 +287,13 @@ class UserProfile extends Component {
                         <div className="col sub-card">
                             <div className="col-md-12">
 
+                                <div className="main-heading"><b> Personal Details </b></div>
                                 <div className="row">
                                     <div className="col-md-6">
                                         <div className="row">
                                             {/*   <div className="col-md-6">*/}
                                             <label htmlFor="" className="mandatory">
-                                                Name:
+                                                Name :
                                             </label>
                                             <Input
                                                 placeholder="Full Name"
@@ -294,7 +307,7 @@ class UserProfile extends Component {
 
                                     <div className="col-md-6">
                                         <div className="row">
-                                            <label className="mandatory">Type:</label>
+                                            <label className="mandatory">Type :</label>
 
                                             <ComboBox
                                                 textField="name"
@@ -316,7 +329,7 @@ class UserProfile extends Component {
                                     {(this.state.selectedType && this.state.selectedType.name === "Student") && (
                                         <div className="col-md-6">
                                             <div className="row">
-                                                <label htmlFor="" className="mandatory">Reg No:</label>
+                                                <label htmlFor="" className="mandatory">Reg No :</label>
 
                                                 <Input className="mandatory"
                                                        placeholder="Register Number"
@@ -355,7 +368,7 @@ class UserProfile extends Component {
                                     {(this.state.selectedType && this.state.selectedType.name === "Student") && (
                                         <div className="col-md-6">
                                             <div className="row">
-                                                <label htmlFor="" className="mandatory">Program:</label>
+                                                <label htmlFor="" className="mandatory">Program :</label>
                                                 <ComboBox
                                                     data={this.state.AllPrograms}
                                                     textField="name"
@@ -374,7 +387,7 @@ class UserProfile extends Component {
                                     {(this.state.selectedType && this.state.selectedType.name === "Lecturer") && (
                                         <div className="col-md-6">
                                             <div className="row">
-                                                <label htmlFor="" className="mandatory">Program:</label>
+                                                <label htmlFor="" className="mandatory">Program :</label>
                                                 <ComboBox
                                                     data={this.state.AllPrograms}
                                                     textField="name"
@@ -396,7 +409,7 @@ class UserProfile extends Component {
 
                                     <div className="col-md-6">
                                         <div className="row">
-                                            <Label htmlFor="" className="mandatory">Email:</Label>
+                                            <Label htmlFor="" className="mandatory">Email :</Label>
                                             <div id="statusToolTip">
                                                 <Input className="mandatory"
                                                        placeholder="example@gmail.com"
@@ -435,7 +448,7 @@ class UserProfile extends Component {
                         </div>
                         <div className="col sub-card">
                             <div className="col-md-12">
-                                <div className="main-heading">My Courses</div>
+                                <div className="main-heading"><b> My Courses </b></div>
                                 <div className="row">
                                     <Fragment>
                                         <table className="table table-striped">
@@ -448,8 +461,10 @@ class UserProfile extends Component {
                                             <tbody>
                                             {items.map(item => (
                                                 <tr>
-                                                    <td>{item.code}</td>
-                                                    <td>{item.name}</td>
+                                                    <td> {item.code} </td>
+                                                    <td><a href="#" onClick={this.handleLinkClick}>
+                                                        {/*<a href="">*/}
+                                                        {item.name} </a></td>
                                                 </tr>
                                             ))}
                                             </tbody>
@@ -464,7 +479,7 @@ class UserProfile extends Component {
                     <div className="col">
                         <div className="col sub-card">
                             <div className="col-md-12">
-                                <h1> this is Dashboard/Upcoming section area </h1>
+                                <div className="main-heading"><b> Dashboard </b></div>
                             </div>
                         </div>
                     </div>
