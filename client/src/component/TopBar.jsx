@@ -4,7 +4,7 @@ import '@progress/kendo-ui';
 import '@progress/kendo-theme-default';
 import { Button } from '@progress/kendo-react-buttons';
 import Avatar from '@material-ui/core/Avatar';
-import logo from './kts crop.png';
+import logo from './logo....png';
 import dp from './img_avatar.jpg';
 import Chip from '@material-ui/core/Chip';
 import Tooltip from "@material-ui/core/Tooltip";

@@ -49,7 +49,7 @@ class UserProfile extends Component {
     componentDidMount() {
         window.scrollTo(0, 0);
         this.isMount = true;
-        this.populateCourses();
+        this.populateAllCourses();
         this.populatePrograms();
         this.populateDepartments();
         this.populateUserType();
@@ -88,7 +88,7 @@ class UserProfile extends Component {
             });
     }
 
-    populateCourses() {
+    populateAllCourses() {
         // var postId = this.props.postid;
 
         fetch('http://localhost:5000/userProfile/')
@@ -135,7 +135,7 @@ class UserProfile extends Component {
         }
     };
 
-    handleOnChange = event => {
+    handleOnChange = (event) => {
         const field = event.target.name;
 
         if (field === "FirstName") {
@@ -173,7 +173,7 @@ class UserProfile extends Component {
         // await this.validateProperty(event.target.value);
     };
 
-    handleSubmit = event => {
+    handleSubmit = (event) => {
         //Do not refresh the page
         event.preventDefault();
 
@@ -406,7 +406,6 @@ class UserProfile extends Component {
                                 </div>
 
                                 <div className="row">
-
                                     <div className="col-md-6">
                                         <div className="row">
                                             <Label htmlFor="" className="mandatory">Email :</Label>

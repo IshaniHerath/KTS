@@ -1,11 +1,11 @@
 const pool = require('../connection');
-const userContext = {};
+const courseContext = {};
 
 /**
  * getPrograms - Retrieve all programs
  * @returns {array} list of Courses
  */
-userContext.getPrograms = async () => {
+courseContext.getPrograms = async () => {
     try {
         const allPrograms = await pool.query(
             'select id, name from "Program";'
@@ -17,4 +17,27 @@ userContext.getPrograms = async () => {
     }
 };
 
-module.exports = userContext;
+courseContext.getCoursesByProgram = async (req, res) => {
+    try {
+        const allPrograms = await pool.query(
+            'select id, name from "Course" where program =' + (req) + ';'
+        );
+        return (allPrograms.rows);
+    } catch (e) {
+        console.log(e.message);
+    }
+};
+
+courseContext.updateUserCourseStatus = async (req, res) => {
+    try {
+        const allPrograms = await pool.query(
+            'insert into "user_course" ("cid", "uid", "status") values ($1, $2, $3)',
+            [req.CourseId, req.UserId, req.CourseStatus]
+        );
+        return (allPrograms.rows);
+    } catch (e) {
+        console.log(e.message);
+    }
+};
+
+module.exports = courseContext;
