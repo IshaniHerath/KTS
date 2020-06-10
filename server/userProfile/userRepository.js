@@ -5,15 +5,12 @@ const userContext = {};
  * getCourses - Retrieve some details of Course by user ID
  * @returns {array} list of Courses
  */
-userContext.getCourses = async () => {
-    const userId = 73;
-
+userContext.getCourses = async (req, res) => {
     try {
         const allUser = await pool.query(
-            'select c.name , c.code from "Course" as c INNER JOIN "user_course" as t on c.id = t."cid" where t.uid =' + userId + ';'
+            'select c.name , c.code from "Course" as c INNER JOIN "user_course" as t on c.id = t.cid where t.uid =' + (req.params.id) + 'and t.status = 2'+';'
         );
         return (allUser.rows);
-        // res.send (allUser.rows);
     } catch (e) {
         console.log(e.message);
     }
@@ -39,7 +36,6 @@ userContext.getUserTypes = async () => {
         const allUserTypes = await pool.query(
             'select typeid, name from "UserType";'
         );
-        console.log("allUserTypes : ", allUserTypes);
         return (allUserTypes.rows);
     } catch (e) {
         console.log("ERROR!!", e.message);

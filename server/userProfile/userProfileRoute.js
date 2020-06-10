@@ -3,10 +3,8 @@ const userRepository = require('./.').repo;
 const router = express.Router();
 const pool = require('../connection');
 
-router.get('/', async (req, res) => {
-  // res.send ("hello");
-  res.send (await userRepository.getCourses());
-  // return userRepository.getCourses(req, res);
+router.get('/:id', async (req, res) => {
+  res.send (await userRepository.getCourses(req, res));
 });
 
 router.get('/getDepartments', async (req, res) => {
@@ -19,7 +17,6 @@ router.get('/getUserTypes', async (req, res) => {
 
 router.post('/', async (req, res) => {
   res.send (await userRepository.saveUserDetails(req.body));
-  // res.end();
 });
 
 module.exports = router;

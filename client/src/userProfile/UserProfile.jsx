@@ -89,9 +89,9 @@ class UserProfile extends Component {
     }
 
     populateAllCourses() {
-        // var postId = this.props.postid;
+        var userId = 89; //TODO
 
-        fetch('http://localhost:5000/userProfile/')
+        fetch('http://localhost:5000/userProfile/' + userId)
             .then(res => res.json())
             .then(json => {
                 this.setState({
@@ -99,12 +99,6 @@ class UserProfile extends Component {
                     items: json,
                 });
             });
-
-        // getCourseList().then(response => {
-        //     // let profileDetails = response.data;
-        //     console.log("UUUUUUUUUUUUUUUUUUUUUUUUUUUU")
-        //     console.log("response.data : ", response.data)
-        // });
     }
 
     handleOnChangeCombo = event => {
