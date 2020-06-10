@@ -1,10 +1,6 @@
 const pool = require('../connection');
 const courseContext = {};
 
-/**
- * getPrograms - Retrieve all programs
- * @returns {array} list of Courses
- */
 courseContext.getPrograms = async () => {
     try {
         const allPrograms = await pool.query(
@@ -20,7 +16,7 @@ courseContext.getPrograms = async () => {
 courseContext.getCoursesByProgram = async (req, res) => {
     try {
         const allPrograms = await pool.query(
-            'select id, name from "Course" where program =' + (req) + ';'
+            'select id, name from "Course" where program =' + (req.params.id) + ';'
         );
         return (allPrograms.rows);
     } catch (e) {

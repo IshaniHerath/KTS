@@ -28,10 +28,12 @@ class Course extends Component {
         super(props);
 
         this.state = {
-            fullName: "",
-            program: "",
+            //TODO - get from parent
+            userId: 0,
+            programId: "",
             email: "",
             regNumber: 0,
+
             courseList: [],
             selectedCourse: [],
 
@@ -53,7 +55,6 @@ class Course extends Component {
             visible: false,
         };
         this.toggleDialog = this.toggleDialog.bind(this);
-
     }
 
     componentDidMount(): void {
@@ -61,9 +62,11 @@ class Course extends Component {
     }
 
     populateCourseByProgramId = () => {
-        fetch('http://localhost:5000/courses/getCoursesByProgram')
+        var pid = 10; //TODO
+        fetch('http://localhost:5000/courses/getCoursesByProgram/' + pid)
             .then(res => res.json())
             .then(json => {
+                console.log("json : >> ", json);
                 this.setState({
                     courseList: json
                 })
@@ -95,17 +98,14 @@ class Course extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-
         var userCourseList = [];
-
         if (this.state.selectedCourse) {
             userCourseList = {
                 CourseId: this.state.selectedCourse.id,
                 UserId: 90, //TODO
-                CourseStatus: 1,
+                CourseStatus: 1, //Pending status
             }
         }
-        console.log('userCourseList : ', userCourseList);
 
         fetch('http://localhost:5000/courses/updateUserCourseStatus', {
             method: 'PUT',
@@ -161,15 +161,15 @@ class Course extends Component {
                                 <label>Course :</label>
                             </div>
                             <ComboBox className='ml-3'
-                                textField="name"
-                                dataItemKey="id"
-                                data={this.state.courseList}
-                                value={this.state.selectedCourse}
-                                onChange={this.handleOnChangeCombo}
-                                name="selectedCourse"
-                                placeholder="Please Select"
+                                      textField="name"
+                                      dataItemKey="id"
+                                      data={this.state.courseList}
+                                      value={this.state.selectedCourse}
+                                      onChange={this.handleOnChangeCombo}
+                                      name="selectedCourse"
+                                      placeholder="Please Select"
                             />
-                            <MuiThemeProvider className = 'ml-3'>
+                            <MuiThemeProvider className='ml-3'>
                                 <React.Fragment>
                                     <RaisedButton
                                         className={"rbtn-primary"}
@@ -298,8 +298,6 @@ class Course extends Component {
                         </DialogActionsBar>
                     </Dialog>
                 )}
-
-
 
 
                 {/*{this.state.visible && (*/}
