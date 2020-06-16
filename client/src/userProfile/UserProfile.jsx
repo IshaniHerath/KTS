@@ -21,7 +21,9 @@ class UserProfile extends Component {
             email: "",
             typeId: 0,
             regNumber: "",
-            userId: {},
+            userDetails: [],
+            userId: this.props.id,
+            status: this.props.status,
 
             //drop down selected data
             selectedType: null,
@@ -31,7 +33,7 @@ class UserProfile extends Component {
             //drop down data
             types: ['Student', 'Lecturer', 'Other'],
             AllPrograms: [],
-            items: [],
+            courses: [],
             AllDepartments: [],
             AllTypes: [],
             // isLoaded: false,
@@ -49,10 +51,45 @@ class UserProfile extends Component {
     componentDidMount() {
         window.scrollTo(0, 0);
         this.isMount = true;
-        this.populateAllCourses();
+        this.populateCoursesList();
         this.populatePrograms();
         this.populateDepartments();
         this.populateUserType();
+        this.populateUserDetails();
+    }
+
+    populateUserDetails() {
+        var UserData = [];
+        var id = this.state.userId;
+
+        console.log("this.state.userId : ", this.state.userId)
+        fetch('http://localhost:5000/userProfile/' + id)
+            .then(res => res.json())
+            .then(respond => {
+                respond.forEach(function (userData) {
+                    console.log("userData >>", userData);
+                    UserData = {
+                        Name: userData.username,
+                        Email: userData.email,
+                        Program: {
+                            id: userData.programid,
+                            name: userData.progname
+                        },
+                        Type: {
+                            typeid: userData.typeid,
+                            name: userData.typename,
+                        },
+                        RegNumber: userData.regnumber,
+                    }
+                });
+                this.setState({
+                    fullName: UserData.Name,
+                    email: UserData.Email,
+                    selectedType: UserData.Type,
+                    selectedProgram: UserData.Program,
+                    regNumber: UserData.RegNumber,
+                })
+            })
     }
 
     populatePrograms() {
@@ -64,12 +101,10 @@ class UserProfile extends Component {
                     AllPrograms: data
                 });
             });
-        console.log("progams : ", this.state.AllPrograms)
-
     }
 
     populateDepartments() {
-        fetch('http://localhost:5000/userProfile/getDepartments')
+        fetch('http://localhost:5000/userProfile/:id/getDepartments')
             .then(res => res.json())
             .then(data => {
                 this.setState({
@@ -79,7 +114,7 @@ class UserProfile extends Component {
     }
 
     populateUserType() {
-        fetch('http://localhost:5000/userProfile/getUserTypes')
+        fetch('http://localhost:5000/userProfile/:id/getUserTypes')
             .then(res => res.json())
             .then(data => {
                 this.setState({
@@ -88,15 +123,13 @@ class UserProfile extends Component {
             });
     }
 
-    populateAllCourses() {
-        var userId = 89; //TODO
-
-        fetch('http://localhost:5000/userProfile/' + userId)
+    populateCoursesList() {
+        var id = this.state.userId;
+        fetch('http://localhost:5000/userProfile/' + id + '/courseList')
             .then(res => res.json())
             .then(json => {
                 this.setState({
-                    // isLoaded: true,
-                    items: json,
+                    courses: json,
                 });
             });
     }
@@ -164,7 +197,6 @@ class UserProfile extends Component {
                 });
             }
         }
-        // await this.validateProperty(event.target.value);
     };
 
     handleSubmit = (event) => {
@@ -202,7 +234,7 @@ class UserProfile extends Component {
 
                     console.log("userProfile : ", userProfile)
                     let uId = 0;
-                    fetch('http://localhost:5000/userProfile/', {
+                    fetch('http://localhost:5000/userProfile/:id', {
                         method: 'POST',
                         body: JSON.stringify(userProfile),
                         headers: {
@@ -240,7 +272,6 @@ class UserProfile extends Component {
 
     //TODO
     handleLinkClick = (e) => {
-        console.log("UUUUUUUUUUUUUUUUUUUu")
         this.state.selected = 1;
         // e.preventDefault();
     }
@@ -249,15 +280,12 @@ class UserProfile extends Component {
         //Modify this as reset to previous values
         this.setState({
             fullName: "",
-            program: "",
             email: "",
-            regNumber: "",
-            selectedType: ""
         })
     };
 
     render() {
-        var {items} = this.state;
+        var {courses} = this.state;
 
         if (this.state.redirectToUserSearch === true) {
             return <Redirect to="/"/>;
@@ -285,7 +313,6 @@ class UserProfile extends Component {
                                 <div className="row">
                                     <div className="col-md-6">
                                         <div className="row">
-                                            {/*   <div className="col-md-6">*/}
                                             <label htmlFor="" className="mandatory">
                                                 Name :
                                             </label>
@@ -311,9 +338,8 @@ class UserProfile extends Component {
                                                 onChange={this.handleOnChangeCombo}
                                                 name="selectedType"
                                                 placeholder="Please Select"
-                                                filterable={true}
-                                                //       popupSettings={this.popupSet}
                                                 required={true}
+                                                disabled={true}
                                             />
                                         </div>
                                     </div>
@@ -331,6 +357,7 @@ class UserProfile extends Component {
                                                        name="regNumber"
                                                        required={true}
                                                        onChange={this.handleOnChange}
+                                                       disabled={true}
                                                     // type="Numeric"
                                                     // maxLength= '9'
                                                 />
@@ -371,7 +398,7 @@ class UserProfile extends Component {
                                                     onChange={this.handleOnChangeCombo}
                                                     name="selectedProgram"
                                                     placeholder="Please Select"
-                                                    filterable={true}
+                                                    disabled={true}
                                                     //       popupSettings={this.popupSet}
                                                     required={true}
                                                 />
@@ -439,43 +466,46 @@ class UserProfile extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="col sub-card">
-                            <div className="col-md-12">
-                                <div className="main-heading"><b> My Courses </b></div>
-                                <div className="row">
-                                    <Fragment>
-                                        <table className="table table-striped">
-                                            <thead>
-                                            <tr>
-                                                <th>Course Code</th>
-                                                <th>Course Name</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {items.map(item => (
+
+                        {(this.state.status == 2) && (
+                            <div className="col sub-card">
+                                <div className="col-md-12">
+                                    <div className="main-heading"><b> My Courses </b></div>
+                                    <div className="row">
+                                        <Fragment>
+                                            <table className="table table-striped">
+                                                <thead>
                                                 <tr>
-                                                    <td> {item.code} </td>
-                                                    <td><a href="#" onClick={this.handleLinkClick}>
-                                                        {/*<a href="">*/}
-                                                        {item.name} </a></td>
+                                                    <th>Course Code</th>
+                                                    <th>Course Name</th>
                                                 </tr>
-                                            ))}
-                                            </tbody>
-                                        </table>
-                                    </Fragment>
+                                                </thead>
+                                                <tbody>
+                                                {courses.map((item) => (
+                                                    <tr key={item.id}>
+                                                        <td> {item.code} </td>
+                                                        <td><a href="#" onClick={this.handleLinkClick}>
+                                                            {item.name} </a></td>
+                                                    </tr>
+                                                ))}
+                                                </tbody>
+                                            </table>
+                                        </Fragment>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
                     </div>
 
-                    {/*Post Section here*/}
-                    <div className="col">
+                    {(this.state.status == 2) && (
+                        <div className="col">
                         <div className="col sub-card">
-                            <div className="col-md-12">
-                                <div className="main-heading"><b> Dashboard </b></div>
-                            </div>
+                        <div className="col-md-12">
+                        <div className="main-heading"><b> Dashboard </b></div>
                         </div>
-                    </div>
+                        </div>
+                        </div>
+                        )}
                 </div>
 
                 <div className="row">

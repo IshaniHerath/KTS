@@ -10,6 +10,16 @@ import Admin from './admin/Admin';
 import './App.css';
 
 class App extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state ={
+            id: 89,
+            status: 3
+        }
+    }
+
     render() {
         return (
             <div className="App">
@@ -17,14 +27,22 @@ class App extends Component {
                     <Switch>
                         <Route
                             exact={true}
-                            path="/"
-                            component={props => (
-                                <Layout
-                                    {...props}
-                                    timestamp={new Date().toString()}
-                                    onHeaderTitleChange={this.handleHeaderTitleChange}
+                            path={"/" + (this.state.id)}
+                            render={
+                                (props) => <Layout {...props}
+                                                   id={this.state.id}
+                                                   status={this.state.status}
                                 />
-                            )}
+                            }
+
+                            // component={props => (
+                            //     <Layout
+                            //         {...props}
+                            //         timestamp={new Date().toString()}
+                            //         onHeaderTitleChange={this.handleHeaderTitleChange}
+                            //         id = {this.state.id}
+                            //     />
+                            // )}
                         />
                         <Route
                             exact={true}
