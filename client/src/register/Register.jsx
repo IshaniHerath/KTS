@@ -47,7 +47,7 @@ class Register extends Component {
     }
 
     populateUserType() {
-        fetch('http://localhost:5000/userProfile/getUserTypes')
+        fetch('http://localhost:5000/userProfile/:id/getUserTypes')
             .then(res => res.json())
             .then(data => {
                 this.setState({

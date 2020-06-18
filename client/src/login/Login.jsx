@@ -61,6 +61,7 @@ class Login extends Component {
 
     onClickCancel = event => {
         this.setState({
+            id: 0,
             email: "",
             password: "",
         })
@@ -77,6 +78,9 @@ class Login extends Component {
     handleSubmit = event => {
         //Do not refresh the page
         event.preventDefault();
+
+        // const {history} = this.props;
+
         this.setState(
             () => {
                 if (!this.validation()) {
@@ -99,19 +103,23 @@ class Login extends Component {
                                 var credential = [];
                                 res.forEach(function (credentials) {
                                     credential = {
+                                        Id: credentials.id,
                                         Password: credentials.password,
                                         Status: credentials.status,
                                         Type: credentials.type,
                                     };
                                 });
                                 this.setState({
+                                    id: credential.Id,
                                     dbPassword: credential.Password,
                                     status: credential.Status,
                                     type: credential.Type
                                 });
 
                                 //status approved
-                                if (this.state.dbPassword === this.state.password && this.state.status === 2) {
+                                if (this.state.dbPassword === this.state.password) {
+                                //Not gonna check status, coz every user should go to main page
+                                // if (this.state.dbPassword === this.state.password && this.state.status === 2) {
                                     //Student, Lecturer, Other users
                                     if (this.state.type === 1 || this.state.type === 2 || this.state.type === 3) {
                                         this.setState({
@@ -138,6 +146,7 @@ class Login extends Component {
                                 if (this.state.status === 3) {
                                     this.toggleDialog('Your user type request is Rejected. Please register again with different user type', 'Error');
                                 }
+                             // history.push('/');
                             })
                         )
                 }
@@ -173,7 +182,9 @@ class Login extends Component {
 
     render() {
         if (this.state.redirectToHome === true) {
-            return <Redirect to="/"/>;
+            return <Redirect to= {"/"
+            + this.state.id
+            }/>;
         }
 
         if (this.state.redirectToAdminPage === true){
@@ -254,6 +265,11 @@ class Login extends Component {
 
                         </div>
                     </React.Fragment>
+
+                    <div>
+                        <a href={"http://localhost:3000/register"} > Create New Account </a>
+                    </div>
+
                 </MuiThemeProvider>
 
                 <div>

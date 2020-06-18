@@ -3,11 +3,10 @@ import './App.css';
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 
 import Layout from './component/Layout';
+import MyDirection from './component/Direction';
 import Login from './login/Login';
 import Register from './register/Register';
 import Admin from './admin/Admin';
-
-import './App.css';
 
 class App extends Component {
 
@@ -16,7 +15,8 @@ class App extends Component {
 
         this.state ={
             id: 89,
-            status: 3
+            // id: 0,
+            status: 2
         }
     }
 
@@ -25,6 +25,16 @@ class App extends Component {
             <div className="App">
                 <BrowserRouter>
                     <Switch>
+                        <Route
+                            exact={true}
+                            path={"/"}
+                            render={
+                                (props) => <MyDirection {...props}
+                                                   id={this.state.id}
+                                />
+                            }
+                        />
+
                         <Route
                             exact={true}
                             path={"/" + (this.state.id)}
