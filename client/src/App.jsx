@@ -13,12 +13,18 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-        this.state ={
-            id: 89,
-            // id: 0,
+        this.state = {
+            id: 0,
             status: 2
         }
     }
+
+    callbackFunction = (childData) => {
+        console.log("childData >>>>>>>> :", childData);
+        this.setState({
+            id: childData
+        })
+    };
 
     render() {
         return (
@@ -30,7 +36,8 @@ class App extends Component {
                             path={"/"}
                             render={
                                 (props) => <MyDirection {...props}
-                                                   id={this.state.id}
+                                                        parentCallback={this.callbackFunction}
+                                                        id={this.state.id}
                                 />
                             }
                         />
@@ -44,26 +51,16 @@ class App extends Component {
                                                    status={this.state.status}
                                 />
                             }
-
-                            // component={props => (
-                            //     <Layout
-                            //         {...props}
-                            //         timestamp={new Date().toString()}
-                            //         onHeaderTitleChange={this.handleHeaderTitleChange}
-                            //         id = {this.state.id}
-                            //     />
-                            // )}
                         />
                         <Route
                             exact={true}
                             path="/login"
-                            component={props => (
-                                <Login
-                                    {...props}
-                                    timestamp={new Date().toString()}
-                                    onHeaderTitleChange={this.handleHeaderTitleChange}
+                            render={
+                                (props) => <Login {...props}
+                                                  parentCallback={this.callbackFunction}
+                                                  id={this.state.id}
                                 />
-                            )}
+                            }
                         />
                         <Route
                             exact={true}

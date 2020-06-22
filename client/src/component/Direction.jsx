@@ -8,7 +8,7 @@ class Direction extends Component {
     }
 
     render() {
-        if (this.props.id == 0) {
+        if (this.props.id === 0) {
             return <Redirect to={"/login"}/>;
         } else {
             return <Redirect to={"/" + this.props.id}

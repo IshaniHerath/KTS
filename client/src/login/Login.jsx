@@ -15,6 +15,7 @@ class Login extends Component {
         super(props);
 
         this.state = {
+            id: 0,
             email: "",
             password: "",
             dbPassword: "",
@@ -59,7 +60,7 @@ class Login extends Component {
         event.preventDefault();
     };
 
-    onClickCancel = event => {
+    onClickCancel = (event) => {
         this.setState({
             id: 0,
             email: "",
@@ -115,6 +116,9 @@ class Login extends Component {
                                     status: credential.Status,
                                     type: credential.Type
                                 });
+
+                                //send Data from child(login) to parent(app.jsx) through callback function
+                                this.props.parentCallback(this.state.id);
 
                                 //status approved
                                 if (this.state.dbPassword === this.state.password) {
@@ -181,13 +185,13 @@ class Login extends Component {
     };
 
     render() {
-        if (this.state.redirectToHome === true) {
+        if (this.state.id && this.state.redirectToHome === true) {
             return <Redirect to= {"/"
             + this.state.id
             }/>;
         }
 
-        if (this.state.redirectToAdminPage === true){
+        if (this.state.redirectToAdminPage === true) {
             return <Redirect to= '/admin'/>;
         }
 
@@ -263,13 +267,12 @@ class Login extends Component {
                                 onClick={this.onClickCancel}
                             >CLEAR</RaisedButton>
 
+                            <div className={"mt-3 mb-3"}>
+                                <a href={"http://localhost:3000/register"}> Create New Account </a>
+                            </div>
+
                         </div>
                     </React.Fragment>
-
-                    <div>
-                        <a href={"http://localhost:3000/register"} > Create New Account </a>
-                    </div>
-
                 </MuiThemeProvider>
 
                 <div>

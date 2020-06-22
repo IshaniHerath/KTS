@@ -446,6 +446,11 @@ class Register extends Component {
                                 >Cancel</RaisedButton>
                             </React.Fragment>
                         </MuiThemeProvider>
+
+                        <div className={"mt-3 mb-3"}>
+                            <a href={"http://localhost:3000/login"}> Login to existing Account </a>
+                        </div>
+
                     </div>
                 </div>
 
