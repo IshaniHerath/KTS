@@ -66,7 +66,7 @@ userContext.saveUserDetails = async (user) => {
         console.log("User : ", user);
         try {
             const newUser = await pool.query(
-                'insert into "UserProfile" (name, email, type, regnumber, programid) values ($1 , $2 , $3 , $4 , $5) RETURNING id ;',
+                'Update "UserProfile" set name = ($1), email = ($2), type = ($3), regnumber = ($4), programid = ($5) where id = ' + (user.UserId)+ ';',
                 [user.UserName, user.Email, user.Type, user.regNumber, user.ProgramId]
             );
             console.log("newUser : ", newUser.rows);
@@ -80,9 +80,11 @@ userContext.saveUserDetails = async (user) => {
         console.log("User : ", user);
         try {
             const newUser = await pool.query(
-                'insert into "UserProfile" (name, email, type, programid , departmentid) values ($1 , $2 , $3 , $4 , $5) RETURNING id ;',
+                'Update "UserProfile" set name = ($1), email = ($2), type = ($3), programid = ($4), departmentid = ($5) where id = ' + (user.UserId)+ ';',
                 [user.UserName, user.Email, user.Type, user.ProgramId, user.DepartmentId]
             );
+            console.log("newUser : ", newUser.rows);
+            return (newUser.rows);
         } catch (e) {
             console.log(e.message);
         }
@@ -91,9 +93,11 @@ userContext.saveUserDetails = async (user) => {
         console.log("User : ", user);
         try {
             const newUser = await pool.query(
-                'insert into "UserProfile" (name, email, type) values ($1 , $2 , $3) RETURNING id ;',
+                'Update "UserProfile" set name = ($1), email = ($2), type = ($3) where id = ' +  (user.UserId)+ ';',
                 [user.UserName, user.Email, user.Type]
             );
+            console.log("newUser : ", newUser.rows);
+            return (newUser.rows);
         } catch (e) {
             console.log(e.message);
         }

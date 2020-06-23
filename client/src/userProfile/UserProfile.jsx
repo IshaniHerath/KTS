@@ -210,6 +210,7 @@ class UserProfile extends Component {
 
                     if (this.state.selectedType.name === 'Student') {
                         userProfile = {
+                            UserId: this.state.userId,
                             UserName: this.state.fullName,
                             Email: this.state.email,
                             Type: this.state.typeId,
@@ -218,6 +219,7 @@ class UserProfile extends Component {
                         };
                     } else if (this.state.selectedType.name === 'Lecturer') {
                         userProfile = {
+                            UserId: this.state.userId,
                             UserName: this.state.fullName,
                             ProgramId: this.state.selectedProgram.id,
                             DepartmentId: this.state.selectedDepartment.id,
@@ -226,6 +228,7 @@ class UserProfile extends Component {
                         };
                     } else if (this.state.selectedType.name === 'Other') {
                         userProfile = {
+                            UserId: this.state.userId,
                             UserName: this.state.fullName,
                             Type: this.state.typeId,
                             Email: this.state.email,
@@ -235,7 +238,7 @@ class UserProfile extends Component {
                     console.log("userProfile : ", userProfile)
                     let uId = 0;
                     fetch('http://localhost:5000/userProfile/:id', {
-                        method: 'POST',
+                        method: 'PUT',
                         body: JSON.stringify(userProfile),
                         headers: {
                             'Content-Type': 'application/json'
@@ -243,14 +246,9 @@ class UserProfile extends Component {
                     })
                         .then(response => response.json())
                         .then(data => {
-                            data.forEach(function (userdata) {
-                                uId = userdata.id;
-                            });
+                            // console.log("data :", data);
+                            this.toggleDialog('The user profile has been successfully updated', 'Success');
                         });
-                    const message = 'The user profile has been successfully created';
-                    const title = 'Success';
-                    this.toggleDialog(message, title);
-
                 })
         }
     };
@@ -274,7 +272,7 @@ class UserProfile extends Component {
     handleLinkClick = (e) => {
         this.state.selected = 1;
         // e.preventDefault();
-    }
+    };
 
     onClickCancel = event => {
         //Modify this as reset to previous values
@@ -398,7 +396,7 @@ class UserProfile extends Component {
                                                     onChange={this.handleOnChangeCombo}
                                                     name="selectedProgram"
                                                     placeholder="Please Select"
-                                                    disabled={true}
+                                                    // disabled={true}
                                                     //       popupSettings={this.popupSet}
                                                     required={true}
                                                 />
@@ -467,7 +465,7 @@ class UserProfile extends Component {
                             </div>
                         </div>
 
-                        {(this.state.status == 2) && (
+                        {(this.state.status === 2 && this.state.selectedType && (this.state.selectedType.typeid === 1 || this.state.selectedType.typeid === 2)) && (
                             <div className="col sub-card">
                                 <div className="col-md-12">
                                     <div className="main-heading"><b> My Courses </b></div>
@@ -497,7 +495,7 @@ class UserProfile extends Component {
                         )}
                     </div>
 
-                    {(this.state.status == 2) && (
+                    {(this.state.status === 2 && this.state.selectedType && (this.state.selectedType.typeid === 1 || this.state.selectedType.typeid === 2)) && (
                         <div className="col">
                         <div className="col sub-card">
                         <div className="col-md-12">

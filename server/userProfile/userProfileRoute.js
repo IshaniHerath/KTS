@@ -19,7 +19,7 @@ router.get('/:id/getUserTypes', async (req, res) => {
   res.send (await userRepository.getUserTypes());
 });
 
-router.post('/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   res.send (await userRepository.saveUserDetails(req.body));
 });
 
