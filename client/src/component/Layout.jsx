@@ -17,10 +17,32 @@ class Layout extends Component {
             id: this.props.id,
             status: this.props.status,
 
+            //Data From Child
+            courseList: [],
+            programId: 0,
+
             //Tab selected
             selected: 0
         }
     }
+
+    callbackFunctionCourseList = (CourseList) => {
+        console.log("courseList > " , CourseList);
+        this.setState({
+            courseList : CourseList,
+            // programId:
+        });
+        console.log("this.state.courseList parent> : ", this.state.courseList)
+    };
+
+    // callbackFunctionProgramId =(ProgramId) => {
+    //     console.log("ProgramId > " , ProgramId);
+    //     this.setState({
+    //         programId: ProgramId
+    //     })
+    //     console.log("this.state.programId parent> : ", this.state.programId)
+    //
+    // };
 
     handleSelect = (e) => {
         this.setState({selected: e.selected})
@@ -41,6 +63,9 @@ class Layout extends Component {
 
                             <TabStripTab title="User Profile">
                                 <UserProfile
+                                    {...this.props}
+                                    parentCallBackCourseList = {this.callbackFunctionCourseList}
+                                    // parentCallBackProgramId = {this.callbackFunctionProgramId}
                                     id={this.state.id}
                                     status={this.state.status}
                                 />
@@ -48,6 +73,7 @@ class Layout extends Component {
 
                             <TabStripTab title="Course Details">
                                 <Course
+                                    courseList={this.state.courseList}
                                     id={this.state.id}
                                     status={this.state.status}
                                 />

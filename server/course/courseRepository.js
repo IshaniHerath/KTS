@@ -24,6 +24,67 @@ courseContext.getCoursesByProgram = async (req, res) => {
     }
 };
 
+//TODO
+courseContext.getCourseDetails = async (req, res) => {
+    console.log("QQQQQQQQQQQQQQQQQ", req);
+
+    //courseId = req.params.id
+    try {
+        const allCourseDetails = await pool.query(
+            'select name, code, description from "Course" where id =' + (req.params.id) + ';'
+        );
+
+        console.log("allCourseDetails.rows : ", allCourseDetails.rows);
+        console.log("allCourseDetails : ", allCourseDetails);
+        return (allCourseDetails.rows);
+    } catch (e) {
+        console.log(e.message);
+    }
+};
+
+courseContext.getAnnouncementDetails = async (req, res) => {
+    console.log("BBBBBBBBBBBB", req);
+    console.log("BBBBBBBBBBBB", req.params);
+
+    //courseId = req.params.id
+    try {
+        const announcement = await pool.query(
+            'select a.title, a.description, a.datetime, u.name from "Announcement" as a  inner JOIN "UserProfile" as u on a.owner = u.id where courseid =' + (req.params.id) +';'
+        );
+        console.log("announcement.rows : ", announcement.rows);
+        console.log("announcement : ", announcement);
+        return (announcement.rows);
+    } catch (e) {
+        console.log(e.message);
+    }
+};
+
+courseContext.postAnnouncement =async (req, res) => {
+    console.log("req.param >>>> ", req);
+    try {
+        const announcement = await pool.query(
+            'insert into "Announcement" (title, description, courseid, datetime, owner) values ($1, $2, $3, $4, $5)',
+            [req.title, req.announcement, req.courseId, req.dateTime, req.owner]
+        );
+        return (announcement.rows);
+    }catch (e) {
+        console.log(e.message)
+    }
+};
+
+courseContext.postDayschool = async (req, res) => {
+    try {
+        const daySchool = await pool.query(
+            // 'insert into "user_course" ("cid", "uid", "status") values ($1, $2, $3)',
+        );
+    return (daySchool.rows);
+    }
+    catch (e) {
+        console.log(e.message);
+    }
+
+};
+
 courseContext.updateUserCourseStatus = async (req, res) => {
     try {
         const allPrograms = await pool.query(

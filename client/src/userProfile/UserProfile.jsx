@@ -25,6 +25,11 @@ class UserProfile extends Component {
             userId: this.props.id,
             status: this.props.status,
 
+            // passToCourse: {
+            //     courseList: [],
+            //     ProgramId: 0,
+            // },
+
             //drop down selected data
             selectedType: null,
             selectedProgram: null,
@@ -62,12 +67,10 @@ class UserProfile extends Component {
         var UserData = [];
         var id = this.state.userId;
 
-        console.log("this.state.userId : ", this.state.userId)
         fetch('http://localhost:5000/userProfile/' + id)
             .then(res => res.json())
             .then(respond => {
                 respond.forEach(function (userData) {
-                    console.log("userData >>", userData);
                     UserData = {
                         Name: userData.username,
                         Email: userData.email,
@@ -85,6 +88,7 @@ class UserProfile extends Component {
                 this.setState({
                     fullName: UserData.Name,
                     email: UserData.Email,
+                    typeId: UserData.Type.typeid,
                     selectedType: UserData.Type,
                     selectedProgram: UserData.Program,
                     regNumber: UserData.RegNumber,
@@ -128,10 +132,14 @@ class UserProfile extends Component {
         fetch('http://localhost:5000/userProfile/' + id + '/courseList')
             .then(res => res.json())
             .then(json => {
+                console.log("courses: ", json);
                 this.setState({
                     courses: json,
                 });
+                this.props.parentCallBackCourseList(json);
             });
+        // console.log("this.state.courses : ",this.state.courses)
+        // this.props.parentCallBackCourseList(this.state.courses);
     }
 
     handleOnChangeCombo = event => {
@@ -232,11 +240,10 @@ class UserProfile extends Component {
                             UserName: this.state.fullName,
                             Type: this.state.typeId,
                             Email: this.state.email,
+                            // ProgramId: null,
                         };
                     }
-
-                    console.log("userProfile : ", userProfile)
-                    let uId = 0;
+                    console.log("userProfile : ", userProfile);
                     fetch('http://localhost:5000/userProfile/:id', {
                         method: 'PUT',
                         body: JSON.stringify(userProfile),
@@ -295,6 +302,7 @@ class UserProfile extends Component {
 
         return (
             <div className="container-fluid">
+                {console.log("II", this.state.courses)}
                 <UserImageSection className="mb-4" headerTitle=" "/>
 
                 {/*mt = margin top mb = margin buttom*/}
@@ -396,7 +404,7 @@ class UserProfile extends Component {
                                                     onChange={this.handleOnChangeCombo}
                                                     name="selectedProgram"
                                                     placeholder="Please Select"
-                                                    // disabled={true}
+                                                    disabled={true}
                                                     //       popupSettings={this.popupSet}
                                                     required={true}
                                                 />
@@ -497,13 +505,13 @@ class UserProfile extends Component {
 
                     {(this.state.status === 2 && this.state.selectedType && (this.state.selectedType.typeid === 1 || this.state.selectedType.typeid === 2)) && (
                         <div className="col">
-                        <div className="col sub-card">
-                        <div className="col-md-12">
-                        <div className="main-heading"><b> Dashboard </b></div>
+                            <div className="col sub-card">
+                                <div className="col-md-12">
+                                    <div className="main-heading"><b> Dashboard </b></div>
+                                </div>
+                            </div>
                         </div>
-                        </div>
-                        </div>
-                        )}
+                    )}
                 </div>
 
                 <div className="row">

@@ -16,7 +16,8 @@
     "@progress/kendo-data-query": "^1.5.3",
     "@progress/kendo-react-data-tools": "^3.14.0",
     "@progress/kendo-react-dateinputs": "^3.14.0",
-    "@progress/kendo-react-grid": "^3.14.0"
+    "@progress/kendo-react-grid": "^3.14.0",
+    "date-fns": "^2.14.0"
   },
   "devDependencies": {
     "concurrently": "^3.5.1"
