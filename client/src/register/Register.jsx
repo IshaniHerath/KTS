@@ -47,7 +47,7 @@ class Register extends Component {
     }
 
     populateUserType() {
-        fetch('http://localhost:5000/userProfile/getUserTypes')
+        fetch('http://localhost:5000/userProfile/:id/getUserTypes')
             .then(res => res.json())
             .then(data => {
                 this.setState({
@@ -446,6 +446,11 @@ class Register extends Component {
                                 >Cancel</RaisedButton>
                             </React.Fragment>
                         </MuiThemeProvider>
+
+                        <div className={"mt-3 mb-3"}>
+                            <a href={"http://localhost:3000/login"}> Login to existing Account </a>
+                        </div>
+
                     </div>
                 </div>
 

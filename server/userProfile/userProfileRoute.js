@@ -3,23 +3,24 @@ const userRepository = require('./.').repo;
 const router = express.Router();
 const pool = require('../connection');
 
-router.get('/', async (req, res) => {
-  // res.send ("hello");
-  res.send (await userRepository.getCourses());
-  // return userRepository.getCourses(req, res);
+router.get('/:id', async (req, res) => {
+  res.send (await userRepository.getUserDetails(req, res));
 });
 
-router.get('/getDepartments', async (req, res) => {
+router.get('/:id/courseList/', async (req, res) => {
+  res.send (await userRepository.getCourses(req, res));
+});
+
+router.get('/:id/getDepartments', async (req, res) => {
   res.send (await userRepository.getDepartments());
 });
 
-router.get('/getUserTypes', async (req, res) => {
+router.get('/:id/getUserTypes', async (req, res) => {
   res.send (await userRepository.getUserTypes());
 });
 
-router.post('/', async (req, res) => {
+router.put('/:id', async (req, res) => {
   res.send (await userRepository.saveUserDetails(req.body));
-  // res.end();
 });
 
 module.exports = router;

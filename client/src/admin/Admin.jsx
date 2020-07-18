@@ -7,29 +7,39 @@ class Admin extends Component {
         super(props);
 
         this.state = {
-            items: [],
-            id: 0,
+            userList: [],
+            courseList: [],
         }
     }
 
     componentDidMount(): void {
-        this.populatePendingRequest();
+        this.populateUserPendingRequest();
+        this.populatePendingCourseRequest();
         // setInterval(this.getData, 5000); // runs every 5 seconds.
     }
 
-    populatePendingRequest() {
+    populateUserPendingRequest() {
         fetch('http://localhost:5000/admin/getPendingUserDetails')
             .then(res => res.json())
             .then(json => {
                 this.setState({
-                    // isLoaded: true,
-                    items: json,
+                    userList: json,
                 });
             });
     }
 
-    updateStatus(userDetail) {
-        fetch('http://localhost:5000/admin/updateStatus', {
+    populatePendingCourseRequest() {
+        fetch('http://localhost:5000/admin/getPendingCourseDetails')
+            .then(res => res.json())
+            .then(json => {
+                this.setState({
+                    courseList: json,
+                })
+            })
+    }
+
+    updateUserStatus(userDetail) {
+        fetch('http://localhost:5000/admin/updateUserStatus', {
             method: 'PUT',
             body: JSON.stringify(userDetail),
             headers: {
@@ -50,11 +60,50 @@ class Admin extends Component {
             });
     }
 
-    handleAccept = event => {
+    updateCourseStatus(courseDetail) {
+        fetch('http://localhost:5000/admin/updateCourseStatus', {
+            method: 'PUT',
+            body: JSON.stringify(courseDetail),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => res.json())
+            .then(result => {
+                if (courseDetail.NewStatusId === 2) {
+                    this.toggleDialog('Course is successfully APPROVED!', 'Success');
+                } else if (courseDetail.NewStatusId === 3) {
+                    this.toggleDialog('Course is successfully REJECTED!', 'Success');
+                }
+                console.log('Success:', result)
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    handleCourseAccept = (event) => {
+        event.preventDefault();
+        var courseDetail = [];
+
+        this.state.courseList.forEach(function (item, key) {
+            if (parseInt(event.target.value) === key) {
+                courseDetail = {
+                    cId: item.cid,
+                    uId: item.uid,
+                    NewStatusId: 2
+                }
+            }
+        });
+        this.updateCourseStatus(courseDetail);
+    };
+
+    handleUserAccept = event => {
         event.preventDefault();
         var userDetail = [];
 
-        this.state.items.forEach(function (item, key) {
+        this.state.userList.forEach(function (item, key) {
+            //To check the row
             if (parseInt(event.target.value) === key) {
                 userDetail = {
                     UserId: item.id,
@@ -64,14 +113,30 @@ class Admin extends Component {
                 };
             }
         });
-        this.updateStatus(userDetail);
+        this.updateUserStatus(userDetail);
     };
 
-    handleReject = event => {
+    handleCourseReject = (event) => {
+        event.preventDefault();
+        var courseDetail = [];
+
+        this.state.courseList.forEach(function (item, key) {
+            if (parseInt(event.target.value) === key) {
+                courseDetail = {
+                    cId: item.cid,
+                    uId: item.uid,
+                    NewStatusId: 3
+                };
+            }
+        });
+        this.updateCourseStatus(courseDetail);
+    };
+
+    handleUserReject = event => {
         event.preventDefault();
         var userDetail = [];
 
-        this.state.items.forEach(function (item, key) {
+        this.state.userList.forEach(function (item, key) {
             if (parseInt(event.target.value) === key) {
                 userDetail = {
                     UserId: item.id,
@@ -81,7 +146,7 @@ class Admin extends Component {
                 };
             }
         });
-        this.updateStatus(userDetail);
+        this.updateUserStatus(userDetail);
     };
 
     toggleDialog = (message, title) => {
@@ -93,7 +158,9 @@ class Admin extends Component {
     };
 
     render() {
-        var {items} = this.state;
+        var {userList} = this.state;
+        var {courseList} = this.state;
+
         return (
             <div>
                 <TopBar headerTitle=""/>
@@ -118,7 +185,7 @@ class Admin extends Component {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {items.map((item, i) => (
+                                {userList.map((item, i) => (
                                         <tr>
                                             <td>{i}</td>
                                             <td>{item.name}</td>
@@ -130,14 +197,14 @@ class Admin extends Component {
                                                 <button
                                                     className="mr-3  btn  btn-primary"
                                                     value={i}
-                                                    onClick={this.handleAccept}
+                                                    onClick={this.handleUserAccept}
                                                 >
                                                     Accept
                                                 </button>
                                                 <button
                                                     className={"btn btn-secondary"}
                                                     value={i}
-                                                    onClick={this.handleReject}
+                                                    onClick={this.handleUserReject}
                                                 >
                                                     Reject
                                                 </button>
@@ -150,10 +217,49 @@ class Admin extends Component {
                         </Fragment>
                     </div>
 
-                    {/*TODO in Courses*/}
                     <div className="main-card">
                         <div className="main-heading">Course Requests</div>
-                        Hi Admin
+                        <table className="table table-striped">
+                            <thead>
+                            <tr>
+                                <th> User Name</th>
+                                <th> Register Number</th>
+                                <th> Program</th>
+                                <th> Course Name</th>
+                                <th> Course Code</th>
+                                <th> Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {courseList.map((item, i) => (
+                                    <tr>
+                                        <td> {item.username} </td>
+                                        <td> {item.regnumber} </td>
+                                        <td> {item.programname} </td>
+                                        <td> {item.coursename} </td>
+                                        <td> {item.code} </td>
+                                        <td>
+                                            <button
+                                                className="mr-3  btn  btn-primary"
+                                                value={i}
+                                                onClick={this.handleCourseAccept}
+                                            >
+                                                Accept
+                                            </button>
+                                            <button
+                                                className={"btn btn-secondary"}
+                                                value={i}
+                                                onClick={this.handleCourseReject}
+                                            >
+                                                Reject
+                                            </button>
+                                        </td>
+                                    </tr>
+                                )
+                            )}
+
+                            </tbody>
+                        </table>
                     </div>
 
                 </div>

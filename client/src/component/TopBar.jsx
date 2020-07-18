@@ -4,7 +4,7 @@ import '@progress/kendo-ui';
 import '@progress/kendo-theme-default';
 import { Button } from '@progress/kendo-react-buttons';
 import Avatar from '@material-ui/core/Avatar';
-import logo from './kts crop.png';
+import logo from './logo....png';
 import dp from './img_avatar.jpg';
 import Chip from '@material-ui/core/Chip';
 import Tooltip from "@material-ui/core/Tooltip";
@@ -41,7 +41,7 @@ class TopBar extends Component {
                         />
                     </div>
                     <div className="search-btn">
-                        <Tooltip title="Search" font-size={10}>
+                        <Tooltip title="Search">
                             <Button type="submit" icon="search" look="bare" onClick={this.handleSubmit} />
                             {/*{this.state.isSearchResultVisible && this.globalSearchResult(this.state.searchResult)}*/}
                         </Tooltip>
@@ -53,7 +53,7 @@ class TopBar extends Component {
             <div className="page-title mt-3">Knowledge Transferring System</div>
 
             <div className = "mt-3 chip-dp">
-                <Tooltip title="My Profile" font-size={20}>
+                <Tooltip title="My Profile" >
                     <Chip avatar={<Avatar alt="Natacha" src={dp} />}
                         // avatar={<Avatar>M</Avatar>}
                         label="Ishani"

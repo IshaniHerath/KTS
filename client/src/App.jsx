@@ -3,13 +3,29 @@ import './App.css';
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 
 import Layout from './component/Layout';
+import MyDirection from './component/Direction';
 import Login from './login/Login';
 import Register from './register/Register';
 import Admin from './admin/Admin';
 
-import './App.css';
-
 class App extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            id: 0,
+            status: 2
+        }
+    }
+
+    callbackFunction = (childData) => {
+        console.log("childData >>>>>>>> :", childData);
+        this.setState({
+            id: childData
+        })
+    };
+
     render() {
         return (
             <div className="App">
@@ -17,25 +33,34 @@ class App extends Component {
                     <Switch>
                         <Route
                             exact={true}
-                            path="/"
-                            component={props => (
-                                <Layout
-                                    {...props}
-                                    timestamp={new Date().toString()}
-                                    onHeaderTitleChange={this.handleHeaderTitleChange}
+                            path={"/"}
+                            render={
+                                (props) => <MyDirection {...props}
+                                                        parentCallback={this.callbackFunction}
+                                                        id={this.state.id}
                                 />
-                            )}
+                            }
+                        />
+
+                        <Route
+                            exact={true}
+                            path={"/" + (this.state.id)}
+                            render={
+                                (props) => <Layout {...props}
+                                                   id={this.state.id}
+                                                   status={this.state.status}
+                                />
+                            }
                         />
                         <Route
                             exact={true}
                             path="/login"
-                            component={props => (
-                                <Login
-                                    {...props}
-                                    timestamp={new Date().toString()}
-                                    onHeaderTitleChange={this.handleHeaderTitleChange}
+                            render={
+                                (props) => <Login {...props}
+                                                  parentCallback={this.callbackFunction}
+                                                  id={this.state.id}
                                 />
-                            )}
+                            }
                         />
                         <Route
                             exact={true}

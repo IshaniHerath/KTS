@@ -21,7 +21,14 @@ class UserProfile extends Component {
             email: "",
             typeId: 0,
             regNumber: "",
-            userId: {},
+            userDetails: [],
+            userId: this.props.id,
+            status: this.props.status,
+
+            // passToCourse: {
+            //     courseList: [],
+            //     ProgramId: 0,
+            // },
 
             //drop down selected data
             selectedType: null,
@@ -31,7 +38,7 @@ class UserProfile extends Component {
             //drop down data
             types: ['Student', 'Lecturer', 'Other'],
             AllPrograms: [],
-            items: [],
+            courses: [],
             AllDepartments: [],
             AllTypes: [],
             // isLoaded: false,
@@ -49,10 +56,44 @@ class UserProfile extends Component {
     componentDidMount() {
         window.scrollTo(0, 0);
         this.isMount = true;
-        this.populateCourses();
+        this.populateCoursesList();
         this.populatePrograms();
         this.populateDepartments();
         this.populateUserType();
+        this.populateUserDetails();
+    }
+
+    populateUserDetails() {
+        var UserData = [];
+        var id = this.state.userId;
+
+        fetch('http://localhost:5000/userProfile/' + id)
+            .then(res => res.json())
+            .then(respond => {
+                respond.forEach(function (userData) {
+                    UserData = {
+                        Name: userData.username,
+                        Email: userData.email,
+                        Program: {
+                            id: userData.programid,
+                            name: userData.progname
+                        },
+                        Type: {
+                            typeid: userData.typeid,
+                            name: userData.typename,
+                        },
+                        RegNumber: userData.regnumber,
+                    }
+                });
+                this.setState({
+                    fullName: UserData.Name,
+                    email: UserData.Email,
+                    typeId: UserData.Type.typeid,
+                    selectedType: UserData.Type,
+                    selectedProgram: UserData.Program,
+                    regNumber: UserData.RegNumber,
+                })
+            })
     }
 
     populatePrograms() {
@@ -64,12 +105,10 @@ class UserProfile extends Component {
                     AllPrograms: data
                 });
             });
-        console.log("progams : ", this.state.AllPrograms)
-
     }
 
     populateDepartments() {
-        fetch('http://localhost:5000/userProfile/getDepartments')
+        fetch('http://localhost:5000/userProfile/:id/getDepartments')
             .then(res => res.json())
             .then(data => {
                 this.setState({
@@ -79,7 +118,7 @@ class UserProfile extends Component {
     }
 
     populateUserType() {
-        fetch('http://localhost:5000/userProfile/getUserTypes')
+        fetch('http://localhost:5000/userProfile/:id/getUserTypes')
             .then(res => res.json())
             .then(data => {
                 this.setState({
@@ -88,23 +127,19 @@ class UserProfile extends Component {
             });
     }
 
-    populateCourses() {
-        // var postId = this.props.postid;
-
-        fetch('http://localhost:5000/userProfile/')
+    populateCoursesList() {
+        var id = this.state.userId;
+        fetch('http://localhost:5000/userProfile/' + id + '/courseList')
             .then(res => res.json())
             .then(json => {
+                console.log("courses: ", json);
                 this.setState({
-                    // isLoaded: true,
-                    items: json,
+                    courses: json,
                 });
+                this.props.parentCallBackCourseList(json);
             });
-
-        // getCourseList().then(response => {
-        //     // let profileDetails = response.data;
-        //     console.log("UUUUUUUUUUUUUUUUUUUUUUUUUUUU")
-        //     console.log("response.data : ", response.data)
-        // });
+        // console.log("this.state.courses : ",this.state.courses)
+        // this.props.parentCallBackCourseList(this.state.courses);
     }
 
     handleOnChangeCombo = event => {
@@ -135,7 +170,7 @@ class UserProfile extends Component {
         }
     };
 
-    handleOnChange = event => {
+    handleOnChange = (event) => {
         const field = event.target.name;
 
         if (field === "FirstName") {
@@ -170,10 +205,9 @@ class UserProfile extends Component {
                 });
             }
         }
-        // await this.validateProperty(event.target.value);
     };
 
-    handleSubmit = event => {
+    handleSubmit = (event) => {
         //Do not refresh the page
         event.preventDefault();
 
@@ -184,6 +218,7 @@ class UserProfile extends Component {
 
                     if (this.state.selectedType.name === 'Student') {
                         userProfile = {
+                            UserId: this.state.userId,
                             UserName: this.state.fullName,
                             Email: this.state.email,
                             Type: this.state.typeId,
@@ -192,6 +227,7 @@ class UserProfile extends Component {
                         };
                     } else if (this.state.selectedType.name === 'Lecturer') {
                         userProfile = {
+                            UserId: this.state.userId,
                             UserName: this.state.fullName,
                             ProgramId: this.state.selectedProgram.id,
                             DepartmentId: this.state.selectedDepartment.id,
@@ -200,16 +236,16 @@ class UserProfile extends Component {
                         };
                     } else if (this.state.selectedType.name === 'Other') {
                         userProfile = {
+                            UserId: this.state.userId,
                             UserName: this.state.fullName,
                             Type: this.state.typeId,
                             Email: this.state.email,
+                            // ProgramId: null,
                         };
                     }
-
-                    console.log("userProfile : ", userProfile)
-                    let uId = 0;
-                    fetch('http://localhost:5000/userProfile/', {
-                        method: 'POST',
+                    console.log("userProfile : ", userProfile);
+                    fetch('http://localhost:5000/userProfile/:id', {
+                        method: 'PUT',
                         body: JSON.stringify(userProfile),
                         headers: {
                             'Content-Type': 'application/json'
@@ -217,14 +253,9 @@ class UserProfile extends Component {
                     })
                         .then(response => response.json())
                         .then(data => {
-                            data.forEach(function (userdata) {
-                                uId = userdata.id;
-                            });
+                            // console.log("data :", data);
+                            this.toggleDialog('The user profile has been successfully updated', 'Success');
                         });
-                    const message = 'The user profile has been successfully created';
-                    const title = 'Success';
-                    this.toggleDialog(message, title);
-
                 })
         }
     };
@@ -244,25 +275,34 @@ class UserProfile extends Component {
         });
     };
 
+    //TODO
+    handleLinkClick = (e) => {
+        this.state.selected = 1;
+        // e.preventDefault();
+    };
+
     onClickCancel = event => {
         //Modify this as reset to previous values
         this.setState({
             fullName: "",
-            program: "",
             email: "",
-            regNumber: "",
-            selectedType: ""
         })
     };
 
     render() {
-        var {items} = this.state;
+        var {courses} = this.state;
 
         if (this.state.redirectToUserSearch === true) {
             return <Redirect to="/"/>;
         }
+
+        if (this.state.redirectToAdminPage === true) {
+            return <Redirect to='/admin'/>;
+        }
+
         return (
             <div className="container-fluid">
+                {console.log("II", this.state.courses)}
                 <UserImageSection className="mb-4" headerTitle=" "/>
 
                 {/*mt = margin top mb = margin buttom*/}
@@ -275,12 +315,12 @@ class UserProfile extends Component {
                         <div className="col sub-card">
                             <div className="col-md-12">
 
+                                <div className="main-heading"><b> Personal Details </b></div>
                                 <div className="row">
                                     <div className="col-md-6">
                                         <div className="row">
-                                            {/*   <div className="col-md-6">*/}
                                             <label htmlFor="" className="mandatory">
-                                                Name:
+                                                Name :
                                             </label>
                                             <Input
                                                 placeholder="Full Name"
@@ -294,7 +334,7 @@ class UserProfile extends Component {
 
                                     <div className="col-md-6">
                                         <div className="row">
-                                            <label className="mandatory">Type:</label>
+                                            <label className="mandatory">Type :</label>
 
                                             <ComboBox
                                                 textField="name"
@@ -304,9 +344,8 @@ class UserProfile extends Component {
                                                 onChange={this.handleOnChangeCombo}
                                                 name="selectedType"
                                                 placeholder="Please Select"
-                                                filterable={true}
-                                                //       popupSettings={this.popupSet}
                                                 required={true}
+                                                disabled={true}
                                             />
                                         </div>
                                     </div>
@@ -316,7 +355,7 @@ class UserProfile extends Component {
                                     {(this.state.selectedType && this.state.selectedType.name === "Student") && (
                                         <div className="col-md-6">
                                             <div className="row">
-                                                <label htmlFor="" className="mandatory">Reg No:</label>
+                                                <label htmlFor="" className="mandatory">Reg No :</label>
 
                                                 <Input className="mandatory"
                                                        placeholder="Register Number"
@@ -324,6 +363,7 @@ class UserProfile extends Component {
                                                        name="regNumber"
                                                        required={true}
                                                        onChange={this.handleOnChange}
+                                                       disabled={true}
                                                     // type="Numeric"
                                                     // maxLength= '9'
                                                 />
@@ -355,7 +395,7 @@ class UserProfile extends Component {
                                     {(this.state.selectedType && this.state.selectedType.name === "Student") && (
                                         <div className="col-md-6">
                                             <div className="row">
-                                                <label htmlFor="" className="mandatory">Program:</label>
+                                                <label htmlFor="" className="mandatory">Program :</label>
                                                 <ComboBox
                                                     data={this.state.AllPrograms}
                                                     textField="name"
@@ -364,7 +404,7 @@ class UserProfile extends Component {
                                                     onChange={this.handleOnChangeCombo}
                                                     name="selectedProgram"
                                                     placeholder="Please Select"
-                                                    filterable={true}
+                                                    disabled={true}
                                                     //       popupSettings={this.popupSet}
                                                     required={true}
                                                 />
@@ -374,7 +414,7 @@ class UserProfile extends Component {
                                     {(this.state.selectedType && this.state.selectedType.name === "Lecturer") && (
                                         <div className="col-md-6">
                                             <div className="row">
-                                                <label htmlFor="" className="mandatory">Program:</label>
+                                                <label htmlFor="" className="mandatory">Program :</label>
                                                 <ComboBox
                                                     data={this.state.AllPrograms}
                                                     textField="name"
@@ -393,10 +433,9 @@ class UserProfile extends Component {
                                 </div>
 
                                 <div className="row">
-
                                     <div className="col-md-6">
                                         <div className="row">
-                                            <Label htmlFor="" className="mandatory">Email:</Label>
+                                            <Label htmlFor="" className="mandatory">Email :</Label>
                                             <div id="statusToolTip">
                                                 <Input className="mandatory"
                                                        placeholder="example@gmail.com"
@@ -433,41 +472,46 @@ class UserProfile extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="col sub-card">
-                            <div className="col-md-12">
-                                <div className="main-heading">My Courses</div>
-                                <div className="row">
-                                    <Fragment>
-                                        <table className="table table-striped">
-                                            <thead>
-                                            <tr>
-                                                <th>Course Code</th>
-                                                <th>Course Name</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {items.map(item => (
+
+                        {(this.state.status === 2 && this.state.selectedType && (this.state.selectedType.typeid === 1 || this.state.selectedType.typeid === 2)) && (
+                            <div className="col sub-card">
+                                <div className="col-md-12">
+                                    <div className="main-heading"><b> My Courses </b></div>
+                                    <div className="row">
+                                        <Fragment>
+                                            <table className="table table-striped">
+                                                <thead>
                                                 <tr>
-                                                    <td>{item.code}</td>
-                                                    <td>{item.name}</td>
+                                                    <th>Course Code</th>
+                                                    <th>Course Name</th>
                                                 </tr>
-                                            ))}
-                                            </tbody>
-                                        </table>
-                                    </Fragment>
+                                                </thead>
+                                                <tbody>
+                                                {courses.map((item) => (
+                                                    <tr key={item.id}>
+                                                        <td> {item.code} </td>
+                                                        <td><a href="#" onClick={this.handleLinkClick}>
+                                                            {item.name} </a></td>
+                                                    </tr>
+                                                ))}
+                                                </tbody>
+                                            </table>
+                                        </Fragment>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {(this.state.status === 2 && this.state.selectedType && (this.state.selectedType.typeid === 1 || this.state.selectedType.typeid === 2)) && (
+                        <div className="col">
+                            <div className="col sub-card">
+                                <div className="col-md-12">
+                                    <div className="main-heading"><b> Dashboard </b></div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    {/*Post Section here*/}
-                    <div className="col">
-                        <div className="col sub-card">
-                            <div className="col-md-12">
-                                <h1> this is Dashboard/Upcoming section area </h1>
-                            </div>
-                        </div>
-                    </div>
+                    )}
                 </div>
 
                 <div className="row">

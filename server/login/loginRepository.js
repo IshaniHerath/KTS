@@ -4,7 +4,7 @@ const userContext = {};
 userContext.checkLoginDetails = async (req, res) => {
     try {
         const user = await pool.query(
-            'select status, password, type from "UserProfile" where email =' + "'" + req + "'" + ';'
+            'select id, status, password, type from "UserProfile" where email =' + "'" + req + "'" + ';'
         );
         return (user.rows);
     } catch (e) {
