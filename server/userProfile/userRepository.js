@@ -16,10 +16,6 @@ userContext.getUserDetails = async  (req, res) => {
     }
 };
 
-/**
- * getCourses - Retrieve some details of Course by user ID
- * @returns {array} list of Courses
- */
 userContext.getCourses = async (req, res) => {
     try {
         const allCourses = await pool.query(
@@ -31,10 +27,6 @@ userContext.getCourses = async (req, res) => {
     }
 };
 
-/**
- * getPrograms - Retrieve all programs
- * @returns {array} list of Courses
- */
 userContext.getDepartments = async () => {
     try {
         const allDepartments = await pool.query(
@@ -57,10 +49,6 @@ userContext.getUserTypes = async () => {
     }
 };
 
-/**
- * saveUserDetails - Save User details
- * @returns {array} 0 or 1
- */
 userContext.saveUserDetails = async (user) => {
     if (user.Type === 1) {
         console.log("User : ", user);
@@ -101,6 +89,18 @@ userContext.saveUserDetails = async (user) => {
         } catch (e) {
             console.log(e.message);
         }
+    }
+};
+
+userContext.getAssignments = async  (req, res) => {
+    try{
+        const assignments = await pool.query(
+            'select title, duedatetime from "Assignment" as a inner join "user_course" as m on a.courseid = m.cid ' +
+            ' where m.uid=' + (req.params.id) + ';'
+        );
+        return (assignments.rows);
+    } catch (e) {
+        console.log("Error", e);
     }
 };
 

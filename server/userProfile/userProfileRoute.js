@@ -23,4 +23,8 @@ router.put('/:id', async (req, res) => {
   res.send (await userRepository.saveUserDetails(req.body));
 });
 
+router.get('/:id/getAssignments', async (req, res) => {
+  res.send (await userRepository.getAssignments(req, res));
+});
+
 module.exports = router;
