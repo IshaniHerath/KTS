@@ -9,6 +9,11 @@ import Input from "@material-ui/core/Input";
 import {Label} from '@progress/kendo-react-labels';
 import Redirect from "react-router-dom/Redirect";
 import UserImageSection from "../userProfile/UserImageSection";
+import Grid from "@material-ui/core/Grid";
+import FolderIcon from "@material-ui/icons/Folder";
+import AlarmIcon from '@material-ui/icons/Alarm';
+import Avatar from "@material-ui/core/Avatar";
+import moment from "moment";
 
 class UserProfile extends Component {
     constructor(props) {
@@ -43,6 +48,9 @@ class UserProfile extends Component {
             AllTypes: [],
             // isLoaded: false,
 
+            toBeDueAssignments: [],
+            overdueAssignments:[],
+
             // Other
             dialogMessage: '',
             dialogTitle: '',
@@ -61,6 +69,7 @@ class UserProfile extends Component {
         this.populateDepartments();
         this.populateUserType();
         this.populateUserDetails();
+        this.populateDashboard();
     }
 
     populateUserDetails() {
@@ -94,6 +103,69 @@ class UserProfile extends Component {
                     regNumber: UserData.RegNumber,
                 })
             })
+    }
+
+    populateDashboard() {
+        var toBeDueAssignment = [];
+        var overdueAssignment = [];
+        var OverdueAssignments = [];
+        const ToBeDueAssignments = [];
+        var id = this.state.userId;
+        var currentDate = moment().format("DD-MM-YYYY hh:mm:ss");
+
+        fetch('http://localhost:5000/userProfile/' + id + '/getAssignments')
+            .then(res => res.json())
+            .then(respond => {
+                respond.forEach(function (datewant) {
+                    let dueDateObject = new Date(datewant.duedatetime);
+                    let currentDateObj = new Date(Date.now());
+
+                    console.log("dueDateObject obj : ", dueDateObject);
+
+                    // var dueAfter30 = dueDateObject.setDate(dueDateObject.getDate() + 31);
+                    var dueAfter30 = dueDateObject.getDate() + 31;
+                    var dueBefore30 = dueDateObject.getDate() - 31;
+                    // var dueBefore30 = dueDateObject.setDate(dueDateObject.getDate() - 10);
+                    let dueBefore30Obj = new Date(dueBefore30);
+                    let dueAfter30Obj = new Date(dueAfter30);
+
+                    console.log("dueDateObject : ", dueDateObject);
+                    console.log("dueAfter30 : ", dueAfter30);
+                    console.log("dueBefore30 : ", dueBefore30);
+
+                    // var dueAfter30_ = moment(dueAfter30).format('DD-MM-YYYY h:mm:ss');
+                    var dueAfter30_ = moment(dueDateObject.getDate() + 31).format('DD-MM-YYYY h:mm:ss');
+                    // var dueBefore30_ = moment(dueBefore30).format('DD-MM-YYYY h:mm:ss');
+                    var dueBefore30_ = moment(dueDateObject.getDate() - 31).format('DD-MM-YYYY h:mm:ss');
+                    var currentDate = moment(Date.now()).format('DD-MM-YYYY h:mm:ss');
+                    console.log("dueAfter30_ : ", dueAfter30_);
+                    console.log("dueBefore30_ : ", dueBefore30_);
+                    console.log("currentDate : ", currentDate);
+                    console.log("dueDateObject : ", dueDateObject);
+
+                    if (dueDateObject.getTime() < currentDateObj.getTime() && dueDateObject.getTime() > dueBefore30Obj.getTime()) {
+                        console.log("current date max ?? overdueAssignment");
+                        overdueAssignment = {
+                            Title: datewant.title,
+                            Date: moment(dueDateObject).format('DD-MM-YYYY h:mm:ss'),
+                        };
+                        OverdueAssignments.push(overdueAssignment);
+                    } else if (dueDateObject.getTime() >= currentDateObj.getTime() && dueDateObject.getTime() < dueAfter30Obj.getTime()) {
+                        console.log("due date max ?? toBeDueAssignment");
+                        toBeDueAssignment = {
+                            Title: datewant.title,
+                            Date: moment(dueDateObject).format('DD-MM-YYYY h:mm:ss'),
+                        };
+                        ToBeDueAssignments.push(toBeDueAssignment);
+                    }
+                    console.log("ToBeDueAssignments : ", ToBeDueAssignments)
+                    console.log("OverdueAssignments : ", OverdueAssignments)
+                });
+                this.setState({
+                    toBeDueAssignments: ToBeDueAssignments,
+                    overdueAssignments: OverdueAssignments,
+                })
+            });
     }
 
     populatePrograms() {
@@ -290,7 +362,7 @@ class UserProfile extends Component {
     };
 
     render() {
-        var {courses} = this.state;
+        var {courses, dashboard, } = this.state;
 
         if (this.state.redirectToUserSearch === true) {
             return <Redirect to="/"/>;
@@ -302,12 +374,17 @@ class UserProfile extends Component {
 
         return (
             <div className="container-fluid">
-                {console.log("II", this.state.courses)}
-                <UserImageSection className="mb-4" headerTitle=" "/>
+                {console.log("overdueAssignments >> : ", this.state.overdueAssignments)}
+                {console.log("toBeDueAssignments >> : ", this.state.toBeDueAssignments)}
+
+                <UserImageSection
+                    className="mb-4" headerTitle=" "
+                    id={this.state.userId}
+                />
 
                 {/*mt = margin top mb = margin buttom*/}
                 <br/> <br/>
-                <div className="main-heading mt-10 mb-4"><b> ISHANI HERATH </b></div>
+                <div className="main-heading mt-10 mb-4"><b> {this.state.fullName} </b></div>
 
                 <div className="row">
 
@@ -508,6 +585,40 @@ class UserProfile extends Component {
                             <div className="col sub-card">
                                 <div className="col-md-12">
                                     <div className="main-heading"><b> Dashboard </b></div>
+                                    <div className="dashboard-heading"><b> Recently overdue </b></div>
+
+                                    {this.state.overdueAssignments.map((item) => (
+                                        <div className="col small-card">
+                                            <div>
+                                                <h6><AlarmIcon/>
+                                                    <a href="#" onClick={this.handleLinkClick}>
+                                                        {item.Title} &nbsp; &nbsp;
+                                                        {item.Date}
+                                                    </a>
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    ))}
+
+                                    <div className="dashboard-heading"><b> Next 30 days </b></div>
+                                    {/*{this.state.toBeDueAssignments.map((item) => (*/}
+                                        <div className="col small-card">
+                                            <div>
+                                                <h6><AlarmIcon/>
+                                                    <a href="#" onClick={this.handleLinkClick}>
+                                                        {/*{item.Title} &nbsp; &nbsp;*/}
+                                                        {/*{item.Date}*/}
+                                                        2020-07-30 04:22:00
+                                                        {/*{"2020-07-30 04:22:00"}*/}
+
+                                                    </a>
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    {/*))}*/}
+
+                                    <div className="dashboard-heading"><b> Future </b></div>
+
                                 </div>
                             </div>
                         </div>
