@@ -384,7 +384,7 @@ class UserProfile extends Component {
 
                 {/*mt = margin top mb = margin buttom*/}
                 <br/> <br/>
-                <div className="main-heading mt-10 mb-4"><b> {this.state.fullName} </b></div>
+                <div className="main-heading mt-10 mb-4"><b> {(this.state.fullName).toUpperCase()} </b></div>
 
                 <div className="row">
 
