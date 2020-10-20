@@ -14,6 +14,7 @@ class QAndAPosts extends Component {
         this.state = {
             items: [],
             isLoaded: false,
+            id: this.props.id
         }
     }
 
@@ -35,10 +36,10 @@ class QAndAPosts extends Component {
                     {items.map(item => (
                     <div className='post-card'>
                         <div className='postlabel'>
-                            <Likes post_id = {item.post_id}/>
-                            <ThumbsUp post_id = {item.post_id} />
-                            <ThumbsDown post_id = {item.post_id} />
-                            <DeletePost post_id = {item.post_id}/>
+                            <Likes post_id = {item.post_id} id={this.state.id}/>
+                            <ThumbsUp post_id = {item.post_id} id={this.state.id}/>
+                            <ThumbsDown post_id = {item.post_id} id={this.state.id}/>
+                            <DeletePost post_id = {item.post_id} id={this.state.id}/>
                         </div>
                         <div>
                         <h6 className='postname'>{item.user_name}</h6>
@@ -49,7 +50,7 @@ class QAndAPosts extends Component {
                         <Replies postid = {item.post_id}/>
 
                         <div className='postlabel'>  
-                            <AddReplies postid = {item.post_id} /> 
+                            <AddReplies postid = {item.post_id} id={this.state.id}/> 
                         </div> 
                         
                     </div>  

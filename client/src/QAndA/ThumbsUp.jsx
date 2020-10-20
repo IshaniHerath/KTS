@@ -8,6 +8,7 @@ class ThumbsUp extends Component {
         this.state = {
             items: [],
             isLoaded: false,
+            id: this.props.id
             
         }
     }
@@ -16,7 +17,7 @@ class ThumbsUp extends Component {
         event.preventDefault();
         //var user_id = this.props.user_id;
         
-        var user_id = 1;
+        var user_id = this.state.id;
         var post_id = this.props.post_id;
         var post_user = `${user_id}${post_id}`;
         var thumbs = '1';

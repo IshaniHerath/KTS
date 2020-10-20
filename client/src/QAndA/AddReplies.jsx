@@ -7,7 +7,7 @@ class AddReplies extends Component {
         this.state = {
             items: [],
             isLoaded: false,
-            
+            id: this.props.id
         }
 
         this.replayContentEl = React.createRef();
@@ -17,7 +17,7 @@ class AddReplies extends Component {
         event.preventDefault();
         var post_id = this.props.postid;
         //var user_id = this.props.user_id;
-        var user_id = 1;
+        var user_id = this.state.id;
         const replay_content = this.replayContentEl.current.value;
         const body = {replay_content , user_id , post_id}
 
