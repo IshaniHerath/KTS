@@ -40,6 +40,9 @@ class UserProfile extends Component {
             selectedProgram: null,
             selectedDepartment: null,
 
+            //To catch the selected tab
+            selected: 0,
+
             //drop down data
             types: ['Student', 'Lecturer', 'Other'],
             AllPrograms: [],
@@ -349,7 +352,11 @@ class UserProfile extends Component {
 
     //TODO
     handleLinkClick = (e) => {
-        this.state.selected = 1;
+        this.setState({
+            selected: 1
+        });
+        //TODO Pass child to parent
+
         // e.preventDefault();
     };
 
