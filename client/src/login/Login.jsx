@@ -245,7 +245,7 @@ class Login extends Component {
                             />
                             {this.state.isErrorMessageVisible === true ? (
                                 <span className={this.validateProperty(this.state.password)}>
-                    Please enter your name
+                    Please enter the password
                   </span>
                             ) : null}
 

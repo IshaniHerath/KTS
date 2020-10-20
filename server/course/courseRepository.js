@@ -26,16 +26,10 @@ courseContext.getCoursesByProgram = async (req, res) => {
 
 //TODO
 courseContext.getCourseDetails = async (req, res) => {
-    console.log("QQQQQQQQQQQQQQQQQ", req);
-
-    //courseId = req.params.id
     try {
         const allCourseDetails = await pool.query(
             'select name, code, description from "Course" where id =' + (req.params.id) + ';'
         );
-
-        console.log("allCourseDetails.rows : ", allCourseDetails.rows);
-        console.log("allCourseDetails : ", allCourseDetails);
         return (allCourseDetails.rows);
     } catch (e) {
         console.log(e.message);
@@ -43,16 +37,9 @@ courseContext.getCourseDetails = async (req, res) => {
 };
 
 courseContext.getAnnouncementDetails = async (req, res) => {
-    console.log("BBBBBBBBBBBB", req);
-    console.log("BBBBBBBBBBBB", req.params);
-
-    //courseId = req.params.id
     try {
         const announcement = await pool.query(
-            'select a.title, a.description, a.datetime, u.name from "Announcement" as a  inner JOIN "UserProfile" as u on a.owner = u.id where courseid =' + (req.params.id) +';'
-        );
-        console.log("announcement.rows : ", announcement.rows);
-        console.log("announcement : ", announcement);
+            'select a.title, a.description, a.datetime, u.name from "Announcement" as a  inner JOIN "UserProfile" as u on a.owner = u.id where courseid =' + (req.params.id) +  'ORDER BY a.datetime DESC;');
         return (announcement.rows);
     } catch (e) {
         console.log(e.message);
