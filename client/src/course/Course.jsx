@@ -29,7 +29,9 @@ import {
     KeyboardDatePicker,
 } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
-
+import Divider from '@material-ui/core/Divider';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 class Course extends Component {
     constructor(props) {
@@ -37,6 +39,7 @@ class Course extends Component {
 
         this.state = {
             userId: this.props.id,
+            userType: 0,
             email: "",
             fullName: "",
             ProgramId: 0,
@@ -67,13 +70,14 @@ class Course extends Component {
             selected: 0,
 
             //drop down data
-            types: ['Student', 'Lecturer', 'Other'],
+            // types: ['Student', 'Lecturer', 'Other'],
 
             // other
             ListItemOpen_01: false,
             ListAnnouncementOpen: false,
             ListDayschoolOpen: false,
 
+            isErrorMessageVisible: false,
             ListItemOpen_02: false,
             setOpen: false,
             setDialogOpen: false,
@@ -86,6 +90,28 @@ class Course extends Component {
     componentDidMount(): void {
         console.log("PROPSSSSS child", this.props);
         this.populateCourseByProgramId();
+        this.populateUserDetails();
+    }
+
+    populateUserDetails() {
+        var UserData = [];
+        var id = this.state.userId;
+
+        fetch('http://localhost:5000/userProfile/' + id)
+            .then(res => res.json())
+            .then(respond => {
+                respond.forEach(function (userData) {
+                    UserData = {
+                        Type: userData.typeid
+                    }
+                });
+                console.log("respond :: ", respond);
+                console.log("respond.typeid :: ", UserData.Type)
+
+                this.setState({
+                    userType: UserData.Type,
+                })
+            })
     }
 
     populateCourseByProgramId = () => {
@@ -269,28 +295,53 @@ class Course extends Component {
     };
 
     addAnnouncement = async (event) => {
-        //To get the current date and time
-        var curTime = new Date().toLocaleString();
+        //Do not refresh the page
+        event.preventDefault();
 
-        var Announcement = {
-            courseId: this.state.courseId,
-            dateTime: curTime,
-            title: this.state.title,
-            owner: this.state.userId,
-            announcement: this.state.announcement
-        };
+        this.setState(
+            () => {
+                if (!this.validation()) {
+                    this.setState({
+                        isErrorMessageVisible: true
+                    });
+                    this.setState({
+                        visible: true
+                    });
+                    this.toggleDialog('Please fix the highlighted errors to continue', 'Error');
+                } else {
+                    this.setState({
+                        isErrorMessageVisible: false
+                    });
 
-        fetch('http://localhost:5000/courses/postAnnouncement/', {
-            method: 'POST',
-            body: JSON.stringify(Announcement),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(res => res.json())
-            .then(respond => {
-                this.toggleDialog('The announcement has been successfully added', 'Success');
-                this.onClear();
+                    //To get the current date and time
+                    var curTime = new Date().toLocaleString();
+
+                    var Announcement = {
+                        courseId: this.state.courseId,
+                        dateTime: curTime,
+                        title: this.state.title,
+                        owner: this.state.userId,
+                        announcement: this.state.announcement
+                    };
+
+                    fetch('http://localhost:5000/courses/postAnnouncement/', {
+                        method: 'POST',
+                        body: JSON.stringify(Announcement),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(res => res.json())
+                        .then(respond => {
+                            console.log("respond :", respond);
+                            if (respond != null) {
+                                console.log("GGGGGGGGGGGGGGG :");
+
+                                this.toggleDialog('The announcement has been successfully added. Please Re-login if you wish to see the changes', 'Success');
+                                this.onClear();
+                            }
+                        })
+                }
             })
     };
 
@@ -330,6 +381,32 @@ class Course extends Component {
 
     };
 
+    validateProperty = value => {
+        console.log("value : ", value);
+        if (value) {
+            return 'd-none';
+        } else {
+            return 'inline-error';
+        }
+    };
+
+    validation = () => {
+        if (
+            this.validateProperty(this.state.announcement)
+                .toString()
+                .includes('error')
+        ) {
+            return false;
+        } else if (
+            this.validateProperty(this.state.title)
+                .toString()
+                .includes('error')
+        ) {
+            return false;
+        } else {
+            return true;
+        }
+    };
 
     render() {
         var {courseList, AnnouncementList} = this.state;
@@ -386,6 +463,12 @@ class Course extends Component {
                         <div className="row">
                             <p> {this.state.description} </p>
                         </div>
+                        {(this.state.userType === 2) && (
+                            <div style={{float: "right"}}>
+                                <EditIcon className="mr-3"/>
+                                <DeleteIcon/>
+                            </div>
+                        )}
 
                         {(this.state.courseId !== 0) && (
                             <List
@@ -411,54 +494,85 @@ class Course extends Component {
                                 </ListItem>
 
                                 <Collapse in={this.state.ListAnnouncementOpen} timeout="auto" unmountOnExit>
-                                    <div className="row ml-5">
-                                        <label htmlFor="" className="mandatory">
-                                            Title :
-                                        </label>
-                                        <Input
-                                            className="ml-md-3"
-                                            placeholder="Announcement title"
-                                            value={this.state.title}
-                                            name="Title"
-                                            onChange={this.handleOnChange}
-                                            required={true}
-                                        />
-                                    </div>
+                                    {(this.state.userType === 2) && (
+                                        <div>
+                                            <div className="row ml-5">
+                                                <label htmlFor="" className="mandatory">
+                                                    Title :
+                                                </label>
+                                                <Input
+                                                    className="ml-md-3"
+                                                    placeholder="Announcement title"
+                                                    value={this.state.title}
+                                                    name="Title"
+                                                    onChange={this.handleOnChange}
+                                                    required={true}
+                                                />
+                                                {this.state.isErrorMessageVisible === true ? (
+                                                    <span className={this.validateProperty(this.state.title)}>
+                    Please enter Announcement title
+                  </span>
+                                                ) : null}
+                                            </div>
 
-                                    <div className="row ml-5">
-                                        <label htmlFor="" className="mandatory mt-4">
-                                            Announcement :
-                                        </label>
-                                        <TextField
-                                            id="standard-multiline-flexible"
-                                            label="Announcement message"
-                                            onChange={this.handleOnChange}
-                                            className="course-detail-section"
-                                            name="Announcement"
-                                            required={true}
-                                            value={this.state.announcement}
-                                        />
-
-                                        <Avatar onClick={this.addAnnouncement}>
-                                            <AddIcon/>
-                                        </Avatar>
-                                    </div>
+                                            <div className="row ml-5">
+                                                <label htmlFor="" className="mandatory mt-4">
+                                                    Announcement :
+                                                </label>
+                                                <TextField
+                                                    id="standard-multiline-flexible"
+                                                    label="Announcement message"
+                                                    onChange={this.handleOnChange}
+                                                    className="course-detail-section"
+                                                    name="Announcement"
+                                                    value={this.state.announcement}
+                                                />
+                                                {this.state.isErrorMessageVisible === true ? (
+                                                    <span className={this.validateProperty(this.state.announcement)}>
+                    Please enter Announcement message
+                  </span>
+                                                ) : null}
+                                                <Avatar onClick={this.addAnnouncement}>
+                                                    <AddIcon/>
+                                                </Avatar>
+                                            </div>
+                                        </div>
+                                    )}
 
                                     <div className="row ml-5">
                                         <Paper className={"classes-paper"}>
                                             <Grid container wrap="nowrap" spacing={2}>
-                                                {/*<Grid item>*/}
-                                                {/*    <Avatar>n</Avatar>*/}
-                                                {/*</Grid>*/}
                                                 <Grid item xs>
                                                     {AnnouncementList.map((item) => (
                                                         <Typography>
-                                                            <h5>
-                                                                {item.title}
+                                                            <br/>
+                                                            <h5><b>
+                                                                {(item.title).toUpperCase()}
+                                                            </b>
                                                             </h5>
-                                                            <p className="ml-2"> by {item.name} - {item.datetime}
-                                                                <br/>
+                                                            <p className="ml-3">
+                                                                by {item.name} - {item.datetime}
+                                                                <br/> <br/>
                                                                 {item.description} </p>
+
+                                                            {(this.state.userType === 2) && (
+
+                                                                <div style={{float: "right"}}>
+                                                                    {/*<Avatar*/}
+                                                                    {/*    // onClick={this.deleteAnnouncement}*/}
+                                                                    {/*>*/}
+                                                                    <EditIcon className="mr-3"/>
+
+                                                                    {/*</Avatar>*/}
+                                                                    {/*<Avatar*/}
+                                                                    {/*    // onClick={this.deleteAnnouncement}*/}
+                                                                    {/*>*/}
+                                                                    <DeleteIcon/>
+                                                                    {/*</Avatar>*/}
+                                                                </div>
+                                                            )}
+                                                            <br/> <br/>
+                                                            <Divider/>
                                                         </Typography>
                                                     ))}
                                                 </Grid>
@@ -467,7 +581,7 @@ class Course extends Component {
                                     </div>
                                 </Collapse>
 
-                                {/*DS*/}
+                                {/*TODO DS*/}
                                 <ListItem button onClick={this.handleClickDayschool}>
                                     <ListItemAvatar>
                                         <Avatar>
@@ -478,74 +592,81 @@ class Course extends Component {
                                     {this.state.ListDayschoolOpen === true ? <ExpandMore/> : <ExpandLess/>}
                                 </ListItem>
                                 <Collapse in={this.state.ListDayschoolOpen} timeout="auto" unmountOnExit>
-                                    <div className="row ml-5">
-                                        <label htmlFor="" className="mandatory">
-                                            Day School Title :
-                                        </label>
-                                        <Input
-                                            className="ml-md-3"
-                                            placeholder="Day School Title Here"
-                                            value={this.state.dsName}
-                                            name="DsName"
-                                            onChange={this.handleOnChange}
-                                            required={true}
-                                        />
-                                    </div>
-                                    <div className="row ml-5">
-                                        <label htmlFor="" className="mandatory mt-4">
-                                            Date :
-                                        </label>
-                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                            <KeyboardDatePicker
-                                                name="Date"
-                                                margin="normal"
-                                                id="date-picker-dialog"
-                                                format="MM/dd/yyyy"
-                                                value={this.state.selectedDate}
-                                                onChange={this.handleDateChange}
-                                                KeyboardButtonProps={{
-                                                    'aria-label': 'change date',
-                                                }}
-                                            />
-                                        </MuiPickersUtilsProvider>
-                                    </div>
+                                    {(this.state.userType === 2) && (
+                                        <div>
+                                            <div className="row ml-5">
+                                                <label htmlFor="" className="mandatory">
+                                                    Day School Title :
+                                                </label>
+                                                <Input
+                                                    className="ml-md-3"
+                                                    placeholder="Day School Title Here"
+                                                    value={this.state.dsName}
+                                                    name="DsName"
+                                                    onChange={this.handleOnChange}
+                                                    required={true}
+                                                />
+                                            </div>
+                                            <div className="row ml-5">
+                                                <label htmlFor="" className="mandatory mt-4">
+                                                    Date :
+                                                </label>
+                                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                                    <KeyboardDatePicker
+                                                        name="Date"
+                                                        margin="normal"
+                                                        id="date-picker-dialog"
+                                                        format="MM/dd/yyyy"
+                                                        value={this.state.selectedDate}
+                                                        onChange={this.handleDateChange}
+                                                        KeyboardButtonProps={{
+                                                            'aria-label': 'change date',
+                                                        }}
+                                                    />
+                                                </MuiPickersUtilsProvider>
+                                            </div>
 
-                                    <div className="row ml-5">
-                                        <label htmlFor="" className="mandatory mt-4">
-                                            Time :
-                                        </label>
-                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                            <KeyboardTimePicker
-                                                name="FromTime"
-                                                margin="normal"
-                                                id="from-time-picker"
-                                                value={this.state.selectedFromTime}
-                                                onChange={this.handleFromTimeChange}
-                                                KeyboardButtonProps={{
-                                                    'aria-label': 'change time',
-                                                }}
-                                            />
+                                            <div className="row ml-5">
+                                                <label htmlFor=""
+                                                       className="mandatory mt-4">
+                                                    Time :
+                                                </label>
+                                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                                    <KeyboardTimePicker
+                                                        name="FromTime"
+                                                        margin="normal"
+                                                        placeholder="From Time"
+                                                        id="from-time-picker"
+                                                        value={this.state.selectedFromTime}
+                                                        onChange={this.handleFromTimeChange}
+                                                        KeyboardButtonProps={{
+                                                            'aria-label': 'change time',
+                                                        }}
+                                                    />
 
-                                            <KeyboardTimePicker
-                                                name="ToTime"
-                                                className="ml-5"
-                                                margin="normal"
-                                                id="to-time-picker"
-                                                // label="Time picker"
-                                                value={this.state.selectedToTime}
-                                                onChange={this.handleToTimeChange}
-                                                KeyboardButtonProps={{
-                                                    'aria-label': 'change time',
-                                                }}
-                                            />
+                                                    <KeyboardTimePicker
+                                                        name="ToTime"
+                                                        className="ml-5"
+                                                        placeholder="To Time"
+                                                        margin="normal"
+                                                        id="to-time-picker"
+                                                        // label="Time picker"
+                                                        value={this.state.selectedToTime}
+                                                        onChange={this.handleToTimeChange}
+                                                        KeyboardButtonProps={{
+                                                            'aria-label': 'change time',
+                                                        }}
+                                                    />
 
-                                            <Avatar
-                                                className="ml-5"
-                                                onClick={this.addDayschool}>
-                                                <AddIcon/>
-                                            </Avatar>
-                                        </MuiPickersUtilsProvider>
-                                    </div>
+                                                    <Avatar
+                                                        className="ml-5"
+                                                        onClick={this.addDayschool}>
+                                                        <AddIcon/>
+                                                    </Avatar>
+                                                </MuiPickersUtilsProvider>
+                                            </div>
+                                        </div>
+                                    )}
                                 </Collapse>
 
                                 {/*Assignment*/}
