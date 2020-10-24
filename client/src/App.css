@@ -315,12 +315,12 @@
 }
 
 .box {
-padding: 2px 6px 4px 6px;
-color: #555555;
-background-color: #eeeeee;
-margin-top: 15px;
-margin-bottom: 15px;
-border: none;
+    padding: 2px 6px 4px 6px;
+    color: #555555;
+    background-color: #eeeeee;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border: none;
 }
 
 .replaybox {
@@ -330,27 +330,27 @@ border: none;
     margin-top: 15px;
     margin-bottom: 15px;
 
-    }
+}
 
 .textarea{
-  font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; 
-font-size: 16px; 
-background: rgb(225, 243, 248);
-color: rgb(0, 0, 0);
-border-style: solid;
-border-width: 1px;
-border-radius: 1px;
-border-color: rgb(0, 238, 255);
+    font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    background: rgb(225, 243, 248);
+    color: rgb(0, 0, 0);
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 1px;
+    border-color: rgb(0, 238, 255);
 }
 
 .postlabel{
-  text-align: left;
+    text-align: left;
 }
 
 .postname{
     text-align: left;
     color: #42c1d2;
-  }
+}
 
 .postp{
     width: 50%;
@@ -370,7 +370,7 @@ border-color: rgb(0, 238, 255);
 .likeIcone{
     cursor: pointer;
     color: darkred;
-   }
+}
 
 .deleteButton{
     margin-left: 450px;
@@ -390,6 +390,27 @@ border-color: rgb(0, 238, 255);
     /*box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);*/
 }
 
+.chat-paper{
+    margin: 50px;
+    padding: 20px;
+}
+
+.chat-topic-window{
+    width: 30%;
+    height: 300px;
+    border-right: 1px solid blue;
+}
+
+.chat-chat-window{
+    width: 70%;
+    height: 300px;
+    /*padding: 5px;*/
+}
+
+.chat-flex{
+    display: flex;
+    align-items: center;
+}
 
 @keyframes App-logo-spin {
     from {
