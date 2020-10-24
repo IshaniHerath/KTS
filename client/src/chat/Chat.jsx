@@ -34,7 +34,7 @@ class Chat extends Component {
                             </List>
                         </div>
 
-                        <div className="row">
+                        <div>
                             <div className="chat-chat-window">
                                 {/*TODO MAP array*/}
                                 {
@@ -49,29 +49,34 @@ class Chat extends Component {
                                 }
                             </div>
 
-                            <div className="row ml-3">
-                                <MuiThemeProvider>
+                            <div className="row">
+                                <div className = "ml-5">
                                     <TextField
                                         // id="standard-full-width"
                                         // style={{ margin: 8 }}
-                                               placeholder="Type your message"
-                                               width="80%"
-                                        // fullWidth
-                                               margin="normal"
-                                               InputLabelProps={{
-                                                   shrink: true,
-                                               }}
+                                        placeholder="Type your message"
+                                        // style = {{width: 100}}
+                                        // fullWidth = true
+                                        fullWidth
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
                                     />
+                                </div>
 
-                                    <React.Fragment>
-                                        <RaisedButton
-                                            className={"rbtn-primary"}
-                                            primary={true}
-                                            variant="contained"
-                                            // onClick={this.handleSubmitAddCourse}
-                                        >Send</RaisedButton>
-                                    </React.Fragment>
-                                </MuiThemeProvider>
+                                <div style={{float: "right"}}>
+                                    <MuiThemeProvider>
+                                        <React.Fragment>
+                                            <RaisedButton
+                                                className={"rbtn-primary"}
+                                                primary={true}
+                                                variant="contained"
+                                                // onClick={this.handleSubmitAddCourse}
+                                            >Send</RaisedButton>
+                                        </React.Fragment>
+                                    </MuiThemeProvider>
+                                </div>
                             </div>
                         </div>
                     </div>
