@@ -8,6 +8,7 @@ import UserProfile from '../userProfile/UserProfile';
 import Course from '../course/Course';
 import QAndA from '../QAndA/QAndA';
 import Group from '../group/Group';
+import Chat from '../chat/Chat';
 
 class Layout extends Component {
     constructor(props) {
@@ -88,6 +89,13 @@ class Layout extends Component {
 
                             <TabStripTab title="Groups">
                                 <Group
+                                    id={this.state.id}
+                                    status={this.state.status}
+                                />
+                            </TabStripTab>
+
+                            <TabStripTab title="Chat">
+                                <Chat
                                     id={this.state.id}
                                     status={this.state.status}
                                 />
