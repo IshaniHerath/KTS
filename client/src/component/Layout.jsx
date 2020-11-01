@@ -17,6 +17,7 @@ class Layout extends Component {
         this.state = {
             id: this.props.id,
             status: this.props.status,
+            type: this.props.type,
 
             //Data From Child
             courseList: [],
@@ -91,6 +92,7 @@ class Layout extends Component {
                                 <Group
                                     id={this.state.id}
                                     status={this.state.status}
+                                    type={this.state.type}
                                 />
                             </TabStripTab>
 
