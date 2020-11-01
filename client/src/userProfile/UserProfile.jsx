@@ -120,7 +120,7 @@ class UserProfile extends Component {
                     let dueDateObject = new Date(datewant.duedatetime);
                     let currentDateObj = new Date(Date.now());
 
-                    console.log("dueDateObject obj : ", dueDateObject);
+                    // console.log("dueDateObject obj : ", dueDateObject);
 
                     // var dueAfter30 = dueDateObject.setDate(dueDateObject.getDate() + 31);
                     var dueAfter30 = dueDateObject.getDate() + 31;
@@ -129,37 +129,37 @@ class UserProfile extends Component {
                     let dueBefore30Obj = new Date(dueBefore30);
                     let dueAfter30Obj = new Date(dueAfter30);
 
-                    console.log("dueDateObject : ", dueDateObject);
-                    console.log("dueAfter30 : ", dueAfter30);
-                    console.log("dueBefore30 : ", dueBefore30);
+                    // console.log("dueDateObject : ", dueDateObject);
+                    // console.log("dueAfter30 : ", dueAfter30);
+                    // console.log("dueBefore30 : ", dueBefore30);
 
                     // var dueAfter30_ = moment(dueAfter30).format('DD-MM-YYYY h:mm:ss');
                     var dueAfter30_ = moment(dueDateObject.getDate() + 31).format('DD-MM-YYYY h:mm:ss');
                     // var dueBefore30_ = moment(dueBefore30).format('DD-MM-YYYY h:mm:ss');
                     var dueBefore30_ = moment(dueDateObject.getDate() - 31).format('DD-MM-YYYY h:mm:ss');
                     var currentDate = moment(Date.now()).format('DD-MM-YYYY h:mm:ss');
-                    console.log("dueAfter30_ : ", dueAfter30_);
-                    console.log("dueBefore30_ : ", dueBefore30_);
-                    console.log("currentDate : ", currentDate);
-                    console.log("dueDateObject : ", dueDateObject);
+                    // console.log("dueAfter30_ : ", dueAfter30_);
+                    // console.log("dueBefore30_ : ", dueBefore30_);
+                    // console.log("currentDate : ", currentDate);
+                    // console.log("dueDateObject : ", dueDateObject);
 
                     if (dueDateObject.getTime() < currentDateObj.getTime() && dueDateObject.getTime() > dueBefore30Obj.getTime()) {
-                        console.log("current date max ?? overdueAssignment");
+                        // console.log("current date max ?? overdueAssignment");
                         overdueAssignment = {
                             Title: datewant.title,
                             Date: moment(dueDateObject).format('DD-MM-YYYY h:mm:ss'),
                         };
                         OverdueAssignments.push(overdueAssignment);
                     } else if (dueDateObject.getTime() >= currentDateObj.getTime() && dueDateObject.getTime() < dueAfter30Obj.getTime()) {
-                        console.log("due date max ?? toBeDueAssignment");
+                        // console.log("due date max ?? toBeDueAssignment");
                         toBeDueAssignment = {
                             Title: datewant.title,
                             Date: moment(dueDateObject).format('DD-MM-YYYY h:mm:ss'),
                         };
                         ToBeDueAssignments.push(toBeDueAssignment);
                     }
-                    console.log("ToBeDueAssignments : ", ToBeDueAssignments)
-                    console.log("OverdueAssignments : ", OverdueAssignments)
+                    // console.log("ToBeDueAssignments : ", ToBeDueAssignments)
+                    // console.log("OverdueAssignments : ", OverdueAssignments)
                 });
                 this.setState({
                     toBeDueAssignments: ToBeDueAssignments,
@@ -204,7 +204,7 @@ class UserProfile extends Component {
         fetch('http://localhost:5000/userProfile/' + id + '/courseList')
             .then(res => res.json())
             .then(json => {
-                console.log("courses: ", json);
+                // console.log("courses: ", json);
                 this.setState({
                     courses: json,
                 });
@@ -315,7 +315,7 @@ class UserProfile extends Component {
                             // ProgramId: null,
                         };
                     }
-                    console.log("userProfile : ", userProfile);
+                    // console.log("userProfile : ", userProfile);
                     fetch('http://localhost:5000/userProfile/:id', {
                         method: 'PUT',
                         body: JSON.stringify(userProfile),
@@ -374,8 +374,8 @@ class UserProfile extends Component {
 
         return (
             <div className="container-fluid">
-                {console.log("overdueAssignments >> : ", this.state.overdueAssignments)}
-                {console.log("toBeDueAssignments >> : ", this.state.toBeDueAssignments)}
+                {/*{console.log("overdueAssignments >> : ", this.state.overdueAssignments)}*/}
+                {/*{console.log("toBeDueAssignments >> : ", this.state.toBeDueAssignments)}*/}
 
                 <UserImageSection
                     className="mb-4" headerTitle=" "

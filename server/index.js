@@ -11,6 +11,7 @@ const thumbsUpRouts = require('./Q&A/thumbsUpAndDown/thumbsUpRouts');
 const thumbsDownRouts = require('./Q&A/thumbsUpAndDown/thumbsDownRouts');
 const repliesRout = require('./Q&A/replies/repliesRout');
 const adminRoute = require('./admin/adminRoute');
+const fileUploadRoute = require('./fileUpload/fileUploadRoute');
 
 app.use((req,res,next) =>{
     res.setHeader('Access-Control-Allow-Origin' , '*');
@@ -34,6 +35,7 @@ app.use('/thumbsUp' , thumbsUpRouts);
 app.use('/thumbsDown' , thumbsDownRouts);
 app.use('/replies' , repliesRout);
 app.use('/admin', adminRoute);
+app.use('/fileUpload', fileUploadRoute);
 
 //callback function
 app.get('/', (req, res)=>{
