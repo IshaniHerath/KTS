@@ -20,7 +20,7 @@ router.get('/getAnnouncementDetails/:id', async (req, res) => {
 });
 
 router.get('/getCourses/:uid', async (req, res) => {
-  res.send(await courseRepository.getAllCourses(req, res));
+  res.send(await courseRepository.getAllCoursesByUserId(req, res));
 });
 
 router.post('/createDayschool', async (req, res) => {

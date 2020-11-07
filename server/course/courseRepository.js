@@ -84,7 +84,7 @@ courseContext.updateUserCourseStatus = async (req, res) => {
     }
 };
 
-courseContext.getAllCourses = async (req, res) => {
+courseContext.getAllCoursesByUserId = async (req, res) => {
     try {
         const courses = await pool.query('SELECT "Course".id, "Course".name, "Course".code FROM "Course" INNER JOIN user_course ON "Course".id = user_course.cid WHERE user_course.uid = $1;',
         [req.params.uid]);
