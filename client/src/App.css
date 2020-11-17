@@ -424,3 +424,36 @@
 .cover-media {
     height: 140px;
 }
+
+.chat {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.flexBox {
+    display: flex;
+    align-items: center;
+}
+
+.topicWindow {
+    width: 50%;
+    height: 500px;
+    border-right: 2px solid grey;
+}
+
+.chatWindow {
+    width: 50%;
+    height: 500px;
+    padding-left: 20px;
+    
+}
+
+.chatBox {
+    width: 85%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.chatButton {
+    width: 15%; 
+}

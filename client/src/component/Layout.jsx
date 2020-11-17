@@ -9,6 +9,7 @@ import Course from '../course/Course';
 import QAndA from '../QAndA/QAndA';
 import Group from '../group/Group';
 import Chat from '../chat/Chat';
+import JoinChat from '../chat/components/JoinChat';
 
 class Layout extends Component {
     constructor(props) {
@@ -95,10 +96,7 @@ class Layout extends Component {
                             </TabStripTab>
 
                             <TabStripTab title="Chat">
-                                <Chat
-                                    id={this.state.id}
-                                    status={this.state.status}
-                                />
+                                <JoinChat id={this.state.id} />
                             </TabStripTab>
                         </TabStrip>
                     </div>
