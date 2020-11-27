@@ -11,6 +11,8 @@ const thumbsUpRouts = require('./Q&A/thumbsUpAndDown/thumbsUpRouts');
 const thumbsDownRouts = require('./Q&A/thumbsUpAndDown/thumbsDownRouts');
 const repliesRout = require('./Q&A/replies/repliesRout');
 const adminRoute = require('./admin/adminRoute');
+const groupRouts = require('./group/groupRout');
+const groupPostRouts = require('./group/groupPostRout');
 
 app.use((req,res,next) =>{
     res.setHeader('Access-Control-Allow-Origin' , '*');
@@ -34,6 +36,8 @@ app.use('/thumbsUp' , thumbsUpRouts);
 app.use('/thumbsDown' , thumbsDownRouts);
 app.use('/replies' , repliesRout);
 app.use('/admin', adminRoute);
+app.use('/group', groupRouts);
+app.use('/groupPost', groupPostRouts);
 
 //callback function
 app.get('/', (req, res)=>{
@@ -41,4 +45,6 @@ app.get('/', (req, res)=>{
 }
 );
 
-app.listen(5000);
+app.listen(5000, () =>{
+    console.log("Server has started");
+ });

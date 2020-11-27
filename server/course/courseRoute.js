@@ -19,6 +19,10 @@ router.get('/getAnnouncementDetails/:id', async (req, res) => {
   res.send(await courseRepository.getAnnouncementDetails(req, res));
 });
 
+router.get('/getCourses/:uid', async (req, res) => {
+  res.send(await courseRepository.getAllCoursesByUserId(req, res));
+});
+
 router.post('/createDayschool', async (req, res) => {
   console.log("aaaaaaaaaaaaaaaaaa", req.body);
   res.send(await courseRepository.postDayschool(req.body))
