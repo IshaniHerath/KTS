@@ -262,6 +262,11 @@
     /*maxWidth: 345;*/
 }
 
+.personal-data-field {
+    margin-bottom: 15px;
+    padding-left: 90px;
+}
+
 .tooltip {
     font-size: 11px;
 }
@@ -305,7 +310,8 @@
     color: #104260 !important;
     text-transform: uppercase;
     font-weight: 700;
-    /*font-size: 0.85rem;*/
+    justify-content: center;
+    align-items: center;
     opacity: 0.5;
     /*margin-left: 6px;*/
 }

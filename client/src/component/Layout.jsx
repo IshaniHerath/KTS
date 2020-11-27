@@ -30,22 +30,11 @@ class Layout extends Component {
     }
 
     callbackFunctionCourseList = (CourseList) => {
-        console.log("courseList > " , CourseList);
         this.setState({
             courseList : CourseList,
             // programId:
         });
-        console.log("this.state.courseList parent> : ", this.state.courseList)
     };
-
-    // callbackFunctionProgramId =(ProgramId) => {
-    //     console.log("ProgramId > " , ProgramId);
-    //     this.setState({
-    //         programId: ProgramId
-    //     })
-    //     console.log("this.state.programId parent> : ", this.state.programId)
-    //
-    // };
 
     handleSelect = (e) => {
         this.setState({selected: e.selected})
@@ -53,10 +42,9 @@ class Layout extends Component {
 
     render(){
         return (
-
             <div>
                 <TopBar headerTitle=" "
-                    // displayName={this.props.displayName} logoutCallback={this.props.logoutCallback}
+                        id={this.state.id}
                 />
 
                 <div className="container-fluid">

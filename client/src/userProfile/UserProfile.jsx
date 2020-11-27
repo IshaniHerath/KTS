@@ -40,6 +40,9 @@ class UserProfile extends Component {
             selectedProgram: null,
             selectedDepartment: null,
 
+            //To catch the selected tab
+            selected: 0,
+
             //drop down data
             types: ['Student', 'Lecturer', 'Other'],
             AllPrograms: [],
@@ -138,10 +141,6 @@ class UserProfile extends Component {
                     // var dueBefore30_ = moment(dueBefore30).format('DD-MM-YYYY h:mm:ss');
                     var dueBefore30_ = moment(dueDateObject.getDate() - 31).format('DD-MM-YYYY h:mm:ss');
                     var currentDate = moment(Date.now()).format('DD-MM-YYYY h:mm:ss');
-                    console.log("dueAfter30_ : ", dueAfter30_);
-                    console.log("dueBefore30_ : ", dueBefore30_);
-                    console.log("currentDate : ", currentDate);
-                    console.log("dueDateObject : ", dueDateObject);
 
                     if (dueDateObject.getTime() < currentDateObj.getTime() && dueDateObject.getTime() > dueBefore30Obj.getTime()) {
                         console.log("current date max ?? overdueAssignment");
@@ -151,15 +150,12 @@ class UserProfile extends Component {
                         };
                         OverdueAssignments.push(overdueAssignment);
                     } else if (dueDateObject.getTime() >= currentDateObj.getTime() && dueDateObject.getTime() < dueAfter30Obj.getTime()) {
-                        console.log("due date max ?? toBeDueAssignment");
                         toBeDueAssignment = {
                             Title: datewant.title,
                             Date: moment(dueDateObject).format('DD-MM-YYYY h:mm:ss'),
                         };
                         ToBeDueAssignments.push(toBeDueAssignment);
                     }
-                    console.log("ToBeDueAssignments : ", ToBeDueAssignments)
-                    console.log("OverdueAssignments : ", OverdueAssignments)
                 });
                 this.setState({
                     toBeDueAssignments: ToBeDueAssignments,
@@ -204,14 +200,11 @@ class UserProfile extends Component {
         fetch('http://localhost:5000/userProfile/' + id + '/courseList')
             .then(res => res.json())
             .then(json => {
-                console.log("courses: ", json);
                 this.setState({
                     courses: json,
                 });
                 this.props.parentCallBackCourseList(json);
             });
-        // console.log("this.state.courses : ",this.state.courses)
-        // this.props.parentCallBackCourseList(this.state.courses);
     }
 
     handleOnChangeCombo = event => {
@@ -315,7 +308,6 @@ class UserProfile extends Component {
                             // ProgramId: null,
                         };
                     }
-                    console.log("userProfile : ", userProfile);
                     fetch('http://localhost:5000/userProfile/:id', {
                         method: 'PUT',
                         body: JSON.stringify(userProfile),
@@ -325,7 +317,6 @@ class UserProfile extends Component {
                     })
                         .then(response => response.json())
                         .then(data => {
-                            // console.log("data :", data);
                             this.toggleDialog('The user profile has been successfully updated', 'Success');
                         });
                 })
@@ -349,7 +340,11 @@ class UserProfile extends Component {
 
     //TODO
     handleLinkClick = (e) => {
-        this.state.selected = 1;
+        this.setState({
+            selected: 1
+        });
+        //TODO Pass child to parent
+
         // e.preventDefault();
     };
 
@@ -393,140 +388,121 @@ class UserProfile extends Component {
                             <div className="col-md-12">
 
                                 <div className="main-heading"><b> Personal Details </b></div>
-                                <div className="row">
-                                    <div className="col-md-6">
-                                        <div className="row">
-                                            <label htmlFor="" className="mandatory">
-                                                Name :
-                                            </label>
-                                            <Input
-                                                placeholder="Full Name"
-                                                value={this.state.fullName}
-                                                name="FirstName"
-                                                onChange={this.handleOnChange}
-                                                required={true}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="col-md-6">
-                                        <div className="row">
-                                            <label className="mandatory">Type :</label>
-
-                                            <ComboBox
-                                                textField="name"
-                                                dataItemKey="typeid"
-                                                data={this.state.AllTypes}
-                                                value={this.state.selectedType}
-                                                onChange={this.handleOnChangeCombo}
-                                                name="selectedType"
-                                                placeholder="Please Select"
-                                                required={true}
-                                                disabled={true}
-                                            />
-                                        </div>
-                                    </div>
+                                <div className="row personal-data-field">
+                                    <label htmlFor="" className="mandatory">
+                                        Name :
+                                    </label>
+                                    <Input className="ml-3"
+                                           placeholder="Full Name"
+                                           value={this.state.fullName}
+                                           name="FirstName"
+                                           onChange={this.handleOnChange}
+                                           required={true}
+                                    />
                                 </div>
 
-                                <div className="row">
-                                    {(this.state.selectedType && this.state.selectedType.name === "Student") && (
-                                        <div className="col-md-6">
-                                            <div className="row">
-                                                <label htmlFor="" className="mandatory">Reg No :</label>
+                                <div className="row personal-data-field">
+                                    <label className="mandatory">Type :</label>
 
-                                                <Input className="mandatory"
-                                                       placeholder="Register Number"
-                                                       value={this.state.regNumber}
-                                                       name="regNumber"
-                                                       required={true}
-                                                       onChange={this.handleOnChange}
-                                                       disabled={true}
-                                                    // type="Numeric"
-                                                    // maxLength= '9'
-                                                />
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {(this.state.selectedType && this.state.selectedType.name === "Lecturer") && (
-                                        <div className="col-md-6">
-                                            <div className="row">
-                                                <label htmlFor="" className="mandatory">Department : </label>
-
-                                                <ComboBox
-                                                    data={this.state.AllDepartments}
-                                                    textField="name"
-                                                    dataItemKey="id"
-                                                    value={this.state.selectedDepartment}
-                                                    onChange={this.handleOnChangeCombo}
-                                                    name="selectedDepartment"
-                                                    placeholder="Please Select"
-                                                    filterable={true}
-                                                    //       popupSettings={this.popupSet}
-                                                    required={true}
-                                                />
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {(this.state.selectedType && this.state.selectedType.name === "Student") && (
-                                        <div className="col-md-6">
-                                            <div className="row">
-                                                <label htmlFor="" className="mandatory">Program :</label>
-                                                <ComboBox
-                                                    data={this.state.AllPrograms}
-                                                    textField="name"
-                                                    dataItemKey="id"
-                                                    value={this.state.selectedProgram}
-                                                    onChange={this.handleOnChangeCombo}
-                                                    name="selectedProgram"
-                                                    placeholder="Please Select"
-                                                    disabled={true}
-                                                    //       popupSettings={this.popupSet}
-                                                    required={true}
-                                                />
-                                            </div>
-                                        </div>
-                                    )}
-                                    {(this.state.selectedType && this.state.selectedType.name === "Lecturer") && (
-                                        <div className="col-md-6">
-                                            <div className="row">
-                                                <label htmlFor="" className="mandatory">Program :</label>
-                                                <ComboBox
-                                                    data={this.state.AllPrograms}
-                                                    textField="name"
-                                                    dataItemKey="id"
-                                                    value={this.state.selectedProgram}
-                                                    onChange={this.handleOnChangeCombo}
-                                                    name="selectedProgram"
-                                                    placeholder="Please Select"
-                                                    filterable={true}
-                                                    //       popupSettings={this.popupSet}
-                                                    required={true}
-                                                />
-                                            </div>
-                                        </div>
-                                    )}
+                                    <ComboBox
+                                        className="ml-3"
+                                        textField="name"
+                                        dataItemKey="typeid"
+                                        data={this.state.AllTypes}
+                                        value={this.state.selectedType}
+                                        onChange={this.handleOnChangeCombo}
+                                        name="selectedType"
+                                        placeholder="Please Select"
+                                        required={true}
+                                        disabled={true}
+                                    />
                                 </div>
 
-                                <div className="row">
-                                    <div className="col-md-6">
-                                        <div className="row">
-                                            <Label htmlFor="" className="mandatory">Email :</Label>
-                                            <div id="statusToolTip">
-                                                <Input className="mandatory"
-                                                       placeholder="example@gmail.com"
-                                                       value={this.state.email}
-                                                       name="Email"
-                                                       required={true}
-                                                       onChange={this.handleOnChange}
-                                                />
-                                            </div>
-                                        </div>
+                                {(this.state.selectedType && this.state.selectedType.name === "Student") && (
+                                    <div className="row personal-data-field">
+                                        <label htmlFor="" className="mandatory">Reg No :</label>
+
+                                        <Input className="ml-3 mandatory"
+                                               placeholder="Register Number"
+                                               value={this.state.regNumber}
+                                               name="regNumber"
+                                               required={true}
+                                               onChange={this.handleOnChange}
+                                               disabled={true}
+                                            // type="Numeric"
+                                            // maxLength= '9'
+                                        />
+                                    </div>
+                                )}
+
+                                {(this.state.selectedType && this.state.selectedType.name === "Lecturer") && (
+                                    <div className="row personal-data-field">
+                                        <label htmlFor="" className="mandatory">Department : </label>
+
+                                        <ComboBox
+                                            className="ml-3"
+                                            data={this.state.AllDepartments}
+                                            textField="name"
+                                            dataItemKey="id"
+                                            value={this.state.selectedDepartment}
+                                            onChange={this.handleOnChangeCombo}
+                                            name="selectedDepartment"
+                                            placeholder="Please Select"
+                                            filterable={true}
+                                            required={true}
+                                        />
+                                    </div>
+                                )}
+
+                                {(this.state.selectedType && this.state.selectedType.name === "Student") && (
+                                    <div className="row personal-data-field">
+                                        <label htmlFor="" className="mandatory">Program :</label>
+                                        <ComboBox
+                                            className="ml-3"
+                                            data={this.state.AllPrograms}
+                                            textField="name"
+                                            dataItemKey="id"
+                                            value={this.state.selectedProgram}
+                                            onChange={this.handleOnChangeCombo}
+                                            name="selectedProgram"
+                                            placeholder="Please Select"
+                                            disabled={true}
+                                            required={true}
+                                        />
+                                    </div>
+                                )}
+                                {(this.state.selectedType && this.state.selectedType.name === "Lecturer") && (
+                                    <div className="row personal-data-field">
+                                        <label htmlFor="" className="mandatory">Program :</label>
+                                        <ComboBox
+                                            className="ml-3"
+                                            data={this.state.AllPrograms}
+                                            textField="name"
+                                            dataItemKey="id"
+                                            value={this.state.selectedProgram}
+                                            onChange={this.handleOnChangeCombo}
+                                            name="selectedProgram"
+                                            placeholder="Please Select"
+                                            filterable={true}
+                                            required={true}
+                                        />
+                                    </div>
+                                )}
+
+                                <div className="row personal-data-field">
+                                    <Label htmlFor="" className="mandatory">Email :</Label>
+                                    <div id="statusToolTip">
+                                        <Input className="ml-3 mandatory"
+                                               placeholder="example@gmail.com"
+                                               value={this.state.email}
+                                               name="Email"
+                                               required={true}
+                                               onChange={this.handleOnChange}
+                                        />
                                     </div>
                                 </div>
 
-                                <div className="row">
+                                <div className="row personal-data-field">
                                     <div className="btn-align-right">
                                         <MuiThemeProvider>
                                             <React.Fragment>
@@ -602,20 +578,19 @@ class UserProfile extends Component {
 
                                     <div className="dashboard-heading"><b> Next 30 days </b></div>
                                     {/*{this.state.toBeDueAssignments.map((item) => (*/}
-                                        <div className="col small-card">
-                                            <div>
-                                                <h6><AlarmIcon/>
-                                                    <a href="#" onClick={this.handleLinkClick}>
-                                                        {/*{item.Title} &nbsp; &nbsp;*/}
-                                                        {/*{item.Date}*/}
-                                                        2020-07-30 04:22:00
-                                                        {/*{"2020-07-30 04:22:00"}*/}
+                                    <div className="col small-card">
+                                        <div>
+                                            <h6><AlarmIcon/>
+                                                <a href="#" onClick={this.handleLinkClick}>
+                                                    {/*{item.Title} &nbsp; &nbsp;*/}
+                                                    {/*{item.Date}*/}
+                                                    2020-07-30 04:22:00
+                                                    {/*{"2020-07-30 04:22:00"}*/}
 
-                                                    </a>
-                                                </h6>
-                                            </div>
+                                                </a>
+                                            </h6>
                                         </div>
-                                    {/*))}*/}
+                                    </div>
 
                                     <div className="dashboard-heading"><b> Future </b></div>
 

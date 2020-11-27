@@ -16,6 +16,19 @@ userContext.getUserDetails = async  (req, res) => {
     }
 };
 
+userContext.getUserName = async  (req, res) => {
+    try{
+        const userName = await pool.query(
+            'select u.name as username \n' +
+            'from "UserProfile" as u \n' +
+            ' where u.id=' + (req.params.id) + ';'
+        );
+        return (userName.rows);
+    } catch (e) {
+        console.log("Error", e);
+    }
+};
+
 userContext.getCourses = async (req, res) => {
     try {
         const allCourses = await pool.query(

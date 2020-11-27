@@ -80,7 +80,7 @@ class App extends Component {
                             component={props => (
                                 <Admin
                                     {...props}
-                                    timestamp={new Date().toString()}
+                                    id={this.state.id}
                                 />
                             )}
                         />
