@@ -7,6 +7,7 @@ class Admin extends Component {
         super(props);
 
         this.state = {
+            userId: this.props.id,
             userList: [],
             courseList: [],
         }
@@ -163,7 +164,9 @@ class Admin extends Component {
 
         return (
             <div>
-                <TopBar headerTitle=""/>
+                <TopBar headerTitle=""
+                        id={this.state.userId}
+                />
 
                 <div className="container-fluid">
                     <div className="main-card">

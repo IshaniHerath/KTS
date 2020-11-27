@@ -17,6 +17,7 @@ class TopBar extends Component {
         super(props);
 
         this.state = {
+            //coming from layout.jsx (for non-admin users) and admin.jsx (for admin users)
             userId: this.props.id,
             RedirectToLogin: false,
             firstName: "",
@@ -37,17 +38,25 @@ class TopBar extends Component {
         var fullName,firstName = "";
         var id = this.state.userId;
 
-        fetch('http://localhost:5000/userProfile/' + id)
-            .then(res => res.json())
-            .then(respond => {
-                respond.forEach(function (userData) {
-                    fullName= userData.username
+        if(id){
+            fetch('http://localhost:5000/userProfile/' + id + '/userName')
+                .then(res => res.json())
+                .then(respond => {
+                        respond.forEach(function (userData) {
+                            fullName= userData.username
+                        });
+                        firstName = fullName.split(' ').slice(0,-1).join(' ');
+                    if(!firstName){
+                        this.setState({
+                            firstName: fullName
+                        });
+                    }else {
+                        this.setState({
+                            firstName: firstName
+                        });
+                    }
                 });
-                firstName = fullName.split(' ').slice(0,-1).join(' ');
-                this.setState({
-                    firstName: firstName
-                });
-            });
+        }
     }
 
     render() {

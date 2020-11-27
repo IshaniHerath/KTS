@@ -7,6 +7,10 @@ router.get('/:id', async (req, res) => {
   res.send (await userRepository.getUserDetails(req, res));
 });
 
+router.get('/:id/userName', async (req, res) => {
+  res.send (await userRepository.getUserName(req, res));
+});
+
 router.get('/:id/courseList/', async (req, res) => {
   res.send (await userRepository.getCourses(req, res));
 });
