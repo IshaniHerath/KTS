@@ -8,6 +8,8 @@ import UserProfile from '../userProfile/UserProfile';
 import Course from '../course/Course';
 import QAndA from '../QAndA/QAndA';
 import Group from '../group/Group';
+import Chat from '../chat/Chat';
+import JoinChat from '../chat/components/JoinChat';
 
 class Layout extends Component {
     constructor(props) {
@@ -16,6 +18,7 @@ class Layout extends Component {
         this.state = {
             id: this.props.id,
             status: this.props.status,
+            type: this.props.type,
 
             //Data From Child
             courseList: [],
@@ -90,7 +93,12 @@ class Layout extends Component {
                                 <Group
                                     id={this.state.id}
                                     status={this.state.status}
+                                    type={this.state.type}
                                 />
+                            </TabStripTab>
+
+                            <TabStripTab title="Chat">
+                                <JoinChat id={this.state.id} />
                             </TabStripTab>
                         </TabStrip>
                     </div>

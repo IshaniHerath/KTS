@@ -15,7 +15,8 @@ class App extends Component {
 
         this.state = {
             id: 0,
-            status: 2
+            status: 2,
+            type: 3
         }
     }
 
@@ -49,6 +50,7 @@ class App extends Component {
                                 (props) => <Layout {...props}
                                                    id={this.state.id}
                                                    status={this.state.status}
+                                                   type={this.state.type}
                                 />
                             }
                         />
