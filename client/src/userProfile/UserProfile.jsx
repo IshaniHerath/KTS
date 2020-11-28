@@ -108,53 +108,70 @@ class UserProfile extends Component {
             })
     }
 
-    populateDashboard() {
+    populateDashboard = async () => {
         var toBeDueAssignment = [];
         var overdueAssignment = [];
         var OverdueAssignments = [];
         const ToBeDueAssignments = [];
         var id = this.state.userId;
-        var currentDate = moment().format("DD-MM-YYYY hh:mm:ss");
 
-        fetch('http://localhost:5000/userProfile/' + id + '/getAssignments')
+        await fetch('http://localhost:5000/userProfile/' + id + '/getAssignments')
             .then(res => res.json())
             .then(respond => {
-                respond.forEach(function (datewant) {
-                    let dueDateObject = new Date(datewant.duedatetime);
-                    let currentDateObj = new Date(Date.now());
 
-                    console.log("dueDateObject obj : ", dueDateObject);
+                respond.forEach(function (assignmentData) {
 
-                    // var dueAfter30 = dueDateObject.setDate(dueDateObject.getDate() + 31);
-                    var dueAfter30 = dueDateObject.getDate() + 31;
-                    var dueBefore30 = dueDateObject.getDate() - 31;
-                    // var dueBefore30 = dueDateObject.setDate(dueDateObject.getDate() - 10);
-                    let dueBefore30Obj = new Date(dueBefore30);
-                    let dueAfter30Obj = new Date(dueAfter30);
+                    //Filter only not submitted assignments
+                    if(assignmentData.issubmitted === false){
 
-                    console.log("dueDateObject : ", dueDateObject);
-                    console.log("dueAfter30 : ", dueAfter30);
-                    console.log("dueBefore30 : ", dueBefore30);
+                        // Already overdue Assignmets
+                        let dueDateObject = new Date(assignmentData.duedatetime);
+                        let currentDateObj = new Date(Date.now());
 
-                    // var dueAfter30_ = moment(dueAfter30).format('DD-MM-YYYY h:mm:ss');
-                    var dueAfter30_ = moment(dueDateObject.getDate() + 31).format('DD-MM-YYYY h:mm:ss');
-                    // var dueBefore30_ = moment(dueBefore30).format('DD-MM-YYYY h:mm:ss');
-                    var dueBefore30_ = moment(dueDateObject.getDate() - 31).format('DD-MM-YYYY h:mm:ss');
-                    var currentDate = moment(Date.now()).format('DD-MM-YYYY h:mm:ss');
+                        //Date After 31 days for dueDate
+                        var dueAfter30 = dueDateObject.getDate() + 31;
+                        let dueAfter30Obj = new Date(dueAfter30);
 
-                    if (dueDateObject.getTime() < currentDateObj.getTime() && dueDateObject.getTime() > dueBefore30Obj.getTime()) {
-                        console.log("current date max ?? overdueAssignment");
-                        overdueAssignment = {
-                            Title: datewant.title,
-                            Date: moment(dueDateObject).format('DD-MM-YYYY h:mm:ss'),
-                        };
-                        OverdueAssignments.push(overdueAssignment);
-                    } else if (dueDateObject.getTime() >= currentDateObj.getTime() && dueDateObject.getTime() < dueAfter30Obj.getTime()) {
-                        toBeDueAssignment = {
-                            Title: datewant.title,
-                            Date: moment(dueDateObject).format('DD-MM-YYYY h:mm:ss'),
-                        };
-                        ToBeDueAssignments.push(toBeDueAssignment);
+                        //Date After 31 days for dueDate
+                        var dueBefore30 = dueDateObject.getDate() - 31;
+                        let dueBefore30Obj = new Date(dueBefore30);
+
+                        // var dueAfter30_ = moment(dueDateObject.getDate() + 31).format('DD-MM-YYYY h:mm:ss');
+                        // var dueBefore30_ = moment(dueBefore30).format('DD-MM-YYYY h:mm:ss');
+                        // var dueBefore30_ = moment(dueDateObject.getDate() - 31).format('DD-MM-YYYY h:mm:ss');
+                        // var currentDate = moment(Date.now()).format('DD-MM-YYYY h:mm:ss');
+
+                        //TODO
+                        // error in 'dueBefore30Obj'
+
+                        //Recently overdue
+                        if (dueDateObject.getTime() < currentDateObj.getTime())
+                        {
+                            //TODO Erro in substracting 30 days
+                            // && dueDateObject.getTime() > dueBefore30Obj.getTime()) {
+
+                            overdueAssignment = {
+                                Title: assignmentData.title,
+                                Code: assignmentData.code,
+                                Date: moment(dueDateObject).format('DD-MM-YYYY h:mm:ss'),
+                            };
+                            OverdueAssignments.push(overdueAssignment);
+                        }
+
+                        //Next 30 days
+                        else if (dueDateObject.getTime() >= currentDateObj.getTime()  ) {
+
+                            //TODO Error in adding 30 days
+                            // && dueDateObject.getTime() < dueAfter30Obj.getTime()) {
+
+                            toBeDueAssignment = {
+                                Title: assignmentData.title,
+                                Code: assignmentData.code,
+                                Date: moment(dueDateObject).format('DD-MM-YYYY h:mm:ss'),
+                            };
+                            ToBeDueAssignments.push(toBeDueAssignment);
+                        }
+                        //    TODO future (after 30 days)
                     }
                 });
                 this.setState({
@@ -162,7 +179,7 @@ class UserProfile extends Component {
                     overdueAssignments: OverdueAssignments,
                 })
             });
-    }
+    };
 
     populatePrograms() {
         fetch('http://localhost:5000/courses/getPrograms')
@@ -338,14 +355,11 @@ class UserProfile extends Component {
         });
     };
 
-    //TODO
     handleLinkClick = (e) => {
         this.setState({
             selected: 1
         });
-        //TODO Pass child to parent
-
-        // e.preventDefault();
+        this.props.parentCallBackSelectedTab(this.state.selected);
     };
 
     onClickCancel = event => {
@@ -369,8 +383,6 @@ class UserProfile extends Component {
 
         return (
             <div className="container-fluid">
-                {console.log("overdueAssignments >> : ", this.state.overdueAssignments)}
-                {console.log("toBeDueAssignments >> : ", this.state.toBeDueAssignments)}
 
                 <UserImageSection
                     className="mb-4" headerTitle=" "
@@ -543,7 +555,8 @@ class UserProfile extends Component {
                                                 {courses.map((item) => (
                                                     <tr key={item.id}>
                                                         <td> {item.code} </td>
-                                                        <td><a href="#" onClick={this.handleLinkClick}>
+                                                        <td className="link-format">
+                                                            <a onClick={this.handleLinkClick}>
                                                             {item.name} </a></td>
                                                     </tr>
                                                 ))}
@@ -566,9 +579,10 @@ class UserProfile extends Component {
                                     {this.state.overdueAssignments.map((item) => (
                                         <div className="col small-card">
                                             <div>
-                                                <h6><AlarmIcon/>
-                                                    <a href="#" onClick={this.handleLinkClick}>
-                                                        {item.Title} &nbsp; &nbsp;
+                                                <h6 className="link-format" ><AlarmIcon/>
+                                                    <a onClick={this.handleLinkClick}>
+                                                        {item.Code}: &nbsp;
+                                                        {item.Title} &nbsp;
                                                         {item.Date}
                                                     </a>
                                                 </h6>
@@ -576,24 +590,22 @@ class UserProfile extends Component {
                                         </div>
                                     ))}
 
-                                    <div className="dashboard-heading"><b> Next 30 days </b></div>
-                                    {/*{this.state.toBeDueAssignments.map((item) => (*/}
-                                    <div className="col small-card">
-                                        <div>
-                                            <h6><AlarmIcon/>
-                                                <a href="#" onClick={this.handleLinkClick}>
-                                                    {/*{item.Title} &nbsp; &nbsp;*/}
-                                                    {/*{item.Date}*/}
-                                                    2020-07-30 04:22:00
-                                                    {/*{"2020-07-30 04:22:00"}*/}
-
-                                                </a>
-                                            </h6>
-                                        </div>
-                                    </div>
-
                                     <div className="dashboard-heading"><b> Future </b></div>
+                                    {this.state.toBeDueAssignments.map((item) => (
+                                        <div className="col small-card">
+                                            <div>
+                                                <h6 className="link-format" ><AlarmIcon/>
+                                                    <a onClick={this.handleLinkClick}>
+                                                        {item.Code}: &nbsp;
+                                                        {item.Title} &nbsp;
+                                                        {item.Date}
+                                                    </a>
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    ))}
 
+                                    {/*<div className="dashboard-heading"><b> Future </b></div>*/}
                                 </div>
                             </div>
                         </div>

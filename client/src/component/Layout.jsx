@@ -36,6 +36,12 @@ class Layout extends Component {
         });
     };
 
+    callbackFunctionSelectedTab = (selectedTab) => {
+        this.setState({
+            selected: selectedTab
+        });
+    };
+
     handleSelect = (e) => {
         this.setState({selected: e.selected})
     };
@@ -56,6 +62,7 @@ class Layout extends Component {
                                 <UserProfile
                                     {...this.props}
                                     parentCallBackCourseList = {this.callbackFunctionCourseList}
+                                    parentCallBackSelectedTab = {this.callbackFunctionSelectedTab}
                                     // parentCallBackProgramId = {this.callbackFunctionProgramId}
                                     id={this.state.id}
                                     status={this.state.status}
