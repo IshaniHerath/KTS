@@ -28,7 +28,7 @@ router.put('/:id', async (req, res) => {
 });
 
 router.get('/:id/getAssignments', async (req, res) => {
-  res.send (await userRepository.getAssignments(req, res));
+  res.send (await userRepository.getAssignmentsByUserCourse(req, res));
 });
 
 module.exports = router;

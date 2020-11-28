@@ -264,7 +264,12 @@
 
 .personal-data-field {
     margin-bottom: 15px;
-    padding-left: 90px;
+    padding-left: 95px;
+}
+
+.link-format {
+    text-decoration: underline;
+    color: #4628ff;
 }
 
 .tooltip {

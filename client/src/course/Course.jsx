@@ -88,7 +88,6 @@ class Course extends Component {
     }
 
     componentDidMount(): void {
-        console.log("PROPSSSSS child", this.props);
         this.populateCourseByProgramId();
         this.populateUserDetails();
     }
@@ -105,8 +104,6 @@ class Course extends Component {
                         Type: userData.typeid
                     }
                 });
-                console.log("respond :: ", respond);
-                console.log("respond.typeid :: ", UserData.Type)
 
                 this.setState({
                     userType: UserData.Type,
@@ -119,7 +116,6 @@ class Course extends Component {
         fetch('http://localhost:5000/courses/getCoursesByProgram/' + pid)
             .then(res => res.json())
             .then(json => {
-                console.log("json : >> ", json);
                 this.setState({
                     allCourseList: json
                 })
@@ -158,7 +154,6 @@ class Course extends Component {
     };
 
     handleClickAssignment = () => {
-        console.log("setDialogOpen", this.state.setDialogOpen);
         this.state.setDialogOpen = true;
     };
 
@@ -275,7 +270,6 @@ class Course extends Component {
         await fetch('http://localhost:5000/courses/getCourseDetails/' + CourseId)
             .then(res => res.json())
             .then(respond => {
-                console.log("course data : ", respond);
 
                 respond.forEach(function (item) {
                     courseDetails = {
@@ -333,10 +327,7 @@ class Course extends Component {
                     })
                         .then(res => res.json())
                         .then(respond => {
-                            console.log("respond :", respond);
                             if (respond != null) {
-                                console.log("GGGGGGGGGGGGGGG :");
-
                                 this.toggleDialog('The announcement has been successfully added. Please Re-login if you wish to see the changes', 'Success');
                                 this.onClear();
                             }
@@ -348,11 +339,6 @@ class Course extends Component {
     addDayschool = () => {
         var curTime = new Date().toLocaleString();
 
-        console.log("selectedDate : ", this.state.selectedDate)
-        console.log("selectedFromTime : ", this.state.selectedFromTime)
-        console.log("selectedToTime : ", this.state.selectedToTime)
-        console.log("courseId : ", this.state.courseId)
-
         var DaySchool = {
             CourseId: this.state.courseId,
             PostedDate: curTime,
@@ -362,7 +348,6 @@ class Course extends Component {
             FromTime: moment(this.state.selectedFromTime).format('HH:mm:ss'),
             ToTime: moment(this.state.selectedToTime).format('HH:mm:ss')
         };
-        console.log("DaySchool : >>>>>> ", DaySchool)
 
         fetch('http://localhost:5000/courses/createDayschool', {
             method: 'POST',
@@ -382,7 +367,6 @@ class Course extends Component {
     };
 
     validateProperty = value => {
-        console.log("value : ", value);
         if (value) {
             return 'd-none';
         } else {

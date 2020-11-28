@@ -105,10 +105,10 @@ userContext.saveUserDetails = async (user) => {
     }
 };
 
-userContext.getAssignments = async  (req, res) => {
+userContext.getAssignmentsByUserCourse = async  (req, res) => {
     try{
         const assignments = await pool.query(
-            'select title, duedatetime from "Assignment" as a inner join "user_course" as m on a.courseid = m.cid ' +
+            'select  a.title, a.duedatetime, a.issubmitted, a.courseid, c.code from "Assignment" as a inner join "user_course" as m on a.courseid = m.cid inner join "Course" as c on a.courseid = c.id ' +
             ' where m.uid=' + (req.params.id) + ';'
         );
         return (assignments.rows);
