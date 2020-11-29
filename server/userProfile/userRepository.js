@@ -16,6 +16,21 @@ userContext.getUserDetails = async  (req, res) => {
     }
 };
 
+userContext.getOtherUserDetails = async  (req, res) => {
+    try{
+        const allUserDetails = await pool.query(
+            'select u.name as username, u.email, u.regnumber, t.typeid, t.name as typename\n' +
+            'from "UserProfile" as u \n' +
+            'INNER join "UserType" as t on u.type = t.typeid\n' +
+            ' where u.id=' + (req.params.id) + ';'
+        );
+        console.log("allUserDetails.rows ??", allUserDetails.rows)
+        return (allUserDetails.rows);
+    } catch (e) {
+        console.log("Error", e);
+    }
+};
+
 userContext.getUserName = async  (req, res) => {
     try{
         const userName = await pool.query(

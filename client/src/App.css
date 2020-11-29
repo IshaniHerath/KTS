@@ -267,6 +267,12 @@
     padding-left: 95px;
 }
 
+.register-data-field {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding-left: 95px;
+}
+
 .link-format {
     text-decoration: underline;
     color: #4628ff;

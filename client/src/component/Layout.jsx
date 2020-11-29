@@ -70,14 +70,15 @@ class Layout extends Component {
                                 />
                             </TabStripTab>
 
-                            <TabStripTab title="Course Details">
-                                <Course
-                                    courseList={this.state.courseList}
-                                    id={this.state.id}
-                                    status={this.state.status}
-                                />
-                            </TabStripTab>
-
+                            {(this.state.type && this.state.type !== 3) && (
+                                <TabStripTab title="Course Details">
+                                    <Course
+                                        courseList={this.state.courseList}
+                                        id={this.state.id}
+                                        status={this.state.status}
+                                    />
+                                </TabStripTab>
+                            )}
                             <TabStripTab title="Q And A">
                                 <QAndA
                                     id={this.state.id}

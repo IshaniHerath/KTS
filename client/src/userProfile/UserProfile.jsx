@@ -67,45 +67,72 @@ class UserProfile extends Component {
     componentDidMount() {
         window.scrollTo(0, 0);
         this.isMount = true;
+        this.populateUserDetails();
         this.populateCoursesList();
         this.populatePrograms();
         this.populateDepartments();
         this.populateUserType();
-        this.populateUserDetails();
         this.populateDashboard();
     }
 
     populateUserDetails() {
         var UserData = [];
         var id = this.state.userId;
+        var typeId = this.state.typeId;
 
-        fetch('http://localhost:5000/userProfile/' + id)
-            .then(res => res.json())
-            .then(respond => {
-                respond.forEach(function (userData) {
-                    UserData = {
-                        Name: userData.username,
-                        Email: userData.email,
-                        Program: {
-                            id: userData.programid,
-                            name: userData.progname
-                        },
-                        Type: {
-                            typeid: userData.typeid,
-                            name: userData.typename,
-                        },
-                        RegNumber: userData.regnumber,
-                    }
-                });
-                this.setState({
-                    fullName: UserData.Name,
-                    email: UserData.Email,
-                    typeId: UserData.Type.typeid,
-                    selectedType: UserData.Type,
-                    selectedProgram: UserData.Program,
-                    regNumber: UserData.RegNumber,
+        //Other Users
+        if(typeId ===3){
+            fetch('http://localhost:5000/userProfile/otherUser/' + id)
+                .then(res => res.json())
+                .then(respond => {
+                    respond.forEach(function (userData) {
+                        UserData = {
+                            Name: userData.username,
+                            Email: userData.email,
+                            Type: {
+                                typeid: userData.typeid,
+                                name: userData.typename,
+                            },
+                            RegNumber: userData.regnumber,
+                        }
+                    });
+                    this.setState({
+                        fullName: UserData.Name,
+                        email: UserData.Email,
+                        typeId: UserData.Type.typeid,
+                        selectedType: UserData.Type,
+                        regNumber: UserData.RegNumber,
+                    })
                 })
-            })
+        } else {
+            fetch('http://localhost:5000/userProfile/' + id)
+                .then(res => res.json())
+                .then(respond => {
+                    respond.forEach(function (userData) {
+                        UserData = {
+                            Name: userData.username,
+                            Email: userData.email,
+                            Program: {
+                                id: userData.programid,
+                                name: userData.progname
+                            },
+                            Type: {
+                                typeid: userData.typeid,
+                                name: userData.typename,
+                            },
+                            RegNumber: userData.regnumber,
+                        }
+                    });
+                    this.setState({
+                        fullName: UserData.Name,
+                        email: UserData.Email,
+                        typeId: UserData.Type.typeid,
+                        selectedType: UserData.Type,
+                        selectedProgram: UserData.Program,
+                        regNumber: UserData.RegNumber,
+                    })
+                })
+        }
     }
 
     populateDashboard = async () => {
@@ -557,7 +584,7 @@ class UserProfile extends Component {
                                                         <td> {item.code} </td>
                                                         <td className="link-format">
                                                             <a onClick={this.handleLinkClick}>
-                                                            {item.name} </a></td>
+                                                                {item.name} </a></td>
                                                     </tr>
                                                 ))}
                                                 </tbody>

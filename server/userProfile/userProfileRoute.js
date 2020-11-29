@@ -7,6 +7,10 @@ router.get('/:id', async (req, res) => {
   res.send (await userRepository.getUserDetails(req, res));
 });
 
+router.get('/otherUser/:id', async (req, res) => {
+  res.send (await userRepository.getOtherUserDetails(req, res));
+});
+
 router.get('/:id/userName', async (req, res) => {
   res.send (await userRepository.getUserName(req, res));
 });

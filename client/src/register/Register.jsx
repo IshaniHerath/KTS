@@ -20,7 +20,7 @@ class Register extends Component {
             email: "",
             typeId: 0,
             regNumber: 0,
-            program: "",
+            program: 0,
             password: "",
             rePassword: "",
 
@@ -34,10 +34,12 @@ class Register extends Component {
             showRePassword: false,
             //drop down
             AllTypes: [],
+            AllPrograms: [],
 
             redirectToLogin: false,
             //drop down selected data
             selectedType: null,
+            selectedProgram: null,
         }
     }
 
@@ -45,6 +47,7 @@ class Register extends Component {
         window.scrollTo(0, 0);
         this.isMount = true;
         this.populateUserType();
+        this.populatePrograms();
     }
 
     populateUserType() {
@@ -53,6 +56,16 @@ class Register extends Component {
             .then(data => {
                 this.setState({
                     AllTypes: data
+                });
+            });
+    }
+
+    populatePrograms() {
+        fetch('http://localhost:5000/courses/getPrograms')
+            .then(res => res.json())
+            .then(data => {
+                this.setState({
+                    AllPrograms: data
                 });
             });
     }
@@ -109,6 +122,15 @@ class Register extends Component {
                 })
             }
         }
+
+        if (field === 'selectedProgram' && valueObj) {
+            if (this.isMount) {
+                this.setState({
+                    selectedProgram: valueObj,
+                    program: valueObj.id
+                })
+            }
+        }
     };
 
     handleSubmit = event => {
@@ -127,9 +149,19 @@ class Register extends Component {
                             Type: this.state.typeId,
                             RegNumber: this.state.regNumber,
                             Password: this.state.password,
+                            Program: this.state.program,
                             StatusId: 1,
                         };
-                    } else if (this.state.selectedType && (this.state.selectedType.name === 'Lecturer' || this.state.selectedType.name === 'Other')) {
+                    } else if (this.state.selectedType && this.state.selectedType.name === 'Lecturer') {
+                        userProfile = {
+                            UserName: this.state.fullName.trim(),
+                            Type: this.state.typeId,
+                            Email: this.state.email.trim(),
+                            Password: this.state.password,
+                            Program: this.state.program,
+                            StatusId: 1,
+                        };
+                    } else if (this.state.selectedType && this.state.selectedType.name === 'Other') {
                         userProfile = {
                             UserName: this.state.fullName.trim(),
                             Type: this.state.typeId,
@@ -203,6 +235,7 @@ class Register extends Component {
             email: "",
             regNumber: 0,
             selectedType: "",
+            selectedProgram: "",
             password: "",
             rePassword: "",
         })
@@ -252,6 +285,13 @@ class Register extends Component {
         ) {
             return false;
         } else if (
+            (this.state.selectedType && (this.state.selectedType.name === "Student" || this.state.selectedType.name === "Lecturer")) &&
+            this.validateProperty(this.state.selectedProgram)
+                .toString()
+                .includes('error')
+        ) {
+            return false;
+        }else if (
             (this.state.selectedType && this.state.selectedType.name === "Student") &&
             this.validateProperty(this.state.regNumber)
                 .toString()
@@ -355,6 +395,22 @@ class Register extends Component {
                     ) : null}
 
                     <br/>
+
+                    {(this.state.selectedType && (this.state.selectedType.name === "Student" || this.state.selectedType.name === "Lecturer")) && (
+                        <div className="row register-data-field">
+                            <label htmlFor="" className="mandatory">Program :</label>
+                            <ComboBox
+                                data={this.state.AllPrograms}
+                                textField="name"
+                                dataItemKey="id"
+                                value={this.state.selectedProgram}
+                                onChange={this.handleOnChangeCombo}
+                                name="selectedProgram"
+                                placeholder="Please Select"
+                                required={true}
+                            />
+                        </div>
+                    )}
 
                     {(this.state.selectedType && this.state.selectedType.name === "Student") && (
                         <div>
