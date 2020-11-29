@@ -24,7 +24,7 @@ class UserProfile extends Component {
             program: "",
             department: "",
             email: "",
-            typeId: 0,
+            typeId: this.props.typeId,
             regNumber: "",
             userDetails: [],
             userId: this.props.id,

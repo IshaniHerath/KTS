@@ -20,6 +20,7 @@ class Register extends Component {
             email: "",
             typeId: 0,
             regNumber: 0,
+            program: "",
             password: "",
             rePassword: "",
 
@@ -112,10 +113,6 @@ class Register extends Component {
                 () => {
                     var userProfile = {};
 
-                    if (this.state.password !== this.state.rePassword) {
-                        this.state.password = null;
-                    }
-
                     if (this.state.selectedType && this.state.selectedType.name === 'Student') {
                         userProfile = {
                             UserName: this.state.fullName.trim(),
@@ -130,47 +127,53 @@ class Register extends Component {
                             UserName: this.state.fullName.trim(),
                             Type: this.state.typeId,
                             Email: this.state.email.trim(),
+                            Password: this.state.password,
                             StatusId: 1,
                         };
                     }
 
-                    console.log("userProfile : ", userProfile);
+                    if (this.state.password !== this.state.rePassword) {
+                        this.setState({
+                            isInCorrectPassword: true,
+                        });
+                        this.toggleDialog('Password Does not match!!', 'Error');
 
-                    if (!this.validation()) {
-                        this.setState({
-                            isErrorMessageVisible: true
-                        });
-                        this.setState({
-                            visible: true
-                        });
-                        this.toggleDialog('Please fix the highlighted errors to continue', 'Error');
                     } else {
-                        this.setState({
-                            isErrorMessageVisible: false
-                        });
-                        let uId = 0;
-                        fetch('http://localhost:5000/register/', {
-                            method: 'POST',
-                            body: JSON.stringify(userProfile),
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                data.forEach(function (userdata) {
-                                    uId = userdata.id;
-                                    console.log("uId : ", uId)
-                                });
-                                this.toggleDialog('The user profile has been successfully created', 'Success');
-                            })
-
-                            .catch(error => {
-                                this.setState({
-                                    isInCorrectPassword: true,
-                                });
-                                this.toggleDialog('Password Does not match!!', 'Error');
+                        if (!this.validation()) {
+                            this.setState({
+                                isErrorMessageVisible: true
                             });
+                            this.setState({
+                                visible: true
+                            });
+                            this.toggleDialog('Please fix the highlighted errors to continue', 'Error');
+                        } else {
+                            this.setState({
+                                isErrorMessageVisible: false
+                            });
+
+                            let uId = 0;
+                            fetch('http://localhost:5000/register/', {
+                                method: 'POST',
+                                body: JSON.stringify(userProfile),
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    data.forEach(function (userdata) {
+                                        console.log("userdata ?? ",userdata)
+                                        uId = userdata.id;
+                                        console.log("uId : ", uId)
+                                    });
+                                    this.toggleDialog('The user profile has been successfully created', 'Success');
+                                })
+
+                                .catch(error => {
+                                    console.log(error);
+                                });
+                        }
                     }
                 })
         }
@@ -242,6 +245,7 @@ class Register extends Component {
         ) {
             return false;
         } else if (
+            (this.state.selectedType && this.state.selectedType.name === "Student") &&
             this.validateProperty(this.state.regNumber)
                 .toString()
                 .includes('error')
@@ -420,8 +424,8 @@ class Register extends Component {
                            }
                     />
                     {this.state.isErrorMessageVisible === true ? (
-                        <span className={this.validateProperty(this.state.showRePassword)}>
-                    Please enter the password
+                        <span className={this.validateProperty(this.state.rePassword)}>
+                    Please re-enter the password
                   </span>
                     ) : null}
 
@@ -436,14 +440,14 @@ class Register extends Component {
                                     color="primary"
                                     variant="contained"
                                     onClick={this.handleSubmit}
-                                >Submit</RaisedButton>
+                                >SUBMIT</RaisedButton>
 
                                 <RaisedButton
                                     className="mt-3"
                                     color="primary"
                                     variant="contained"
-                                    onClick={this.continue}
-                                >Cancel</RaisedButton>
+                                    onClick={this.onClickCancel}
+                                >CLEAR</RaisedButton>
                             </React.Fragment>
                         </MuiThemeProvider>
 

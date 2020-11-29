@@ -66,6 +66,7 @@ class Layout extends Component {
                                     // parentCallBackProgramId = {this.callbackFunctionProgramId}
                                     id={this.state.id}
                                     status={this.state.status}
+                                    typeId={this.state.type}
                                 />
                             </TabStripTab>
 

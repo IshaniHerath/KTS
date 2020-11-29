@@ -118,7 +118,9 @@ class Login extends Component {
                                 });
 
                                 //send Data from child(login) to parent(app.jsx) through callback function
-                                this.props.parentCallback(this.state.id);
+                                this.props.parentCallbackId(this.state.id);
+                                this.props.parentCallbackType(this.state.type);
+                                this.props.parentCallbackStatus(this.state.status);
 
                                 //status approved
                                 if (this.state.dbPassword === this.state.password) {
@@ -137,7 +139,7 @@ class Login extends Component {
                                         });
                                     }
                                 }
-                                if (this.state.dbPassword !== this.state.password) {
+                                else if (this.state.dbPassword !== this.state.password) {
                                     this.toggleDialog('The Password/email address you have entered is incorrect', 'Error');
                                 }
 
@@ -150,7 +152,6 @@ class Login extends Component {
                                 if (this.state.status === 3) {
                                     this.toggleDialog('Your user type request is Rejected. Please register again with different user type', 'Error');
                                 }
-                             // history.push('/');
                             })
                         )
                 }

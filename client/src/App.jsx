@@ -15,15 +15,26 @@ class App extends Component {
 
         this.state = {
             id: 0,
-            status: 2,
-            type: 3
+            status: 0,
+            type: 0
         }
     }
 
     callbackFunction = (childData) => {
-        console.log("childData >>>>>>>> :", childData);
         this.setState({
             id: childData
+        })
+    };
+
+    callbackFunctionType = (type) => {
+        this.setState({
+            type: type
+        })
+    };
+
+    callbackFunctionStatus = (status) => {
+        this.setState({
+            status: status
         })
     };
 
@@ -37,7 +48,7 @@ class App extends Component {
                             path={"/"}
                             render={
                                 (props) => <MyDirection {...props}
-                                                        parentCallback={this.callbackFunction}
+                                                        parentCallbackId={this.callbackFunction}
                                                         id={this.state.id}
                                 />
                             }
@@ -59,7 +70,9 @@ class App extends Component {
                             path="/login"
                             render={
                                 (props) => <Login {...props}
-                                                  parentCallback={this.callbackFunction}
+                                                  parentCallbackId={this.callbackFunction}
+                                                  parentCallbackType={this.callbackFunctionType}
+                                                  parentCallbackStatus={this.callbackFunctionStatus}
                                                   id={this.state.id}
                                 />
                             }

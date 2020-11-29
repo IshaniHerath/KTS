@@ -24,8 +24,8 @@ userContext.saveRegisterDetails = async (user) => {
         console.log("User : ", user);
         try {
             const newUser = await pool.query(
-                'insert into "UserProfile" (name, email, type, password, status) values ($1 , $2 , $3 , $5, $6) RETURNING id ;',
-                [user.UserName, user.Email, user.Type, user.Password, user.Status]
+                'insert into "UserProfile" (name, email, type, password, status) values ($1 , $2 , $3 , $4, $5) RETURNING id ;',
+                [user.UserName, user.Email, user.Type, user.Password, user.StatusId]
             );
             return (newUser.rows);
         } catch (e) {
