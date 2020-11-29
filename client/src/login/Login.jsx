@@ -122,35 +122,40 @@ class Login extends Component {
                                 this.props.parentCallbackType(this.state.type);
                                 this.props.parentCallbackStatus(this.state.status);
 
-                                //status approved
+                                //Password check
                                 if (this.state.dbPassword === this.state.password) {
-                                //Not gonna check status, coz every user should go to main page
-                                // if (this.state.dbPassword === this.state.password && this.state.status === 2) {
-                                    //Student, Lecturer, Other users
-                                    if (this.state.type === 1 || this.state.type === 2 || this.state.type === 3) {
-                                        this.setState({
-                                            redirectToHome: true
-                                        });
+
+                                    //Status pending
+                                    if (this.state.status === 1) {
+                                        this.toggleDialog('Your user type request is Pending. Please try later', 'Error');
                                     }
-                                    //admin user
-                                    if (this.state.type === 4) {
-                                        this.setState({
-                                            redirectToAdminPage: true
-                                        });
+
+                                    //Status Rejected
+                                    if (this.state.status === 3) {
+                                        this.toggleDialog('Your user type request is Rejected. Please register again with different user type', 'Error');
                                     }
+
+                                    //Status Approved
+                                    if (this.state.status === 2) {
+
+                                        //Student, Lecturer, Other users
+                                        if (this.state.type === 1 || this.state.type === 2 || this.state.type === 3) {
+                                            this.setState({
+                                                redirectToHome: true
+                                            });
+                                        }
+
+                                        //admin user
+                                        if (this.state.type === 4) {
+                                            this.setState({
+                                                redirectToAdminPage: true
+                                            });
+                                        }
+                                    }
+
                                 }
                                 else if (this.state.dbPassword !== this.state.password) {
                                     this.toggleDialog('The Password/email address you have entered is incorrect', 'Error');
-                                }
-
-                                //Status pending
-                                if (this.state.status === 1) {
-                                    this.toggleDialog('Your user type request is Pending. Please try later', 'Error');
-                                }
-
-                                //Status Rejected
-                                if (this.state.status === 3) {
-                                    this.toggleDialog('Your user type request is Rejected. Please register again with different user type', 'Error');
                                 }
                             })
                         )

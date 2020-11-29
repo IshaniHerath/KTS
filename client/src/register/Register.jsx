@@ -97,10 +97,17 @@ class Register extends Component {
         const field = event.target.name;
 
         if (field === 'selectedType' && valueObj) {
-            this.setState({
-                selectedType: valueObj,
-                typeId: valueObj.typeid
-            })
+            if(valueObj.typeid === 4){
+                this.toggleDialog("You can't create Admin users from here!!", 'Error');
+                this.setState({
+                    selectedType: ""
+                })
+            } else {
+                this.setState({
+                    selectedType: valueObj,
+                    typeId: valueObj.typeid
+                })
+            }
         }
     };
 
