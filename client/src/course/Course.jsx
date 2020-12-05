@@ -839,6 +839,7 @@ class Course extends Component {
                                                             </p>
 
                                                             <div className="mt-4">
+                                                                Question Paper:
                                                                 <a href="#Content"
                                                                     // onClick={this.handleLinkClick}
                                                                    onClick={() => this.handleLinkClick(item)}>
