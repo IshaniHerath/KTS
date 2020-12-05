@@ -33,6 +33,7 @@ import Divider from '@material-ui/core/Divider';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import axios from 'axios';
+import FilePreviewer, {FilePreviewerThumbnail} from 'react-file-previewer';
 
 class Course extends Component {
     constructor(props) {
@@ -60,6 +61,7 @@ class Course extends Component {
             //Assignment
             assTitle: "",
             assignmentDueDate: "",
+            AssignmentList: [],
 
             //DaySchool
             dsName: "",
@@ -136,6 +138,16 @@ class Course extends Component {
             .then(respond => {
                 this.setState({
                     AnnouncementList: respond
+                })
+            });
+    };
+
+    populateAssignmentQuestionList = () => {
+        fetch('http://localhost:5000/courses/getAssignmentQuestionList/' + this.state.courseId)
+            .then(res => res.json())
+            .then(respond => {
+                this.setState({
+                    AssignmentList: respond
                 })
             });
     };
@@ -313,6 +325,7 @@ class Course extends Component {
             });
 
         this.populateAnnouncementDetails();
+        this.populateAssignmentQuestionList();
     };
 
     addAssignment = async (event) => {
@@ -476,7 +489,7 @@ class Course extends Component {
     }
 
     render() {
-        var {courseList, AnnouncementList} = this.state;
+        var {courseList, AnnouncementList, AssignmentList} = this.state;
 
         return (
             <div className='course-main'>
@@ -764,8 +777,8 @@ class Course extends Component {
                                                 />
                                                 {this.state.isErrorMessageVisible === true ? (
                                                     <span className={this.validateProperty(this.state.assTitle)}>
-                    Please enter Announcement title
-                  </span>
+                                                         Please enter Announcement title
+                                                    </span>
                                                 ) : null}
                                             </div>
 
@@ -773,20 +786,6 @@ class Course extends Component {
                                                 <label htmlFor="" className="mandatory">
                                                     Due Date :
                                                 </label>
-
-                  {/*                              <Input*/}
-                  {/*                                  className="ml-md-3"*/}
-                  {/*                                  placeholder="Assignment due date"*/}
-                  {/*                                  value={this.state.dueDate}*/}
-                  {/*                                  name="AssTitle"*/}
-                  {/*                                  onChange={this.handleOnChange}*/}
-                  {/*                                  required={true}*/}
-                  {/*                              />*/}
-                  {/*                              {this.state.isErrorMessageVisible === true ? (*/}
-                  {/*                                  <span className={this.validateProperty(this.state.title)}>*/}
-                  {/*  Please enter Assignment title*/}
-                  {/*</span>*/}
-                  {/*                              ) : null}*/}
 
                                                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                                     <KeyboardDatePicker
@@ -801,8 +800,6 @@ class Course extends Component {
                                                         }}
                                                     />
                                                 </MuiPickersUtilsProvider>
-
-
                                             </div>
 
                                             <div className="row ml-5">
@@ -810,16 +807,17 @@ class Course extends Component {
                                                     Upload the Question Paper Document :
                                                 </label>
                                             </div>
-                                            <div className="row ml-5">
 
-                                                <div className="row ml-5">
-                                                    <input type="file" onChange={this.fileSelectedHandler} />
-                                                    <button onClick={this.fileUploadHandler}>Upload</button>
-                                                </div>
+                                            <div className="row fileUpload-button">
+                                                <input type="file" onChange={this.fileSelectedHandler} />
+                                                <button onClick={this.fileUploadHandler}>Upload</button>
+                                            </div>
+                                            <div className="add-button">
                                                 <Avatar onClick={this.addAssignment}>
                                                     <AddIcon/>
                                                 </Avatar>
                                             </div>
+                                            <br/> <br/>
                                         </div>
                                     )}
 
@@ -827,7 +825,7 @@ class Course extends Component {
                                         <Paper className={"classes-paper"}>
                                             <Grid container wrap="nowrap" spacing={2}>
                                                 <Grid item xs>
-                                                    {AnnouncementList.map((item) => (
+                                                    {AssignmentList.map((item) => (
                                                         <Typography>
                                                             <br/>
                                                             <h5><b>
@@ -835,10 +833,24 @@ class Course extends Component {
                                                             </b>
                                                             </h5>
                                                             <p className="ml-3">
-                                                                by {item.name} - {item.datetime}
-                                                                <br/> <br/>
-                                                                {item.description} </p>
+                                                                by {item.name} - {item.posteddate}
+                                                                <br/>
+                                                                Due date: {item.duedatetime}
+                                                            </p>
 
+                                                            <div className="mt-4">
+                                                                <a href="#Content"
+                                                                    // onClick={this.handleLinkClick}
+                                                                   onClick={() => this.handleLinkClick(item)}>
+                                                                    {"this.pdf"} </a>
+                                                            </div>
+                                                            <br/>
+                                                            <div>
+                                                                <input type="file" onChange={this.fileSelectedHandler} />
+                                                                <button onClick={this.fileUploadHandler}>Upload</button>
+                                                            </div>
+
+                                                            {/*Lecturer*/}
                                                             {(this.state.userType === 2) && (
 
                                                                 <div style={{float: "right"}}>
@@ -863,16 +875,6 @@ class Course extends Component {
                                             </Grid>
                                         </Paper>
                                     </div>
-
-
-                                    <div className="row ml-5">
-                                        <label htmlFor="" className="mandatory">
-                                            Title :
-                                        </label>
-                                        <input type="file" onChange={this.fileSelectedHandler} />
-                                        <button onClick={this.fileUploadHandler}>Upload</button>
-                                    </div>
-
                                 </Collapse>
 
                                 {/*Marks*/}

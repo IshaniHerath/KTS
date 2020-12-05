@@ -19,6 +19,10 @@ router.get('/getAnnouncementDetails/:id', async (req, res) => {
   res.send(await courseRepository.getAnnouncementDetails(req, res));
 });
 
+router.get('/getAssignmentQuestionList/:id', async (req, res) => {
+  res.send(await courseRepository.getAssignmentQuestionList(req, res));
+});
+
 router.get('/getCourses/:uid', async (req, res) => {
   res.send(await courseRepository.getAllCoursesByUserId(req, res));
 });
