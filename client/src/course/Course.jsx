@@ -32,6 +32,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import Divider from '@material-ui/core/Divider';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import axios from 'axios';
 
 class Course extends Component {
     constructor(props) {
@@ -56,9 +57,13 @@ class Course extends Component {
             title: "",
             AnnouncementList: [],
 
+            //Assignment
+            assTitle: "",
+            assignmentDueDate: "",
+
             //DaySchool
             dsName: "",
-            selectedDate: "",
+            DayshoolSelectedDate: "",
             // selectedTime: "",
             selectedFromTime: "",
             selectedToTime: "",
@@ -75,6 +80,7 @@ class Course extends Component {
             // other
             ListItemOpen_01: false,
             ListAnnouncementOpen: false,
+            ListAssignmentOpen: false,
             ListDayschoolOpen: false,
 
             isErrorMessageVisible: false,
@@ -83,6 +89,8 @@ class Course extends Component {
             setDialogOpen: false,
             open: false,
             visible: false,
+            selectedFile: null
+
         };
         this.toggleDialog = this.toggleDialog.bind(this);
     }
@@ -146,6 +154,14 @@ class Course extends Component {
         this.forceUpdate();
     };
 
+
+    handleClickAssignment = () => {
+        this.setState({
+            ListAssignmentOpen: !this.state.ListAssignmentOpen
+        });
+        this.forceUpdate();
+    };
+
     handleClickDayschool = () => {
         this.setState({
             ListDayschoolOpen: !this.state.ListDayschoolOpen
@@ -153,9 +169,9 @@ class Course extends Component {
         this.forceUpdate();
     };
 
-    handleClickAssignment = () => {
-        this.state.setDialogOpen = true;
-    };
+    // handleClickAssignment = () => {
+    //     this.state.setDialogOpen = true;
+    // };
 
     handleOnChangeCombo = (event) => {
         const valueObj = event.value;
@@ -183,6 +199,12 @@ class Course extends Component {
                 isFormDirty: true,
             });
         }
+        if (field === "AssTitle") {
+            this.setState({
+                assTitle: event.target.value,
+                isFormDirty: true,
+            });
+        }
         if (field === "DsName") {
             this.setState({
                 dsName: event.target.value
@@ -190,9 +212,14 @@ class Course extends Component {
         }
     };
 
-    handleDateChange = async (event) => {
+    handleDayshoolDateChange = async (event) => {
         await this.setState({
-            selectedDate: event
+            DayshoolSelectedDate: event
+        });
+    };
+    handleAssignmentDueDateChange = async (event) => {
+        await this.setState({
+            assignmentDueDate: event
         });
     };
 
@@ -288,6 +315,32 @@ class Course extends Component {
         this.populateAnnouncementDetails();
     };
 
+    addAssignment = async (event) => {
+        var curTime = new Date().toLocaleString();
+        var Assignment = {
+            courseId: this.state.courseId,
+            postedDate: curTime,
+            dueDateTime: this.state.assignmentDueDate,
+            assTitle: this.state.assTitle,
+            owner: this.state.userId,
+        };
+
+        fetch('http://localhost:5000/courses/postAssignment/', {
+            method: 'POST',
+            body: JSON.stringify(Assignment),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => res.json())
+            .then(respond => {
+                if (respond != null) {
+                    this.toggleDialog('The assignment has been successfully added. Please Re-login if you wish to see the changes', 'Success');
+                    this.onClear();
+                }
+            })
+    }
+
     addAnnouncement = async (event) => {
         //Do not refresh the page
         event.preventDefault();
@@ -344,7 +397,7 @@ class Course extends Component {
             PostedDate: curTime,
             DsName: this.state.dsName,
             Owner: this.state.userId,
-            DsDate: moment(this.state.selectedDate).format('YYYY-MM-DD'),
+            DsDate: moment(this.state.DayshoolSelectedDate).format('YYYY-MM-DD'),
             FromTime: moment(this.state.selectedFromTime).format('HH:mm:ss'),
             ToTime: moment(this.state.selectedToTime).format('HH:mm:ss')
         };
@@ -391,6 +444,36 @@ class Course extends Component {
             return true;
         }
     };
+
+    fileSelectedHandler = (event) => {
+        console.log(event.target.files[0]);
+        this.setState({
+            selectedFile: event.target.files[0]
+        })
+    };
+
+    fileUploadHandler = () => {
+        var File= this.state.selectedFile;
+        var path= 'F:\\0001\\DOCS\\Campus\\4th year\\EEY6A89-Group Project\\Implementation\\FYP\\KTS\\server\\fileUpload\\files\\';
+        var fileName = 'Course_Announcement' + File.name;
+        var curTime = new Date().toLocaleString();
+
+        const fd = new FormData();
+
+        fd.append('tma', this.state.selectedFile);
+        fd.append('postedDate', curTime);
+        fd.append('userID', this.state.userId);
+        fd.append('fileName', fileName);
+        fd.append('originalName', File.name);
+        fd.append('path', path);
+        fd.append('courseId', this.state.courseId);
+        fd.append('title', "Course_Announcement");
+
+        axios.post('http://localhost:5000/fileUpload/fileupload', fd)
+            .then(res => {
+                console.log(res);
+            });
+    }
 
     render() {
         var {courseList, AnnouncementList} = this.state;
@@ -601,8 +684,8 @@ class Course extends Component {
                                                         margin="normal"
                                                         id="date-picker-dialog"
                                                         format="MM/dd/yyyy"
-                                                        value={this.state.selectedDate}
-                                                        onChange={this.handleDateChange}
+                                                        value={this.state.DayshoolSelectedDate}
+                                                        onChange={this.handleDayshoolDateChange}
                                                         KeyboardButtonProps={{
                                                             'aria-label': 'change date',
                                                         }}
@@ -661,8 +744,136 @@ class Course extends Component {
                                         </Avatar>
                                     </ListItemAvatar>
                                     <ListItemText primary="Assignments"/>
-                                    {this.state.ListAnnouncementOpen === true ? <ExpandMore/> : <ExpandLess/>}
+                                    {this.state.ListAssignmentOpen === true ? <ExpandMore/> : <ExpandLess/>}
                                 </ListItem>
+
+                                <Collapse in={this.state.ListAssignmentOpen} timeout="auto" unmountOnExit>
+                                    {(this.state.userType === 2) && (
+                                        <div>
+                                            <div className="row ml-5">
+                                                <label htmlFor="" className="mandatory">
+                                                    Title :
+                                                </label>
+                                                <Input
+                                                    className="ml-md-3"
+                                                    placeholder="Assignment title"
+                                                    value={this.state.assTitle}
+                                                    name="AssTitle"
+                                                    onChange={this.handleOnChange}
+                                                    required={true}
+                                                />
+                                                {this.state.isErrorMessageVisible === true ? (
+                                                    <span className={this.validateProperty(this.state.assTitle)}>
+                    Please enter Announcement title
+                  </span>
+                                                ) : null}
+                                            </div>
+
+                                            <div className="row ml-5">
+                                                <label htmlFor="" className="mandatory">
+                                                    Due Date :
+                                                </label>
+
+                  {/*                              <Input*/}
+                  {/*                                  className="ml-md-3"*/}
+                  {/*                                  placeholder="Assignment due date"*/}
+                  {/*                                  value={this.state.dueDate}*/}
+                  {/*                                  name="AssTitle"*/}
+                  {/*                                  onChange={this.handleOnChange}*/}
+                  {/*                                  required={true}*/}
+                  {/*                              />*/}
+                  {/*                              {this.state.isErrorMessageVisible === true ? (*/}
+                  {/*                                  <span className={this.validateProperty(this.state.title)}>*/}
+                  {/*  Please enter Assignment title*/}
+                  {/*</span>*/}
+                  {/*                              ) : null}*/}
+
+                                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                                    <KeyboardDatePicker
+                                                        name="DueDate"
+                                                        margin="normal"
+                                                        id="date-picker-dialog"
+                                                        format="MM/dd/yyyy"
+                                                        value={this.state.assignmentDueDate}
+                                                        onChange={this.handleAssignmentDueDateChange}
+                                                        KeyboardButtonProps={{
+                                                            'aria-label': 'change date',
+                                                        }}
+                                                    />
+                                                </MuiPickersUtilsProvider>
+
+
+                                            </div>
+
+                                            <div className="row ml-5">
+                                                <label htmlFor="" className="mt-4">
+                                                    Upload the Question Paper Document :
+                                                </label>
+                                            </div>
+                                            <div className="row ml-5">
+
+                                                <div className="row ml-5">
+                                                    <input type="file" onChange={this.fileSelectedHandler} />
+                                                    <button onClick={this.fileUploadHandler}>Upload</button>
+                                                </div>
+                                                <Avatar onClick={this.addAssignment}>
+                                                    <AddIcon/>
+                                                </Avatar>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className="row ml-5">
+                                        <Paper className={"classes-paper"}>
+                                            <Grid container wrap="nowrap" spacing={2}>
+                                                <Grid item xs>
+                                                    {AnnouncementList.map((item) => (
+                                                        <Typography>
+                                                            <br/>
+                                                            <h5><b>
+                                                                {(item.title).toUpperCase()}
+                                                            </b>
+                                                            </h5>
+                                                            <p className="ml-3">
+                                                                by {item.name} - {item.datetime}
+                                                                <br/> <br/>
+                                                                {item.description} </p>
+
+                                                            {(this.state.userType === 2) && (
+
+                                                                <div style={{float: "right"}}>
+                                                                    {/*<Avatar*/}
+                                                                    {/*    // onClick={this.deleteAnnouncement}*/}
+                                                                    {/*>*/}
+                                                                    <EditIcon className="mr-3"/>
+
+                                                                    {/*</Avatar>*/}
+                                                                    {/*<Avatar*/}
+                                                                    {/*    // onClick={this.deleteAnnouncement}*/}
+                                                                    {/*>*/}
+                                                                    <DeleteIcon/>
+                                                                    {/*</Avatar>*/}
+                                                                </div>
+                                                            )}
+                                                            <br/> <br/>
+                                                            <Divider/>
+                                                        </Typography>
+                                                    ))}
+                                                </Grid>
+                                            </Grid>
+                                        </Paper>
+                                    </div>
+
+
+                                    <div className="row ml-5">
+                                        <label htmlFor="" className="mandatory">
+                                            Title :
+                                        </label>
+                                        <input type="file" onChange={this.fileSelectedHandler} />
+                                        <button onClick={this.fileUploadHandler}>Upload</button>
+                                    </div>
+
+                                </Collapse>
 
                                 {/*Marks*/}
                                 <ListItem button onClick={this.handleClick}>

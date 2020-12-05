@@ -59,6 +59,18 @@ courseContext.postAnnouncement =async (req, res) => {
     }
 };
 
+courseContext.postAssignment =async (req, res) => {
+    try {
+        const assignment = await pool.query(
+            'insert into "Assignment" (title, posteddate, courseid, duedatetime, owner) values ($1, $2, $3, $4, $5)',
+            [req.assTitle, req.postedDate, req.courseId, req.dueDateTime, req.owner]
+        );
+        return (assignment.rows);
+    }catch (e) {
+        console.log(e.message)
+    }
+};
+
 courseContext.postDayschool = async (req, res) => {
     try {
         const daySchool = await pool.query(
