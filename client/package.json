@@ -63,6 +63,7 @@
     ]
   },
   "devDependencies": {
-    "@material-ui/pickers": "^3.2.10"
+    "@material-ui/pickers": "^3.2.10",
+    "react-file-previewer": "^0.6.3"
   }
 }

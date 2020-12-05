@@ -286,6 +286,16 @@
     float: right !important;
 }
 
+.add-button {
+    float: right;
+    /*padding: 20px;*/
+}
+
+.fileUpload-button{
+    /*float: right;*/
+    padding-left: 100px;
+}
+
 .top-bar {
     text-align: center;
 }

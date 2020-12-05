@@ -13,6 +13,7 @@ const repliesRout = require('./Q&A/replies/repliesRout');
 const adminRoute = require('./admin/adminRoute');
 const groupRouts = require('./group/groupRout');
 const groupPostRouts = require('./group/groupPostRout');
+const fileUploadRouts = require('./fileUpload/fileUploadRoute');
 
 app.use((req,res,next) =>{
     res.setHeader('Access-Control-Allow-Origin' , '*');
@@ -38,6 +39,7 @@ app.use('/replies' , repliesRout);
 app.use('/admin', adminRoute);
 app.use('/group', groupRouts);
 app.use('/groupPost', groupPostRouts);
+app.use('/fileUpload', fileUploadRouts);
 
 //callback function
 app.get('/', (req, res)=>{
