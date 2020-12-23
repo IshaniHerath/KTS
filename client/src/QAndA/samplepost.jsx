@@ -1,5 +1,5 @@
-import React, { Component, Fragment, useEffect , useState } from 'react';
-import { Button, Comment, Form, Header } from 'semantic-ui-react'
+import React, { Component } from 'react';
+// import { Button, Comment, Form, Header } from 'semantic-ui-react'
 import Replies from './Replies';
 import AddReplies from './AddReplies';
 import ThumbsUp from './ThumbsUp';

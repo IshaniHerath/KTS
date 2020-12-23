@@ -8,8 +8,6 @@ import logo from './logo....png';
 import dp from './img_avatar.jpg';
 import Chip from '@material-ui/core/Chip';
 import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
-import {Textsms} from "@material-ui/icons";
 import Redirect from "react-router-dom/Redirect";
 
 class TopBar extends Component {

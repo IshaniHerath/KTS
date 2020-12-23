@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import '@progress/kendo-ui';
 import '@progress/kendo-theme-default';
+import dp from './img_avatar.jpg';
+import cover from './cover3.jpg';
 
 class UserImageSection extends Component {
 
@@ -43,10 +45,10 @@ class UserImageSection extends Component {
             <div className="main-card-cover">
                 <div className="col-md-12 ">
 
-                    <img id='cover-preview' src="" height="200" alt="" className="main-cover-large"/>
+                    <img id='cover-preview' src={cover} height="200" alt="" className="main-cover-large"/>
                     <input type="file" onChange={this.readURL_cover} className = "cover-button" />
 
-                    <img id='preview' src="" height="200" alt="" className="main-dp-large"/>
+                    <img id='preview' src={dp} height="200" alt="" className="main-dp-large"/>
                     <input type="file" onChange={this.readURL} className = "dp-button"/>
 
                 </div>

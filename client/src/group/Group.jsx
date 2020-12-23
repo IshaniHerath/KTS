@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import GroupImageSection from "../group/GroupImageSection";
 import {ComboBox} from "@progress/kendo-react-dropdowns";
 import ThumbsUp from '../QAndA/ThumbsUp';
@@ -135,9 +135,9 @@ class Group extends Component {
         return (
             <div className="container-fluid">
                 <GroupImageSection className="mb-4" headerTitle=" "/>
-                
+                <br/> <br/>
                     <div className="row">
-                       
+
                         <div className="col-md-3">
                             <div className=" course-navigation">
                                 <h6>My Group List</h6>
@@ -145,9 +145,7 @@ class Group extends Component {
                                     <ul>
                                     {items.map((item) => (
                                         <li>
-                                                
                                             <a href="#Content" 
-                                            //onClick = {this.handleCourse(item)}
                                             onClick={() => this.handleCourse(item)}>
                                                 {item.name}
                                             </a>

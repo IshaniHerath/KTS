@@ -8,7 +8,6 @@ import UserProfile from '../userProfile/UserProfile';
 import Course from '../course/Course';
 import QAndA from '../QAndA/QAndA';
 import Group from '../group/Group';
-import Chat from '../chat/Chat';
 import JoinChat from '../chat/components/JoinChat';
 
 class Layout extends Component {
