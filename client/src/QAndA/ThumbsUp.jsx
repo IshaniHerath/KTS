@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { GoThumbsup } from "react-icons/go";
 import { MdThumbUp } from "react-icons/md";
 class ThumbsUp extends Component {
 

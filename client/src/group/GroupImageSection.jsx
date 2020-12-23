@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import '@progress/kendo-ui';
 import '@progress/kendo-theme-default';
+import cover from './cover3_group.jpg';
 
 class GroupImageSection extends Component {
 
@@ -24,7 +25,7 @@ class GroupImageSection extends Component {
             <div className="main-card-cover">
                 <div className="col-md-12 ">
 
-                    <img id='cover-preview' src="" height="200" alt="" className="main-cover-large"/>
+                    <img id='cover-preview' src={cover} height="200" alt="" className="main-cover-large"/>
                     <input type="file" onChange={this.readURL_cover} className = "cover-button" />
 
                 </div>

@@ -9,10 +9,7 @@ import Input from "@material-ui/core/Input";
 import {Label} from '@progress/kendo-react-labels';
 import Redirect from "react-router-dom/Redirect";
 import UserImageSection from "../userProfile/UserImageSection";
-import Grid from "@material-ui/core/Grid";
-import FolderIcon from "@material-ui/icons/Folder";
 import AlarmIcon from '@material-ui/icons/Alarm';
-import Avatar from "@material-ui/core/Avatar";
 import moment from "moment";
 
 class UserProfile extends Component {

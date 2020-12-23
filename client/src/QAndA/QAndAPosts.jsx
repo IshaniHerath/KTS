@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useEffect , useState } from 'react';
+import React, { Component } from 'react';
 import Replies from './Replies';
 import AddReplies from './AddReplies';
 import ThumbsUp from './ThumbsUp';
