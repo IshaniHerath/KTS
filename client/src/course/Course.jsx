@@ -69,6 +69,8 @@ class Course extends Component {
             // selectedTime: "",
             selectedFromTime: "",
             selectedToTime: "",
+            DaySchoolList:[],
+
 
             allCourseList: [],
             selectedCourse: [],
@@ -138,6 +140,16 @@ class Course extends Component {
             .then(respond => {
                 this.setState({
                     AnnouncementList: respond
+                })
+            });
+    };
+
+    populateDaySchoolDetails = () => {
+        fetch('http://localhost:5000/courses/getDaySchoolDetails/' + this.state.courseId)
+            .then(res => res.json())
+            .then(respond => {
+                this.setState({
+                    DaySchoolList: respond
                 })
             });
     };
@@ -294,6 +306,10 @@ class Course extends Component {
         this.setState({
             title: "",
             announcement: "",
+            dsName: "",
+            DayshoolSelectedDate : null,
+            selectedFromTime : null,
+            selectedToTime : null,
         })
     };
 
@@ -325,7 +341,9 @@ class Course extends Component {
             });
 
         this.populateAnnouncementDetails();
+        this.populateDaySchoolDetails();
         this.populateAssignmentQuestionList();
+        this.onClear();
     };
 
     addAssignment = async (event) => {
@@ -394,7 +412,7 @@ class Course extends Component {
                         .then(res => res.json())
                         .then(respond => {
                             if (respond != null) {
-                                this.toggleDialog('The announcement has been successfully added. Please Re-login if you wish to see the changes', 'Success');
+                                this.toggleDialog('The announcement has been successfully added.', 'Success');
                                 this.onClear();
                             }
                         })
@@ -406,13 +424,13 @@ class Course extends Component {
         var curTime = new Date().toLocaleString();
 
         var DaySchool = {
-            CourseId: this.state.courseId,
-            PostedDate: curTime,
-            DsName: this.state.dsName,
-            Owner: this.state.userId,
-            DsDate: moment(this.state.DayshoolSelectedDate).format('YYYY-MM-DD'),
-            FromTime: moment(this.state.selectedFromTime).format('HH:mm:ss'),
-            ToTime: moment(this.state.selectedToTime).format('HH:mm:ss')
+            courseId: this.state.courseId,
+            postedDate: curTime,
+            title: this.state.dsName,
+            owner: this.state.userId,
+            dsDate: moment(this.state.DayshoolSelectedDate).format('YYYY-MM-DD'),
+            fromTime: moment(this.state.selectedFromTime).format('HH:mm:ss'),
+            toTime: moment(this.state.selectedToTime).format('HH:mm:ss')
         };
 
         fetch('http://localhost:5000/courses/createDayschool', {
@@ -425,6 +443,7 @@ class Course extends Component {
             .then(res => res.json())
             .then(result => {
                 this.toggleDialog('The day school details are successfully create', 'Success');
+                this.onClear();
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -459,7 +478,6 @@ class Course extends Component {
     };
 
     fileSelectedHandler = (event) => {
-        console.log(event.target.files[0]);
         this.setState({
             selectedFile: event.target.files[0]
         })
@@ -489,7 +507,7 @@ class Course extends Component {
     }
 
     render() {
-        var {courseList, AnnouncementList, AssignmentList} = this.state;
+        var {courseList, AnnouncementList, DaySchoolList, AssignmentList} = this.state;
 
         return (
             <div className='course-main'>
@@ -502,9 +520,7 @@ class Course extends Component {
                             <ul>
                                 {courseList.map((item, key) => (
                                     <li><a href="#Content"
-                                        // onClick={this.handleLinkClick}
                                            onClick={() => this.handleLinkClick(item)}
-
                                     >
                                         {item.code + "-" + item.name} </a>
                                     </li>
@@ -661,7 +677,7 @@ class Course extends Component {
                                     </div>
                                 </Collapse>
 
-                                {/*TODO DS*/}
+                                {/*TODO DS Delete & Edit*/}
                                 <ListItem button onClick={this.handleClickDayschool}>
                                     <ListItemAvatar>
                                         <Avatar>
@@ -747,6 +763,49 @@ class Course extends Component {
                                             </div>
                                         </div>
                                     )}
+
+                                    <div className="row ml-5">
+                                        <Paper className={"classes-paper"}>
+                                            <Grid container wrap="nowrap" spacing={2}>
+                                                <Grid item xs>
+                                                    {DaySchoolList.map((item) => (
+                                                        <Typography>
+                                                            <br/>
+                                                            <h5><b>
+                                                                {(item.title).toUpperCase()}
+                                                            </b>
+                                                            </h5>
+                                                            <p className="ml-3">
+                                                                by {item.name} - {item.posteddate}
+                                                                <br/> <br/>
+                                                                On {item.date}
+                                                                <br/> <br/>
+                                                                From: {item.fromtime} To: {item.totime}</p>
+
+                                                            {(this.state.userType === 2) && (
+
+                                                                <div style={{float: "right"}}>
+                                                                    {/*<Avatar*/}
+                                                                    {/*    // onClick={this.deleteAnnouncement}*/}
+                                                                    {/*>*/}
+                                                                    <EditIcon className="mr-3"/>
+
+                                                                    {/*</Avatar>*/}
+                                                                    {/*<Avatar*/}
+                                                                    {/*    // onClick={this.deleteAnnouncement}*/}
+                                                                    {/*>*/}
+                                                                    <DeleteIcon/>
+                                                                    {/*</Avatar>*/}
+                                                                </div>
+                                                            )}
+                                                            <br/> <br/>
+                                                            <Divider/>
+                                                        </Typography>
+                                                    ))}
+                                                </Grid>
+                                            </Grid>
+                                        </Paper>
+                                    </div>
                                 </Collapse>
 
                                 {/*Assignment*/}
@@ -896,6 +955,16 @@ class Course extends Component {
                                                 <FolderIcon/>
                                             </ListItemIcon>
                                             <ListItemText primary="CAT Marks"/>
+                                            <div className="row ml-5">
+                                                <label htmlFor="" className="mt-4">
+                                                    Upload the Marks Document :
+                                                </label>
+                                            </div>
+
+                                            <div className="row fileUpload-button">
+                                                <input type="file" onChange={this.fileSelectedHandler} />
+                                                <button onClick={this.fileUploadHandler}>Upload</button>
+                                            </div>
                                         </ListItem>
                                         <ListItem button className='styles-nested'>
                                             <ListItemIcon>
