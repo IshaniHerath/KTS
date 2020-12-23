@@ -39,8 +39,18 @@ courseContext.getCourseDetails = async (req, res) => {
 courseContext.getAnnouncementDetails = async (req, res) => {
     try {
         const announcement = await pool.query(
-            'select a.title, a.description, a.datetime, u.name from "Announcement" as a  inner JOIN "UserProfile" as u on a.owner = u.id where courseid =' + (req.params.id) +  'ORDER BY a.datetime DESC;');
+            'select a.title, a.description, a.datetime, u.name from "Announcement" as a inner JOIN "UserProfile" as u on a.owner = u.id where courseid =' + (req.params.id) +  'ORDER BY a.datetime DESC;');
         return (announcement.rows);
+    } catch (e) {
+        console.log(e.message);
+    }
+};
+
+courseContext.getDaySchoolDetails  = async (req, res) => {
+    try {
+        const daySchools = await pool.query(
+            'select a.title, a.posteddate, u.name, a.date, a.fromtime, a.totime, a.courseid from "Dayschool" as a  inner JOIN "UserProfile" as u on a.owner = u.id  where courseid ='+ (req.params.id) + 'ORDER BY a.posteddate DESC;');
+        return (daySchools.rows);
     } catch (e) {
         console.log(e.message);
     }
@@ -95,7 +105,9 @@ courseContext.postAssignment =async (req, res) => {
 courseContext.postDayschool = async (req, res) => {
     try {
         const daySchool = await pool.query(
-            // 'insert into "user_course" ("cid", "uid", "status") values ($1, $2, $3)',
+            'insert into "Dayschool" (title, posteddate, owner, date, fromtime, totime, courseid) ' +
+            'values ($1, $2, $3, $4, $5, $6, $7)',
+            [req.title, req.postedDate, req.owner, req.dsDate, req.fromTime, req.toTime, req.courseId]
         );
     return (daySchool.rows);
     }
