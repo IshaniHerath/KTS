@@ -442,7 +442,7 @@ class Course extends Component {
         })
             .then(res => res.json())
             .then(result => {
-                this.toggleDialog('The day school details are successfully create', 'Success');
+                this.toggleDialog('The day school details are successfully created', 'Success');
                 this.onClear();
             })
             .catch(error => {
@@ -504,7 +504,45 @@ class Course extends Component {
             .then(res => {
                 console.log(res);
             });
+    };
+
+    deleteAnnouncement(item) {
+        var annId = item.id;
+
+        fetch(`http://localhost:5000/courses/deleteAnnouncement/` + annId , {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => res)
+            .then(result => {
+                this.toggleDialog('The Announcement is successfully deleted', 'Error');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            })
     }
+
+    deleteDayschool(item) {
+        var Id = item.id;
+
+        fetch(`http://localhost:5000/courses/deleteDaySchool/` + Id , {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => res)
+            .then(result => {
+                this.toggleDialog('The Day School is successfully deleted', 'Error');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            })
+    }
+
+
 
     render() {
         var {courseList, AnnouncementList, DaySchoolList, AssignmentList} = this.state;
@@ -654,17 +692,11 @@ class Course extends Component {
                                                             {(this.state.userType === 2) && (
 
                                                                 <div style={{float: "right"}}>
-                                                                    {/*<Avatar*/}
-                                                                    {/*    // onClick={this.deleteAnnouncement}*/}
-                                                                    {/*>*/}
-                                                                    <EditIcon className="mr-3"/>
-
-                                                                    {/*</Avatar>*/}
-                                                                    {/*<Avatar*/}
-                                                                    {/*    // onClick={this.deleteAnnouncement}*/}
-                                                                    {/*>*/}
-                                                                    <DeleteIcon/>
-                                                                    {/*</Avatar>*/}
+                                                                    <Avatar
+                                                                        onClick={() => this.deleteAnnouncement(item)}
+                                                                    >
+                                                                        <DeleteIcon/>
+                                                                    </Avatar>
                                                                 </div>
                                                             )}
                                                             <br/> <br/>
@@ -785,17 +817,11 @@ class Course extends Component {
                                                             {(this.state.userType === 2) && (
 
                                                                 <div style={{float: "right"}}>
-                                                                    {/*<Avatar*/}
-                                                                    {/*    // onClick={this.deleteAnnouncement}*/}
-                                                                    {/*>*/}
-                                                                    <EditIcon className="mr-3"/>
-
-                                                                    {/*</Avatar>*/}
-                                                                    {/*<Avatar*/}
-                                                                    {/*    // onClick={this.deleteAnnouncement}*/}
-                                                                    {/*>*/}
+                                                                    <Avatar
+                                                                        onClick={() => this.deleteDayschool(item)}
+                                                                    >
                                                                     <DeleteIcon/>
-                                                                    {/*</Avatar>*/}
+                                                                    </Avatar>
                                                                 </div>
                                                             )}
                                                             <br/> <br/>

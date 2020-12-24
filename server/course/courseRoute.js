@@ -39,6 +39,14 @@ router.post('/postAnnouncement', async (req, res) => {
   res.send(await courseRepository.postAnnouncement(req.body))
 });
 
+router.delete('/deleteAnnouncement/:id', async (req, res) => {
+  res.send(await courseRepository.deleteAnnouncement(req.params.id))
+});
+
+router.delete('/deleteDaySchool/:id', async (req, res) => {
+  res.send(await courseRepository.deleteDaySchool(req.params.id))
+});
+
 router.post('/postAssignment', async (req, res) => {
   res.send(await courseRepository.postAssignment(req.body))
 });
