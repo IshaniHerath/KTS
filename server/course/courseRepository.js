@@ -39,7 +39,7 @@ courseContext.getCourseDetails = async (req, res) => {
 courseContext.getAnnouncementDetails = async (req, res) => {
     try {
         const announcement = await pool.query(
-            'select a.title, a.description, a.datetime, u.name from "Announcement" as a inner JOIN "UserProfile" as u on a.owner = u.id where courseid =' + (req.params.id) +  'ORDER BY a.datetime DESC;');
+            'select a.id, a.title, a.description, a.datetime, u.name from "Announcement" as a inner JOIN "UserProfile" as u on a.owner = u.id where courseid =' + (req.params.id) +  'ORDER BY a.datetime DESC;');
         return (announcement.rows);
     } catch (e) {
         console.log(e.message);
@@ -49,7 +49,7 @@ courseContext.getAnnouncementDetails = async (req, res) => {
 courseContext.getDaySchoolDetails  = async (req, res) => {
     try {
         const daySchools = await pool.query(
-            'select a.title, a.posteddate, u.name, a.date, a.fromtime, a.totime, a.courseid from "Dayschool" as a  inner JOIN "UserProfile" as u on a.owner = u.id  where courseid ='+ (req.params.id) + 'ORDER BY a.posteddate DESC;');
+            'select a.id, a.title, a.posteddate, u.name, a.date, a.fromtime, a.totime, a.courseid from "Dayschool" as a  inner JOIN "UserProfile" as u on a.owner = u.id  where courseid ='+ (req.params.id) + 'ORDER BY a.posteddate DESC;');
         return (daySchools.rows);
     } catch (e) {
         console.log(e.message);
@@ -76,6 +76,27 @@ courseContext.getAssignmentAnswerList = async (req, res) => {
         console.log(e.message);
     }
 };
+
+courseContext.deleteAnnouncement = async (req, res) => {
+    try {
+        const Announcement = await pool.query(
+        'DELETE FROM "Announcement" WHERE id = $1;',[req]);
+        return (Assignment.rows);
+    } catch (e) {
+        console.log(e.message);
+    }
+};
+
+courseContext.deleteDaySchool  = async (req, res) => {
+    try {
+        const DaySchool = await pool.query(
+            'DELETE FROM "Dayschool" WHERE id = $1;',[req]);
+        return (DaySchool.rows);
+    } catch (e) {
+        console.log(e.message);
+    }
+};
+
 
 courseContext.postAnnouncement =async (req, res) => {
     console.log("req.param >>>> ", req);
