@@ -84,18 +84,22 @@ class Layout extends Component {
                                     status={this.state.status}
                                 />
                             </TabStripTab>
+                            
+                            {(this.state.type && this.state.type !== 3) && (
+                                <TabStripTab title="Groups">
+                                    <Group
+                                        id={this.state.id}
+                                        status={this.state.status}
+                                        type={this.state.type}
+                                    />
+                                </TabStripTab>
+                            )}
 
-                            <TabStripTab title="Groups">
-                                <Group
-                                    id={this.state.id}
-                                    status={this.state.status}
-                                    type={this.state.type}
-                                />
-                            </TabStripTab>
-
-                            <TabStripTab title="Chat">
-                                <JoinChat id={this.state.id} />
-                            </TabStripTab>
+                            {(this.state.type && this.state.type !== 3) && (
+                                <TabStripTab title="Chat">
+                                    <JoinChat id={this.state.id} />
+                                </TabStripTab>
+                            )}
                         </TabStrip>
                     </div>
                 </div>
