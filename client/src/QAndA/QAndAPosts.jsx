@@ -50,7 +50,7 @@ class QAndAPosts extends Component {
                         <Replies postid = {item.post_id}/>
 
                         <div className='postlabel'>  
-                            <AddReplies postid = {item.post_id} id={this.state.id}/> 
+                            <AddReplies postid = {item.post_id} id={this.state.id} post_text = {item.post_content}/> 
                         </div> 
                         
                     </div>  
