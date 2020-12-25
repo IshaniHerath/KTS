@@ -11,7 +11,7 @@ class JoinChat extends Component {
         this.state = {
             id: this.props.id,
             chatRooms: [],
-            name: "Ish",
+            name: [],
             courseList:[]
 
         }
@@ -33,12 +33,20 @@ class JoinChat extends Component {
             .then(json => {
                this.setState({
                 courseList: json
-               }) 
+               })
+            });
+
+        fetch('http://localhost:5000/userProfile/' + uid + '/userName')
+            .then(res => res.json())
+            .then(json => {
+                this.setState({
+                    name: json,
+                })
             });
     }
 
     chatlink = (chatRoom) => {
-        const name = this.state.name;
+        const name = ''+this.state.name[0].username+'_'+this.state.id;
         const room = chatRoom.chat_name;
        window.open('https://kts-chat-client.herokuapp.com/chat?name=' + name + '&room='+ room, '_blank');
     }; 
