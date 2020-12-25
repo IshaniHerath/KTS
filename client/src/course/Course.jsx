@@ -369,6 +369,7 @@ class Course extends Component {
             assTitle: this.state.assTitle,
             owner: this.state.userId,
             isAnswer: false,
+            fileId: this.state.fileId
         };
 
         fetch('http://localhost:5000/courses/postAssignment/', {
@@ -604,6 +605,8 @@ class Course extends Component {
 
     //Save In the DB
     fileUploadToDb = (File) => {
+        var FileId = [];
+
         fetch('http://localhost:5000/fileUpload/fileUploadToDB', {
             method: 'POST',
             body: JSON.stringify(File),
@@ -615,11 +618,14 @@ class Course extends Component {
             .then(result => {
                 this.toggleDialog('The file is successfully uploaded.', 'Success');
 
-                //TODO
-                console.log("lllllllllllllllllll result >> ", result)
+                result.forEach(function (fileId) {
+                    FileId = fileId.id;
+                });
+
                 this.setState({
-                    fileId: 0
-                })
+                    fileId: FileId
+                });
+
             })
             .catch(error => {
                 console.error('Error:', error);

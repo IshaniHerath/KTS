@@ -40,7 +40,7 @@ class JoinChat extends Component {
     chatlink = (chatRoom) => {
         const name = this.state.name;
         const room = chatRoom.chat_name;
-       window.open('http://localhost:4000/chat?name=' + name + '&room='+ room, '_blank');
+       window.open('https://kts-chat-client.herokuapp.com/chat?name=' + name + '&room='+ room, '_blank');
     }; 
 
     createChat = (event) => {

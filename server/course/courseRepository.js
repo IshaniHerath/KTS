@@ -132,8 +132,8 @@ courseContext.postAnnouncement =async (req, res) => {
 courseContext.postAssignment =async (req, res) => {
     try {
         const assignment = await pool.query(
-            'insert into "Assignment" (title, posteddate, courseid, duedatetime, owner, "isAnswer") values ($1, $2, $3, $4, $5, $6)',
-            [req.assTitle, req.postedDate, req.courseId, req.dueDateTime, req.owner, req.isAnswer]
+            'insert into "Assignment" (title, posteddate, courseid, duedatetime, owner, "isAnswer", "fileId") values ($1, $2, $3, $4, $5, $6, $7)',
+            [req.assTitle, req.postedDate, req.courseId, req.dueDateTime, req.owner, req.isAnswer, req.fileId]
         );
         return (assignment.rows);
     }catch (e) {
