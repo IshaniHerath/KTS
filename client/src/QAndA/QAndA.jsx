@@ -41,6 +41,20 @@ class QAndA extends Component {
         this.setState({visible: true});
         this.toggleDialog('The Post has been successfully added. Please Re-login to see the changes', 'Success');
         
+        // Q&A (General) - Search Integration
+        const QuestionDetail = "General : " + this.postContentEl.current.value;
+        const UID            = this.state.id;
+        const CourseId       = 0; // cant get this ID.  this.cName.current.value.id;
+        const body_Inte      = {QuestionDetail, UID, CourseId}; 
+        fetch('http://ktrans-001-site1.etempurl.com/api/SearchEngSubmit/Question' , {
+        method: 'POST',
+        body: JSON.stringify(body_Inte), 
+        headers: {
+        'Content-Type': 'application/json'
+        }
+        });
+        // END  POST - Search Integration
+
     };
 
     toggleDialog = (message, title) => {
