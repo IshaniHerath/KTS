@@ -17,6 +17,10 @@ router.post('/fileupload', async (req, res, next) => {
             message: 'File Uploaded'
         })
     });
+});
+
+router.post('/fileUploadToDB', async (req, res) => {
     res.send(await fileUploadRepository.postFileUpload(req.body))
 });
+
 module.exports = router;

@@ -192,6 +192,12 @@
     width: 70%;
 }
 
+.course-AnnTitle{
+    width: 65%;
+    margin-left: 20px;
+    padding-left: 20px;
+}
+
 .styles-nested {
     text-align: inherit;
     padding: 40px;

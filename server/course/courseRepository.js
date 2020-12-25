@@ -59,18 +59,17 @@ courseContext.getDaySchoolDetails  = async (req, res) => {
 courseContext.getAssignmentQuestionList = async (req, res) => {
     try {
         const Assignment = await pool.query(
-            'select a.title, a.posteddate, a.duedatetime, a.issubmitted, u.name from "Assignment" as a inner JOIN "UserProfile" as u on a.owner = u.id where courseid =' + (req.params.id) +  'and "isAnswer" = FALSE;');
+            'select a.id, a.title, a.posteddate, a.duedatetime, a.issubmitted, u.name from "Assignment" as a inner JOIN "UserProfile" as u on a.owner = u.id where courseid =' + (req.params.id) +  'and "isAnswer" = FALSE;');
         return (Assignment.rows);
     } catch (e) {
         console.log(e.message);
     }
 };
 
-//TODO in FE
 courseContext.getAssignmentAnswerList = async (req, res) => {
     try {
         const Assignment = await pool.query(
-            'select a.title, a.posteddate, a.duedatetime, a.issubmitted, u.name from "Assignment" as a inner JOIN "UserProfile" as u on a.owner = u.id where courseid =' + (req.params.id) +  'and "isAnswer" = TRUE;');
+            'select a.id, a.title, a.posteddate, a.duedatetime, a.issubmitted, u.name from "Assignment" as a inner JOIN "UserProfile" as u on a.owner = u.id where courseid =' + (req.params.id) +  'and "isAnswer" = TRUE;');
         return (Assignment.rows);
     } catch (e) {
         console.log(e.message);
@@ -97,6 +96,25 @@ courseContext.deleteDaySchool  = async (req, res) => {
     }
 };
 
+courseContext.deleteAssignmentQuestion  = async (req, res) => {
+    try {
+        const AssignmentQuestion = await pool.query(
+            'DELETE FROM "Assignment" WHERE id = $1;',[req]);
+        return (AssignmentQuestion.rows);
+    } catch (e) {
+        console.log(e.message);
+    }
+};
+
+courseContext.deleteAssignmentAnswer  = async (req, res) => {
+    try {
+        const AssignmentAnswer = await pool.query(
+        'DELETE FROM "Assignment" WHERE id = $1;',[req]);
+        return (AssignmentAnswer.rows);
+    } catch (e) {
+        console.log(e.message);
+    }
+};
 
 courseContext.postAnnouncement =async (req, res) => {
     console.log("req.param >>>> ", req);
@@ -114,8 +132,8 @@ courseContext.postAnnouncement =async (req, res) => {
 courseContext.postAssignment =async (req, res) => {
     try {
         const assignment = await pool.query(
-            'insert into "Assignment" (title, posteddate, courseid, duedatetime, owner) values ($1, $2, $3, $4, $5)',
-            [req.assTitle, req.postedDate, req.courseId, req.dueDateTime, req.owner]
+            'insert into "Assignment" (title, posteddate, courseid, duedatetime, owner, "isAnswer", "fileId") values ($1, $2, $3, $4, $5, $6, $7)',
+            [req.assTitle, req.postedDate, req.courseId, req.dueDateTime, req.owner, req.isAnswer, req.fileId]
         );
         return (assignment.rows);
     }catch (e) {

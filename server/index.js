@@ -14,7 +14,7 @@ const adminRoute = require('./admin/adminRoute');
 const groupRouts = require('./group/groupRout');
 const groupPostRouts = require('./group/groupPostRout');
 const fileUploadRouts = require('./fileUpload/fileUploadRoute');
-
+const chatRouts = require('./Chat/ChatRouts');
 app.use((req,res,next) =>{
     res.setHeader('Access-Control-Allow-Origin' , '*');
     res.setHeader('Access-Control-Allow-Methods' , 'POST,GET,OPTIONS,PUT,DELETE');
@@ -40,6 +40,7 @@ app.use('/admin', adminRoute);
 app.use('/group', groupRouts);
 app.use('/groupPost', groupPostRouts);
 app.use('/fileUpload', fileUploadRouts);
+app.use('/chat', chatRouts);
 
 //callback function
 app.get('/', (req, res)=>{
