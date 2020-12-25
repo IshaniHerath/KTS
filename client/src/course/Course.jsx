@@ -61,7 +61,9 @@ class Course extends Component {
             //Assignment
             assTitle: "",
             assignmentDueDate: "",
-            AssignmentList: [],
+            AssignmentQuestionList: [],
+            AssignmentAnswerList: [],
+            fileId: 0,
 
             //DaySchool
             dsName: "",
@@ -159,7 +161,17 @@ class Course extends Component {
             .then(res => res.json())
             .then(respond => {
                 this.setState({
-                    AssignmentList: respond
+                    AssignmentQuestionList: respond
+                })
+            });
+    };
+
+    populateAssignmentAnswerList = () => {
+        fetch('http://localhost:5000/courses/getAssignmentAnswerList/' + this.state.courseId)
+            .then(res => res.json())
+            .then(respond => {
+                this.setState({
+                    AssignmentAnswerList: respond
                 })
             });
     };
@@ -177,7 +189,6 @@ class Course extends Component {
         });
         this.forceUpdate();
     };
-
 
     handleClickAssignment = () => {
         this.setState({
@@ -310,6 +321,8 @@ class Course extends Component {
             DayshoolSelectedDate : null,
             selectedFromTime : null,
             selectedToTime : null,
+            assignmentDueDate: "",
+            assTitle: "",
         })
     };
 
@@ -343,10 +356,11 @@ class Course extends Component {
         this.populateAnnouncementDetails();
         this.populateDaySchoolDetails();
         this.populateAssignmentQuestionList();
+        this.populateAssignmentAnswerList();
         this.onClear();
     };
 
-    addAssignment = async (event) => {
+    addAssignmentQuestion = async (event) => {
         var curTime = new Date().toLocaleString();
         var Assignment = {
             courseId: this.state.courseId,
@@ -354,6 +368,7 @@ class Course extends Component {
             dueDateTime: this.state.assignmentDueDate,
             assTitle: this.state.assTitle,
             owner: this.state.userId,
+            isAnswer: false,
         };
 
         fetch('http://localhost:5000/courses/postAssignment/', {
@@ -366,7 +381,7 @@ class Course extends Component {
             .then(res => res.json())
             .then(respond => {
                 if (respond != null) {
-                    this.toggleDialog('The assignment has been successfully added. Please Re-login if you wish to see the changes', 'Success');
+                    this.toggleDialog('The question paper has been successfully added.', 'Success');
                     this.onClear();
                 }
             })
@@ -483,27 +498,74 @@ class Course extends Component {
         })
     };
 
+    img = () => {
+        window.open("http://localhost:5000/posts/img");
+    }
+
+
     fileUploadHandler = () => {
         var File= this.state.selectedFile;
-        var path= 'F:\\0001\\DOCS\\Campus\\4th year\\EEY6A89-Group Project\\Implementation\\FYP\\KTS\\server\\fileUpload\\files\\';
-        var fileName = 'Course_Announcement' + File.name;
-        var curTime = new Date().toLocaleString();
 
-        const fd = new FormData();
+        if(this.state.selectedFile) {
 
-        fd.append('tma', this.state.selectedFile);
-        fd.append('postedDate', curTime);
-        fd.append('userID', this.state.userId);
-        fd.append('fileName', fileName);
-        fd.append('originalName', File.name);
-        fd.append('path', path);
-        fd.append('courseId', this.state.courseId);
-        fd.append('title', "Course_Announcement");
+            var path= 'F:\\0001\\DOCS\\Campus\\4th year\\EEY6A89-Group Project\\Implementation\\FYP\\KTS\\server\\fileUpload\\files\\';
+            var fileName = 'Course_Announcement' + File.name;
+            var curTime = new Date().toLocaleString();
 
-        axios.post('http://localhost:5000/fileUpload/fileupload', fd)
-            .then(res => {
-                console.log(res);
-            });
+            const fd = new FormData();
+
+            fd.append('tma', this.state.selectedFile);
+            fd.append('postedDate', curTime);
+            fd.append('userID', this.state.userId);
+            fd.append('fileName', fileName);
+            fd.append('originalName', File.name);
+            fd.append('path', path);
+            fd.append('courseId', this.state.courseId);
+            fd.append('title', "Course_Announcement");
+
+            var File = {
+                postedDate: curTime,
+                tma: this.state.selectedFile,
+                userID: this.state.userId,
+                fileName: fileName,
+                originalName: File.name,
+                path: path,
+                courseId: this.state.courseId,
+                title: "Course_Announcement"
+            };
+
+            axios.post('http://localhost:5000/fileUpload/fileupload', fd)
+                .then(res => {
+                    this.fileUploadToDb(File)
+                });
+        } else {
+            this.toggleDialog('Please select a file first!', 'Error');
+        }
+
+    };
+
+    //Save In the DB
+    fileUploadToDb = (File) => {
+        fetch('http://localhost:5000/fileUpload/fileUploadToDB', {
+            method: 'POST',
+            body: JSON.stringify(File),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => res.json())
+            .then(result => {
+                this.toggleDialog('The file is successfully uploaded.', 'Success');
+
+                //TODO
+                console.log("lllllllllllllllllll result >> ", result)
+                this.setState({
+                    fileId: 0
+                })
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            })
     };
 
     deleteAnnouncement(item) {
@@ -517,7 +579,7 @@ class Course extends Component {
         })
             .then(res => res)
             .then(result => {
-                this.toggleDialog('The Announcement is successfully deleted', 'Error');
+                this.toggleDialog('The Announcement is successfully deleted', 'Success');
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -535,7 +597,43 @@ class Course extends Component {
         })
             .then(res => res)
             .then(result => {
-                this.toggleDialog('The Day School is successfully deleted', 'Error');
+                this.toggleDialog('The Day School is successfully deleted', 'Success');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            })
+    }
+
+    deleteAssignmentQuestion(item) {
+        var Id = item.id;
+
+        fetch(`http://localhost:5000/courses/deleteAssignmentQuestion/` + Id , {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => res)
+            .then(result => {
+                this.toggleDialog('The Assignment Question is successfully deleted', 'Success');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            })
+    }
+
+    deleteAssignmentAnswer(item) {
+        var Id = item.id;
+
+        fetch(`http://localhost:5000/courses/deleteAssignmentAnswer/` + Id , {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => res)
+            .then(result => {
+                this.toggleDialog('The Assignment Question is successfully deleted', 'Success');
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -545,7 +643,7 @@ class Course extends Component {
 
 
     render() {
-        var {courseList, AnnouncementList, DaySchoolList, AssignmentList} = this.state;
+        var {courseList, AnnouncementList, DaySchoolList, AssignmentQuestionList, AssignmentAnswerList} = this.state;
 
         return (
             <div className='course-main'>
@@ -597,12 +695,6 @@ class Course extends Component {
                         <div className="row">
                             <p> {this.state.description} </p>
                         </div>
-                        {(this.state.userType === 2) && (
-                            <div style={{float: "right"}}>
-                                <EditIcon className="mr-3"/>
-                                <DeleteIcon/>
-                            </div>
-                        )}
 
                         {(this.state.courseId !== 0) && (
                             <List
@@ -634,13 +726,12 @@ class Course extends Component {
                                                 <label htmlFor="" className="mandatory">
                                                     Title :
                                                 </label>
-                                                <Input
-                                                    className="ml-md-3"
-                                                    placeholder="Announcement title"
+                                                <TextField
+                                                    className="course-AnnTitle"
+                                                    label="Announcement title"
                                                     value={this.state.title}
                                                     name="Title"
                                                     onChange={this.handleOnChange}
-                                                    required={true}
                                                 />
                                                 {this.state.isErrorMessageVisible === true ? (
                                                     <span className={this.validateProperty(this.state.title)}>
@@ -650,7 +741,7 @@ class Course extends Component {
                                             </div>
 
                                             <div className="row ml-5">
-                                                <label htmlFor="" className="mandatory mt-4">
+                                                <label htmlFor="" className="mandatory">
                                                     Announcement :
                                                 </label>
                                                 <TextField
@@ -853,7 +944,7 @@ class Course extends Component {
                                                     Title :
                                                 </label>
                                                 <Input
-                                                    className="ml-md-3"
+                                                    className="ml-md-4"
                                                     placeholder="Assignment title"
                                                     value={this.state.assTitle}
                                                     name="AssTitle"
@@ -898,7 +989,7 @@ class Course extends Component {
                                                 <button onClick={this.fileUploadHandler}>Upload</button>
                                             </div>
                                             <div className="add-button">
-                                                <Avatar onClick={this.addAssignment}>
+                                                <Avatar onClick={this.addAssignmentQuestion}>
                                                     <AddIcon/>
                                                 </Avatar>
                                             </div>
@@ -910,7 +1001,7 @@ class Course extends Component {
                                         <Paper className={"classes-paper"}>
                                             <Grid container wrap="nowrap" spacing={2}>
                                                 <Grid item xs>
-                                                    {AssignmentList.map((item) => (
+                                                    {AssignmentQuestionList.map((item) => (
                                                         <Typography>
                                                             <br/>
                                                             <h5><b>
@@ -926,34 +1017,43 @@ class Course extends Component {
                                                             <div className="mt-4">
                                                                 Question Paper:
                                                                 <a href="#Content"
-                                                                    // onClick={this.handleLinkClick}
-                                                                   onClick={() => this.handleLinkClick(item)}>
-                                                                    {"this.pdf"} </a>
-                                                            </div>
-                                                            <br/>
-                                                            <div>
-                                                                <input type="file" onChange={this.fileSelectedHandler} />
-                                                                <button onClick={this.fileUploadHandler}>Upload</button>
-                                                            </div>
-
-                                                            {/*Lecturer*/}
-                                                            {(this.state.userType === 2) && (
+                                                                   // onClick={() => this.handleLinkClick(item)}>
+                                                                   onClick={this.img}>
+                                                                    {"item"} </a>
+                                                                <button className="btn btn-primary" onClick = {this.img}>TMA</button>
 
                                                                 <div style={{float: "right"}}>
-                                                                    {/*<Avatar*/}
-                                                                    {/*    // onClick={this.deleteAnnouncement}*/}
-                                                                    {/*>*/}
-                                                                    <EditIcon className="mr-3"/>
-
-                                                                    {/*</Avatar>*/}
-                                                                    {/*<Avatar*/}
-                                                                    {/*    // onClick={this.deleteAnnouncement}*/}
-                                                                    {/*>*/}
-                                                                    <DeleteIcon/>
-                                                                    {/*</Avatar>*/}
+                                                                    <Avatar
+                                                                        onClick={() => this.deleteAssignmentQuestion(item)}
+                                                                    >
+                                                                        <DeleteIcon/>
+                                                                    </Avatar>
                                                                 </div>
-                                                            )}
-                                                            <br/> <br/>
+                                                            </div>
+
+                                                            <br/>
+
+                                                            {(this.state.userType === 1) && (
+                                                                <div>
+                                                                <div>
+                                                                    <br/>
+                                                                    Answer Paper:
+                                                                    <br/>
+                                                                    <input type="file" onChange={this.fileSelectedHandler} />
+                                                                    <button onClick={this.fileUploadHandler}>Upload</button>
+                                                                </div>
+
+                                                                <div style={{float: "right"}}>
+                                                                    <Avatar
+                                                                        onClick={() => this.deleteAssignmentAnswer(item)}
+                                                                    >
+                                                                        <DeleteIcon/>
+                                                                    </Avatar>
+                                                                </div>
+                                                                </div>
+                                                                )}
+
+                                                                <br/> <br/>
                                                             <Divider/>
                                                         </Typography>
                                                     ))}
