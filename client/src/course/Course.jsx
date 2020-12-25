@@ -385,6 +385,19 @@ class Course extends Component {
                     this.onClear();
                 }
             })
+
+            // TMA - Mobile Integration
+            const CourseID = this.state.courseId;
+            const EventMsg = this.state.assTitle + " :: Due Date : " + this.state.assignmentDueDate;
+            const body_Inte = {CourseID, EventMsg};
+            fetch('http://ktrans-001-site1.etempurl.com/api/EventReporter/CourseEventAdd/' , {
+            method: 'POST',
+            body: JSON.stringify(body_Inte),
+            headers: {
+            'Content-Type': 'application/json'
+            }
+            });
+            // END TMA - Mobile Integration
     }
 
     addAnnouncement = async (event) => {
@@ -433,6 +446,19 @@ class Course extends Component {
                         })
                 }
             })
+
+                         // Announcement - Mobile Integration
+                         const CourseID = this.state.courseId;
+                         const EventMsg = this.state.title + " :: " + this.state.announcement;
+                         const body_Inte = {CourseID, EventMsg};
+                         fetch('http://ktrans-001-site1.etempurl.com/api/EventReporter/CourseEventAdd/' , {
+                         method: 'POST',
+                         body: JSON.stringify(body_Inte),
+                         headers: {
+                         'Content-Type': 'application/json'
+                         }
+                         });
+                         // END Announcement - Mobile Integration
     };
 
     addDayschool = () => {
@@ -463,6 +489,19 @@ class Course extends Component {
             .catch(error => {
                 console.error('Error:', error);
             })
+
+                        // DaySchool - Mobile Integration
+                        const CourseID = this.state.courseId;
+                        const EventMsg = this.state.dsName + "... Date : " +  moment(this.state.DayshoolSelectedDate).format('YYYY-MM-DD') + "...From : "+ moment(this.state.selectedFromTime).format('HH:mm:ss') + ".. TO : " + moment(this.state.selectedToTime).format('HH:mm:ss');
+                        const body_Inte = {CourseID, EventMsg};
+                        fetch('http://ktrans-001-site1.etempurl.com/api/EventReporter/CourseEventAdd/' , {
+                        method: 'POST',
+                        body: JSON.stringify(body_Inte),
+                        headers: {
+                        'Content-Type': 'application/json'
+                        }
+                        });
+                        // DaySchool - Mobile Integration
 
     };
 
@@ -538,6 +577,25 @@ class Course extends Component {
                 .then(res => {
                     this.fileUploadToDb(File)
                 });
+
+            // FileUpload - Search Integration
+            const FileURL      = 'http://localhost/Node_Site/fileupload/' + fileName;  // Place the web server path pointed to upload folder.
+            const courseID     = this.state.courseId;
+            const SectionID    = 1;
+            const keywords     = "Assignment due when" + this.state.assignmentDueDate + fileName;
+            const DocTitle     = this.state.assTitle;
+            const DocBrief     = "Due Date : " + this.state.assignmentDueDate;
+            const CreatedByUID = this.state.userId;
+            const body_Inte    = {courseID, SectionID, keywords, DocTitle, DocBrief, FileURL, CreatedByUID};
+            fetch('http://ktrans-001-site1.etempurl.com/api/SearchEngSubmit/CourseDoc/' , {
+                method: 'POST',
+                body: JSON.stringify(body_Inte),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            // END  FileUpload - Search Integration
+
         } else {
             this.toggleDialog('Please select a file first!', 'Error');
         }
