@@ -20,6 +20,7 @@ class AddReplies extends Component {
         var user_id = this.state.id;
         const replay_content = this.replayContentEl.current.value;
         const body = {replay_content , user_id , post_id}
+        const post_content = this.props.post_text;
 
         console.log(body);
         fetch('http://localhost:5000/replies' , {
@@ -29,6 +30,22 @@ class AddReplies extends Component {
                 'Content-Type': 'application/json'
             }
         });
+
+                // Replies - Search Integration  **
+                const AnswerDetail = this.replayContentEl.current.value;
+                const Answer       = "";  // in short
+                const Qid          = this.props.postid;
+                const AnswerBy     = this.state.id;
+                const Question     = post_content;
+                const body_Inte    = {AnswerDetail, Answer, Qid, AnswerBy, Question}; 
+                fetch('http://ktrans-001-site1.etempurl.com/api/SearchEngSubmit/Answer' , {
+                method: 'POST',
+                body: JSON.stringify(body_Inte), 
+                headers: {
+                'Content-Type': 'application/json'
+                }
+                });
+                // END  Replies - Search Integration
     };
 
     render(){
