@@ -13,7 +13,7 @@ import Redirect from "react-router-dom/Redirect";
 class TopBar extends Component {
     constructor(props) {
         super(props);
-
+        this.searchcontent = React.createRef();
         this.state = {
             //coming from layout.jsx (for non-admin users) and admin.jsx (for admin users)
             userId: this.props.id,
@@ -57,6 +57,15 @@ class TopBar extends Component {
         }
     }
 
+     // Search Integration    
+     handleSubmit = () => {  
+        const info =this.searchcontent.current.value; 
+        const url ='http://ktrans-001-site1.etempurl.com/search/?&search=' + info + '&UID='+this.state.userId;  
+        window.open(url, '_blank', '"menubar=1,location=yes,resizable=1,width=1055,height=600, top=0, left=120');
+       
+        }
+    // END - Search Integration
+
     render() {
 
         if (this.state.RedirectToLogin === true) {
@@ -77,13 +86,14 @@ class TopBar extends Component {
                             <label>Search:</label>
                         </div>
                         <div className="searchbar">
-                            <AutoComplete
+                            {/* <AutoComplete
                                 // data={this.state.opids}
                                 textField="UniqueId"
                                 name="globalSearch"
                                 // value={this.state.globalSearch}
                                 // onChange={this.handleChangeGlobalSearch}
-                            />
+                            /> */}
+                            <input type='text' ref={this.searchcontent}></input>
                         </div>
                         <div className="search-btn">
                             <Tooltip title="Search">
