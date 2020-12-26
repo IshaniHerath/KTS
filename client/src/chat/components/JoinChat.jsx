@@ -8,6 +8,7 @@ class JoinChat extends Component {
         super(props);
         this.cid = React.createRef();
         this.chatName = React.createRef();
+        this.delchatName = React.createRef();
         this.state = {
             id: this.props.id,
             chatRooms: [],
@@ -69,8 +70,16 @@ class JoinChat extends Component {
 
     deleteRoom = (event) => {
         event.preventDefault();
-        const roomName = this.chatName.current.value.chat_name;
-        window.alert(roomName);
+        const chat_name = this.delchatName.current.value.chat_name;
+        const body = {chat_name}
+        
+        fetch(`http://localhost:5000/chat/del` , {
+            method: 'DELETE',
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
     }
 
     render() {
@@ -103,7 +112,7 @@ class JoinChat extends Component {
                                       //onChange={this.handleOnChangeCombo}
                                       //name="selectedCourse"
                                       placeholder="Please Select"
-                                      ref = {this.chatName}
+                                      ref = {this.delchatName}
                     /><br /><br />
                     <button className="btn btn-danger" onClick = {}>Delete</button>
                 </div>

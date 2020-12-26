@@ -23,8 +23,9 @@ ChatData.createRoom = async(content)=>{
 
 ChatData.deleteRoom = async(content) => {
     try {
-        const delroom = await pool.query('DELETE FROM chat WHERE chat_id = $1;',
-        [chat_id]);
+        const delroom = await pool.query('DELETE FROM chat WHERE chat_name = $1;',
+        [content.chat_name]);
+        console.log(content.chat_name);
     } catch (err) {
         console.log(err);
     }
