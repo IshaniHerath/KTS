@@ -97,7 +97,7 @@ class Layout extends Component {
 
                             {(this.state.type && this.state.type !== 3) && (
                                 <TabStripTab title="Chat">
-                                    <JoinChat id={this.state.id} />
+                                    <JoinChat id={this.state.id} type={this.state.type}/>
                                 </TabStripTab>
                             )}
                         </TabStrip>

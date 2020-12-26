@@ -11,6 +11,7 @@ class JoinChat extends Component {
         this.delchatName = React.createRef();
         this.state = {
             id: this.props.id,
+            type: this.props.type,
             chatRooms: [],
             name: [],
             courseList:[]
@@ -69,17 +70,21 @@ class JoinChat extends Component {
     }
 
     deleteRoom = (event) => {
-        event.preventDefault();
-        const chat_name = this.delchatName.current.value.chat_name;
-        const body = {chat_name}
+        if(this.state.type === 2 || this.state.type === 4){
+            event.preventDefault();
+            const chat_name = this.delchatName.current.value.chat_name;
+            const body = {chat_name}
         
-        fetch(`http://localhost:5000/chat/del` , {
-            method: 'DELETE',
-            body: JSON.stringify(body),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+            fetch(`http://localhost:5000/chat/del` , {
+                method: 'DELETE',
+                body: JSON.stringify(body),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        }else{
+            window.alert("You dont have the access to Delete this chat room.");
+        }
     }
 
     render() {
