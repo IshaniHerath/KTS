@@ -377,29 +377,38 @@ class Course extends Component {
     addMarks = async (event) => {
         var curTime = new Date().toLocaleString();
 
-        var Marks = {
-            courseId: this.state.courseId,
-            postedDate: curTime,
-            markTitle: this.state.markTitle,
-            owner: this.state.userId,
-            fileId: this.state.fileId
-        };
+        if(this.state.markTitle){
 
-        fetch('http://localhost:5000/courses/postMark/', {
-            method: 'POST',
-            body: JSON.stringify(Marks),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(res => res.json())
-            .then(response => {
-                if (response != null) {
-                    this.toggleDialog('The mark sheet is successfully added.', 'Success');
-                    this.onClear();
+            var Marks = {
+                courseId: this.state.courseId,
+                postedDate: curTime,
+                markTitle: this.state.markTitle,
+                owner: this.state.userId,
+                fileId: this.state.fileId
+            };
+
+            fetch('http://localhost:5000/courses/postMark/', {
+                method: 'POST',
+                body: JSON.stringify(Marks),
+                headers: {
+                    'Content-Type': 'application/json'
                 }
             })
-    }
+                .then(res => res.json())
+                .then(response => {
+                    if (response != null) {
+                        this.toggleDialog('The mark sheet is successfully added.', 'Success');
+                        this.onClear();
+                        // this.setState({
+                        //     selectedFile: null
+                        // })
+                    }
+                })
+
+        } else {
+            this.toggleDialog('Please fill the mark sheet title to continue!', 'Error');
+        }
+    };
 
 
     addAssignmentAnswer = async (event) => {
@@ -1156,6 +1165,7 @@ class Course extends Component {
                                 </ListItem>
 
                                 <Collapse in={this.state.ListAssignmentOpen} timeout="auto" unmountOnExit>
+
                                     {(this.state.userType === 2) && (
                                         <div>
                                             <div className="row ml-5">
@@ -1302,6 +1312,7 @@ class Course extends Component {
                                             </Grid>
                                         </Paper>
                                     </div>
+
                                 </Collapse>
 
                                 {/*Marks*/}
@@ -1327,7 +1338,7 @@ class Course extends Component {
 
                                             <div className="row ml-5">
 
-                                                <label htmlFor="">
+                                                <label htmlFor="" className="mandatory">
                                                     Title :
                                                 </label>
                                                 <Input
@@ -1346,7 +1357,7 @@ class Course extends Component {
                                                 <button onClick={this.fileUploadHandler}>Upload</button>
                                             </div>
 
-                                            <div className="add-button  mt-3">
+                                            <div className="add-button">
                                                 <Avatar onClick={this.addMarks}>
                                                     <AddIcon/>
                                                 </Avatar>
@@ -1355,29 +1366,46 @@ class Course extends Component {
                                         </div>
                                     )}
 
+                                    <div className="row ml-5">
+                                        <Paper className={"classes-paper"}>
+                                            <Grid container wrap="nowrap" spacing={2}>
+                                                <Grid item xs>
+                                                    <Typography>
 
-                                    {MarksList.map((item) => (
+                                                        <div>
+                                                            <br/>
+                                                            Mark Sheet:
+                                                            <br/>
 
-                                        <div className="ml-5">
-                                            <label htmlFor="" className="mt-4">
-                                                Mark Sheets:
-                                            </label>
+                                                            {MarksList.map((item) => (
 
-                                            <a href="#Content"
-                                               onClick={() => this.handleAttachementClick(item)}>
-                                                { item.OriginalName} </a>
+                                                                <div className="mt-4">
+                                                                    {item.title} -
+                                                                    <a href="#Content"
+                                                                       onClick={() => this.handleAttachementClick(item)}>
+                                                                        {item.OriginalName} </a>
 
-                                            {(this.state.userType === 2) && (
-                                                <div style={{float: "right"}}>
-                                                    <Avatar
-                                                        onClick={() => this.deleteMarks(item)}
-                                                    >
-                                                        <DeleteIcon/>
-                                                    </Avatar>
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))}
+                                                                    {(this.state.userType === 2) && (
+
+                                                                        <div style={{float: "right"}}>
+                                                                            <Avatar
+                                                                                onClick={() => this.deleteMarks(item)}
+                                                                            >
+                                                                                <DeleteIcon/>
+                                                                            </Avatar>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+
+                                                            ))}
+                                                        </div>
+
+                                                        <br/> <br/>
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
+                                        </Paper>
+                                    </div>
 
                                 </Collapse>
                             </List>
