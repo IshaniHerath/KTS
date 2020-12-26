@@ -23,4 +23,9 @@ router.post('/fileUploadToDB', async (req, res) => {
     res.send(await fileUploadRepository.postFileUpload(req.body))
 });
 
+router.get('/getAttachementByName/:name', async(req,res) => {
+    var fileName = req.params.name;
+    res.sendFile('F:\\0001\\DOCS\\Campus\\4th year\\EEY6A89-Group Project\\Implementation\\FYP\\KTS\\server\\fileUpload\\files\\' + fileName);
+});
+
 module.exports = router;
