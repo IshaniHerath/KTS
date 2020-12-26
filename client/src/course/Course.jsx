@@ -11,7 +11,6 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import FolderIcon from '@material-ui/icons/Folder';
 import Collapse from '@material-ui/core/Collapse';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import {EmojiEvents, ExpandLess, ExpandMore, NotificationImportant} from "@material-ui/icons";
 import {Dialog, DialogActionsBar} from '@progress/kendo-react-dialogs';
 import RaisedButton from "material-ui/RaisedButton";
@@ -23,17 +22,11 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import {
-    MuiPickersUtilsProvider,
-    KeyboardTimePicker,
-    KeyboardDatePicker,
-} from '@material-ui/pickers';
+import {KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import Divider from '@material-ui/core/Divider';
-import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import axios from 'axios';
-import FilePreviewer, {FilePreviewerThumbnail} from 'react-file-previewer';
 
 class Course extends Component {
     constructor(props) {
@@ -64,6 +57,10 @@ class Course extends Component {
             AssignmentQuestionList: [],
             AssignmentAnswerList: [],
             fileId: 0,
+
+            //Marks
+            markTitle: "",
+            MarksList: [],
 
             //DaySchool
             dsName: "",
@@ -170,12 +167,21 @@ class Course extends Component {
         fetch('http://localhost:5000/courses/getAssignmentAnswerList/' + this.state.courseId)
             .then(res => res.json())
             .then(response => {
-                console.log("ressssssssssssssssssssssss KK >", response)
                 this.setState({
                     AssignmentAnswerList: response
                 })
             });
     };
+
+    populateMarksList = () => {
+        fetch('http://localhost:5000/courses/getMarkList/' + this.state.courseId)
+            .then(res => res.json())
+            .then(response => {
+                this.setState({
+                    MarksList: response
+                })
+            });
+    }
 
     handleClick = () => {
         this.setState({
@@ -244,6 +250,11 @@ class Course extends Component {
         if (field === "DsName") {
             this.setState({
                 dsName: event.target.value
+            })
+        }
+        if (field === "MarkTitle"){
+            this.setState({
+                markTitle: event.target.value
             })
         }
     };
@@ -324,6 +335,7 @@ class Course extends Component {
             selectedToTime : null,
             assignmentDueDate: null,
             assTitle: "",
+            markTitle: "",
         })
     };
 
@@ -358,8 +370,37 @@ class Course extends Component {
         this.populateDaySchoolDetails();
         this.populateAssignmentQuestionList();
         this.populateAssignmentAnswerList();
+        this.populateMarksList();
         this.onClear();
     };
+
+    addMarks = async (event) => {
+        var curTime = new Date().toLocaleString();
+
+        var Marks = {
+            courseId: this.state.courseId,
+            postedDate: curTime,
+            markTitle: this.state.markTitle,
+            owner: this.state.userId,
+            fileId: this.state.fileId
+        };
+
+        fetch('http://localhost:5000/courses/postMark/', {
+            method: 'POST',
+            body: JSON.stringify(Marks),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => res.json())
+            .then(response => {
+                if (response != null) {
+                    this.toggleDialog('The mark sheet is successfully added.', 'Success');
+                    this.onClear();
+                }
+            })
+    }
+
 
     addAssignmentAnswer = async (event) => {
         var assAnswerTitle = "Answer";
@@ -583,10 +624,11 @@ class Course extends Component {
         if(this.state.selectedFile) {
 
             var path= 'F:\\0001\\DOCS\\Campus\\4th year\\EEY6A89-Group Project\\Implementation\\FYP\\KTS\\server\\fileUpload\\files\\';
-            var fileName = 'Course_Announcement' + File.name;
+            var fileName = 'Course_Assignment' + File.name;
             var curTime = new Date().toLocaleString();
 
             const fd = new FormData();
+            var file;
 
             fd.append('tma', this.state.selectedFile);
             fd.append('postedDate', curTime);
@@ -595,22 +637,38 @@ class Course extends Component {
             fd.append('originalName', File.name);
             fd.append('path', path);
             fd.append('courseId', this.state.courseId);
-            fd.append('title', "Course_Announcement");
 
-            var File = {
-                postedDate: curTime,
-                tma: this.state.selectedFile,
-                userID: this.state.userId,
-                fileName: fileName,
-                originalName: File.name,
-                path: path,
-                courseId: this.state.courseId,
-                title: "Course_Announcement"
-            };
+            if(this.state.markTitle){
+                fd.append('title', "Marks");
+
+                file = {
+                    postedDate: curTime,
+                    tma: this.state.selectedFile,
+                    userID: this.state.userId,
+                    fileName: fileName,
+                    originalName: File.name,
+                    path: path,
+                    courseId: this.state.courseId,
+                    title: "Marks"
+                };
+            }else {
+                fd.append('title', "Course_Assignment");
+
+                file = {
+                    postedDate: curTime,
+                    tma: this.state.selectedFile,
+                    userID: this.state.userId,
+                    fileName: fileName,
+                    originalName: File.name,
+                    path: path,
+                    courseId: this.state.courseId,
+                    title: "Course_Assignment"
+                };
+            }
 
             axios.post('http://localhost:5000/fileUpload/fileupload', fd)
                 .then(res => {
-                    this.fileUploadToDb(File)
+                    this.fileUploadToDb(file)
                 });
 
             // FileUpload - Search Integration
@@ -655,9 +713,9 @@ class Course extends Component {
             fd.append('originalName', File.name);
             fd.append('path', path);
             fd.append('courseId', this.state.courseId);
-            fd.append('title', "Course_Announcement");
+            fd.append('title', "Course_Assignment_Answers");
 
-            var File = {
+            var file = {
                 postedDate: curTime,
                 tma: this.state.selectedFile,
                 userID: this.state.userId,
@@ -665,12 +723,12 @@ class Course extends Component {
                 originalName: File.name,
                 path: path,
                 courseId: this.state.courseId,
-                title: "Course_Announcement"
+                title: "Course_Assignment_Answers"
             };
 
             axios.post('http://localhost:5000/fileUpload/fileupload', fd)
                 .then(res => {
-                    this.fileUploadToDb(File)
+                    this.fileUploadToDb(file)
                 });
 
         } else if(!this.state.selectedFile) {
@@ -764,6 +822,25 @@ class Course extends Component {
             })
     }
 
+    deleteMarks(item) {
+        var Id = item.id;
+
+        fetch(`http://localhost:5000/courses/deleteMark/` + Id , {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => res)
+            .then(result => {
+                this.toggleDialog('The Mark sheet is successfully deleted', 'Success');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            })
+
+    }
+
     deleteAssignmentAnswer(item) {
         var Id = item.id;
 
@@ -785,7 +862,7 @@ class Course extends Component {
 
 
     render() {
-        var {courseList, AnnouncementList, DaySchoolList, AssignmentQuestionList, AssignmentAnswerList} = this.state;
+        var {courseList, AnnouncementList, DaySchoolList, AssignmentQuestionList, AssignmentAnswerList, MarksList} = this.state;
 
         return (
             <div className='course-main'>
@@ -1239,36 +1316,69 @@ class Course extends Component {
                                 </ListItem>
 
                                 <Collapse in={this.state.ListItemOpen_01} timeout="auto" unmountOnExit>
-                                    <List component="div" disablePadding>
-                                        <ListItem button className='styles-nested'>
-                                            <ListItemIcon>
-                                                <FolderIcon/>
-                                            </ListItemIcon>
-                                            <ListItemText primary="CAT Marks"/>
+
+                                    {(this.state.userType === 2) && (
+                                        <div>
                                             <div className="row ml-5">
                                                 <label htmlFor="" className="mt-4">
                                                     Upload the Marks Document :
                                                 </label>
                                             </div>
 
-                                            <div className="row fileUpload-button">
+                                            <div className="row ml-5">
+
+                                                <label htmlFor="">
+                                                    Title :
+                                                </label>
+                                                <Input
+                                                    className="ml-md-4"
+                                                    placeholder="Mark title"
+                                                    value={this.state.markTitle}
+                                                    name="MarkTitle"
+                                                    onChange={this.handleOnChange}
+                                                    required={true}
+                                                />
+
+                                            </div>
+
+                                            <div className="row fileUpload-button ml-2">
                                                 <input type="file" onChange={this.fileSelectedHandler} />
                                                 <button onClick={this.fileUploadHandler}>Upload</button>
                                             </div>
-                                        </ListItem>
-                                        <ListItem button className='styles-nested'>
-                                            <ListItemIcon>
-                                                <FolderIcon/>
-                                            </ListItemIcon>
-                                            <ListItemText primary="TMA Marks"/>
-                                        </ListItem>
-                                        <ListItem button className='styles-nested'>
-                                            <ListItemIcon>
-                                                <FolderIcon/>
-                                            </ListItemIcon>
-                                            <ListItemText primary="Mini Project Marks"/>
-                                        </ListItem>
-                                    </List>
+
+                                            <div className="add-button  mt-3">
+                                                <Avatar onClick={this.addMarks}>
+                                                    <AddIcon/>
+                                                </Avatar>
+                                            </div>
+                                            <br/> <br/>
+                                        </div>
+                                    )}
+
+
+                                    {MarksList.map((item) => (
+
+                                        <div className="ml-5">
+                                            <label htmlFor="" className="mt-4">
+                                                Mark Sheets:
+                                            </label>
+
+                                            <a href="#Content"
+                                               onClick={() => this.handleAttachementClick(item)}>
+                                                { item.OriginalName} </a>
+
+                                            {(this.state.userType === 2) && (
+                                                <div style={{float: "right"}}>
+                                                    <Avatar
+                                                        onClick={() => this.deleteMarks(item)}
+                                                    >
+                                                        <DeleteIcon/>
+                                                    </Avatar>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+
                                 </Collapse>
                             </List>
                         )}

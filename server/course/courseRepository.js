@@ -82,6 +82,18 @@ courseContext.getAssignmentAnswerList = async (req, res) => {
     }
 };
 
+courseContext.getMarkList = async (req, res) => {
+    try {
+        const Marks = await pool.query(
+            'select m.id, m.title, m.posteddate, f."OriginalName" from "Mark" as m \n' +
+            'inner JOIN "FileUpload" as f on m."fileId" = f.id \n' +
+            'where m.courseid =' + (req.params.id) + ';');
+        return (Marks.rows);
+    } catch (e) {
+        console.log(e.message);
+    }
+};
+
 courseContext.deleteAnnouncement = async (req, res) => {
     try {
         const Announcement = await pool.query(
@@ -122,8 +134,17 @@ courseContext.deleteAssignmentAnswer  = async (req, res) => {
     }
 };
 
+courseContext.deleteMark  = async (req, res) => {
+    try {
+        const Mark = await pool.query(
+            'DELETE FROM "Mark" WHERE id = $1;',[req]);
+        return (Mark.rows);
+    } catch (e) {
+        console.log(e.message);
+    }
+};
+
 courseContext.postAnnouncement =async (req, res) => {
-    console.log("req.param >>>> ", req);
     try {
         const announcement = await pool.query(
             'insert into "Announcement" (title, description, courseid, datetime, owner) values ($1, $2, $3, $4, $5)',
@@ -135,7 +156,7 @@ courseContext.postAnnouncement =async (req, res) => {
     }
 };
 
-courseContext.postAssignment =async (req, res) => {
+courseContext.postAssignment = async (req, res) => {
     try {
         const assignment = await pool.query(
             'insert into "Assignment" (title, posteddate, courseid, duedatetime, owner, "isAnswer", "fileId", issubmitted) values ($1, $2, $3, $4, $5, $6, $7, $8)',
@@ -146,6 +167,19 @@ courseContext.postAssignment =async (req, res) => {
         console.log(e.message)
     }
 };
+
+courseContext.postMark = async (req, res) => {
+    try {
+        const Marks = await pool.query(
+            'insert into "Mark" (title, posteddate, courseid, "owner", "fileId") values ($1, $2, $3, $4, $5)',
+            [req.markTitle, req.postedDate, req.courseId, req.owner, req.fileId]
+        );
+        return (Marks.rows);
+    }catch (e) {
+        console.log(e.message)
+    }
+};
+
 
 courseContext.postDayschool = async (req, res) => {
     try {
