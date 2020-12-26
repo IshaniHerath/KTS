@@ -110,8 +110,22 @@ class Group extends Component {
                 'Content-Type': 'application/json'
             }
         });
+
+                // POST - Search Integration
+                const QuestionDetail = this.postContentEl.current.value;
+                const UID            = this.state.id;
+                const CourseId       = 0; // cant get this ID.  this.cName.current.value.id;
+                const body_Inte      = {QuestionDetail, UID, CourseId}; 
+                fetch('http://ktrans-001-site1.etempurl.com/api/SearchEngSubmit/Question' , {
+                method: 'POST',
+                body: JSON.stringify(body_Inte), 
+                headers: {
+                'Content-Type': 'application/json'
+                }
+                });
+                // END  POST - Search Integration
     };
-    
+        
     deleteGroup = (event) => {
         const id = this.groupid;
         const body = {id}

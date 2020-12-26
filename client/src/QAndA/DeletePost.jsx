@@ -12,18 +12,22 @@ class DeletePost extends Component {
     }
 
     submitHandler = (event) =>{
-        event.preventDefault();
+        if(this.state.type === 2 || this.state.type === 4){
+            event.preventDefault();
         
-        var post_id = this.props.post_id;
-        const body = {post_id}
-        console.log(body);
-        fetch(`http://localhost:5000/posts/${post_id}` , {
-            method: 'DELETE',
-            body: JSON.stringify(body),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+            var post_id = this.props.post_id;
+            const body = {post_id}
+            console.log(body);
+            fetch(`http://localhost:5000/posts/${post_id}` , {
+                method: 'DELETE',
+                body: JSON.stringify(body),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        }else{
+            window.alert("You dont have the access to delete this post.");
+        }
     };
   
     render(){

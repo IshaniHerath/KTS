@@ -73,6 +73,20 @@ class Admin extends Component {
             .then(result => {
                 if (courseDetail.NewStatusId === 2) {
                     this.toggleDialog('Course is successfully APPROVED!', 'Success');
+
+                    // Course-Student Enrolement Integration
+                    const CourseID  = courseDetail.cId;
+                    const StudId    = courseDetail.uId;
+                    const body_Inte = {CourseID, StudId}; 
+                    fetch('http://ktrans-001-site1.etempurl.com/api/EventReporter/CourseStudentAdd/' , {
+                        method: 'POST',
+                        body: JSON.stringify(body_Inte),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    // END Course-Student Enrolement Integration
+
                 } else if (courseDetail.NewStatusId === 3) {
                     this.toggleDialog('Course is successfully REJECTED!', 'Success');
                 }
