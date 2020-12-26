@@ -59,6 +59,12 @@ class JoinChat extends Component {
         });
     }
 
+    deleteRoom = (event) => {
+        event.preventDefault();
+        const roomName = this.chatName.current.value.chat_name;
+        window.alert(roomName);
+    }
+
     render() {
         var {chatRooms} = this.state;
         return (
@@ -79,6 +85,19 @@ class JoinChat extends Component {
                                       ref = {this.cid}
                     /><br /><br />
                     <button className="btn btn-primary" onClick = {this.createChat}>Create</button>
+
+                    <h3>Delete Chat Room</h3>
+                    <ComboBox className='ml-3'
+                                      textField="chat_name"
+                                      //dataItemKey="id"
+                                      data={this.state.chatRooms}
+                                      //value={this.state.selectedCourse}
+                                      //onChange={this.handleOnChangeCombo}
+                                      //name="selectedCourse"
+                                      placeholder="Please Select"
+                                      ref = {this.chatName}
+                    /><br /><br />
+                    <button className="btn btn-danger" onClick = {}>Delete</button>
                 </div>
 
                 <div className = 'chatWindow'>
