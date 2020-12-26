@@ -119,7 +119,7 @@ class JoinChat extends Component {
                                       placeholder="Please Select"
                                       ref = {this.delchatName}
                     /><br /><br />
-                    <button className="btn btn-danger" onClick = {}>Delete</button>
+                    <button className="btn btn-danger" onClick = {this.deleteRoom}>Delete</button>
                 </div>
 
                 <div className = 'chatWindow'>
