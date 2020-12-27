@@ -210,7 +210,7 @@ class Login extends Component {
                             <br/>
 
                             <label htmlFor="" className="mandatory">Email : </label>
-                            <Input className="mt-3"
+                            <Input className="mt-3 ml-2"
                                    placeholder="Enter your Email"
                                    name="Email"
                                    onChange={this.handleOnChange}
@@ -230,7 +230,7 @@ class Login extends Component {
 
                             <label htmlFor="" className="mandatory">Password : </label>
                             <Input
-                                placeholder="Enter Password"
+                                placeholder="Enter your Password"
                                 id="standard-adornment-password"
                                 type={this.state.showPassword ? 'text' : 'password'}
                                 value={this.state.password}

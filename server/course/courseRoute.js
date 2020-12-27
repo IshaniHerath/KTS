@@ -27,7 +27,7 @@ router.get('/getAssignmentQuestionList/:id', async (req, res) => {
   res.send(await courseRepository.getAssignmentQuestionList(req, res));
 });
 
-router.get('/getAssignmentAnswerList/:id', async (req, res) => {
+router.get('/getAssignmentAnswerList/:cid', async (req, res) => {
   res.send(await courseRepository.getAssignmentAnswerList(req, res));
 });
 
@@ -70,6 +70,10 @@ router.delete('/deleteMark/:id', async (req, res) => {
 
 router.post('/postAssignment', async (req, res) => {
   res.send(await courseRepository.postAssignment(req.body))
+});
+
+router.post('/postAssignmentAnswer', async (req, res) => {
+  res.send(await courseRepository.postAssignmentAnswer(req.body))
 });
 
 router.post('/postMark', async (req, res) => {
