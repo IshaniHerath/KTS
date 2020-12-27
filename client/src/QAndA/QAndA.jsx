@@ -17,6 +17,7 @@ class QAndA extends Component {
         this.state = {
             id: this.props.id,
             isrender:true,
+            type: this.props.type,
             visible: false,
             redirectToLogin: false
         };
@@ -91,7 +92,7 @@ class QAndA extends Component {
                     <button className = 'btn btn-primary mr-5'>Add</button>
                </form>
                
-               <QAndAPosts id={this.state.id} />
+               <QAndAPosts id={this.state.id} type={this.state.type}/>
 
 
                <div>

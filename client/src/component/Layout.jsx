@@ -82,6 +82,7 @@ class Layout extends Component {
                                 <QAndA
                                     id={this.state.id}
                                     status={this.state.status}
+                                    type={this.state.type}
                                 />
                             </TabStripTab>
                             

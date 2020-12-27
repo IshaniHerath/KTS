@@ -13,6 +13,7 @@ class QAndAPosts extends Component {
         super(props);
         this.state = {
             items: [],
+            type: this.props.type,
             isLoaded: false,
             id: this.props.id
         }
@@ -39,7 +40,7 @@ class QAndAPosts extends Component {
                             <Likes post_id = {item.post_id} id={this.state.id}/>
                             <ThumbsUp post_id = {item.post_id} id={this.state.id}/>
                             <ThumbsDown post_id = {item.post_id} id={this.state.id}/>
-                            <DeletePost post_id = {item.post_id} id={this.state.id}/>
+                            <DeletePost post_id = {item.post_id} id={this.state.id} type={this.state.type}/>
                         </div>
                         <div>
                         <h6 className='postname'>{item.user_name}</h6>
@@ -47,7 +48,7 @@ class QAndAPosts extends Component {
                         <div>
                             <p className='postp'>{item.post_content}</p>
                         </div>  
-                        <Replies postid = {item.post_id}/>
+                        <Replies postid = {item.post_id} type={this.state.type}/>
 
                         <div className='postlabel'>  
                             <AddReplies postid = {item.post_id} id={this.state.id} post_text = {item.post_content}/> 

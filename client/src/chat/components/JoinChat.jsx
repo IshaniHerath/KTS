@@ -54,19 +54,23 @@ class JoinChat extends Component {
     }; 
 
     createChat = (event) => {
-        event.preventDefault();
-        const cid = this.cid.current.value.id;
-        const chat_name = this.chatName.current.value;
-        alert(cid+ ' ' + chat_name);
-        const body = {chat_name , cid }
-        console.log(body);
-        fetch('http://localhost:5000/chat' , {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+        if(this.state.type === 2 || this.state.type === 4){
+            event.preventDefault();
+            const cid = this.cid.current.value.id;
+            const chat_name = this.chatName.current.value;
+            const body = {chat_name , cid }
+            console.log(body);
+            fetch('http://localhost:5000/chat' , {
+                method: 'POST',
+                body: JSON.stringify(body),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            window.alert("Room successfully created. Please switch the tabe to view change");
+        }else{
+            window.alert("You dont have the access to create a Chat Room");
+        }
     }
 
     deleteRoom = (event) => {
@@ -82,6 +86,7 @@ class JoinChat extends Component {
                     'Content-Type': 'application/json'
                 }
             });
+            window.alert("Room successfully deleted. Please switch the tabe to view change");
         }else{
             window.alert("You dont have the access to Delete this chat room.");
         }

@@ -71,6 +71,7 @@ class Group extends Component {
                     'Content-Type': 'application/json'
                 }
             });
+            window.alert("Group Successfully created. Please switch the tab to view the change");
         }else{
             window.alert("You dont have the access to create group.");
         }
@@ -110,6 +111,7 @@ class Group extends Component {
                 'Content-Type': 'application/json'
             }
         });
+        window.alert("Post Successfully created. Please switch the tab to view the change");
 
                 // POST - Search Integration
                 const QuestionDetail = this.postContentEl.current.value;
@@ -137,6 +139,7 @@ class Group extends Component {
                 'Content-Type': 'application/json'
             }
         });
+        window.alert("Group successfully deleted. Please switch the tab to view the change");
     }else{
         window.alert("You dont have the access to Delete this group."); 
     }
@@ -205,7 +208,7 @@ class Group extends Component {
                                         <AddReplies postid = {grouppost.post_id} id={this.state.id}/> 
                                     </div>
                                 </div> 
-                                <DeletePost post_id = {grouppost.post_id} id={this.state.id}/>  
+                                <DeletePost post_id = {grouppost.post_id} id={this.state.id} type={this.state.type}/>  
                             </div>  
                        ))}
                         </div>
