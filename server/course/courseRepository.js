@@ -72,10 +72,12 @@ courseContext.getAssignmentQuestionList = async (req, res) => {
 courseContext.getAssignmentAnswerList = async (req, res) => {
     try {
         const Assignment = await pool.query(
-            'select a.id, a.title, a.posteddate, a.duedatetime, a.issubmitted, u.name, f."OriginalName" from "Assignment" as a \n' +
+            'select a.id, a.owner, a.title, a.posteddate, a.issubmitted, u.name, a."QuestionId", f."OriginalName" \n' +
+            'from "AssignmentAnswer" as a \n' +
             'inner JOIN "UserProfile" as u on a.owner = u.id \n' +
             'inner JOIN "FileUpload" as f on a."fileId" = f.id\n' +
-            'where a.courseid =' + (req.params.id) + ' and a."isAnswer" = TRUE and a.issubmitted = TRUE;');
+            'inner JOIN "Assignment" as b on a."QuestionId" = b.id\n' +
+            'where a.courseid =' + (req.params.cid) + ';');
         return (Assignment.rows);
     } catch (e) {
         console.log(e.message);
@@ -127,7 +129,7 @@ courseContext.deleteAssignmentQuestion  = async (req, res) => {
 courseContext.deleteAssignmentAnswer  = async (req, res) => {
     try {
         const AssignmentAnswer = await pool.query(
-        'DELETE FROM "Assignment" WHERE id = $1;',[req]);
+        'DELETE FROM "AssignmentAnswer" WHERE id = $1;',[req]);
         return (AssignmentAnswer.rows);
     } catch (e) {
         console.log(e.message);
@@ -167,6 +169,19 @@ courseContext.postAssignment = async (req, res) => {
         console.log(e.message)
     }
 };
+
+courseContext.postAssignmentAnswer = async (req, res) => {
+    try {
+        const assignmentAnswers = await pool.query(
+            'insert into "AssignmentAnswer" (title, posteddate, courseid, "fileId", "owner", "QuestionId", issubmitted) values ($1, $2, $3, $4, $5, $6, $7)',
+            [req.assAnsTitle, req.postedDate, req.courseId, req.fileId, req.owner, req.questionId,  req.isSubmitted]
+        );
+        return (assignmentAnswers.rows);
+    }catch (e) {
+        console.log(e.message)
+    }
+};
+
 
 courseContext.postMark = async (req, res) => {
     try {

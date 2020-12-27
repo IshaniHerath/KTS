@@ -141,14 +141,15 @@ class UserProfile extends Component {
 
         await fetch('http://localhost:5000/userProfile/' + id + '/getAssignments')
             .then(res => res.json())
-            .then(respond => {
+            .then(response => {
 
-                respond.forEach(function (assignmentData) {
+                response.forEach(function (assignmentData) {
 
+                    //TODO
                     //Filter only not submitted assignments
-                    if(assignmentData.issubmitted === false){
+                    // if(assignmentData.issubmitted === false){
 
-                        // Already overdue Assignmets
+                        // Already overdue Assignmetslo
                         let dueDateObject = new Date(assignmentData.duedatetime);
                         let currentDateObj = new Date(Date.now());
 
@@ -196,7 +197,7 @@ class UserProfile extends Component {
                             ToBeDueAssignments.push(toBeDueAssignment);
                         }
                         //    TODO future (after 30 days)
-                    }
+                    // }
                 });
                 this.setState({
                     toBeDueAssignments: ToBeDueAssignments,
