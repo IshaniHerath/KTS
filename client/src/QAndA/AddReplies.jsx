@@ -7,6 +7,7 @@ class AddReplies extends Component {
         this.state = {
             items: [],
             isLoaded: false,
+            type: this.props.type,
             id: this.props.id
         }
 
@@ -30,6 +31,7 @@ class AddReplies extends Component {
                 'Content-Type': 'application/json'
             }
         });
+        window.alert("Replay successfully added. Please switch the tab to view the change");
 
                 // Replies - Search Integration  **
                 const AnswerDetail = this.replayContentEl.current.value;
