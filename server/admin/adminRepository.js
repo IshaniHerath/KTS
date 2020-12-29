@@ -16,10 +16,12 @@ adminContext.getPendingCourseDetails = async (req, res) => {
     try {
         const allCourseRequest = await pool.query(
             'select u.name as username, u.regnumber, p.name as programname, m.cid, m.uid, c.name as courseName, c.code\n' +
-            'from "UserProfile" as u inner JOIN "user_course" as m on u.id = m.uid\n' +
-            'inner join "Course" as c on c.id = m.cid\n' +
-            'inner join "Program" As p on p.id = u.programid\n' +
-            'where u.type = 1 and m.status = 1;'
+            '            from "UserProfile" as u inner \n' +
+            '            JOIN "user_course" as m on u.id = m.uid \n' +
+            '            inner join "Course" as c on c.id = m.cid \n' +
+            '            inner join "Program" As p on p.id = u.programid\n' +
+            '            where  m.status = 1\n' +
+            '             and u.type != 3; '
         );
         return (allCourseRequest.rows);
     } catch (e) {
