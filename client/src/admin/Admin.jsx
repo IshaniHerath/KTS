@@ -192,7 +192,7 @@ class Admin extends Component {
                             <table className="table table-striped">
                                 <thead>
                                 <tr>
-                                    <th>Id</th>
+                                    {/*<th>Id</th>*/}
                                     <th>User Name</th>
                                     <th>Email</th>
                                     <th>User Type</th>
@@ -204,7 +204,7 @@ class Admin extends Component {
                                 <tbody>
                                 {userList.map((item, i) => (
                                         <tr>
-                                            <td>{i}</td>
+                                            {/*<td>{i}</td>*/}
                                             <td>{item.name}</td>
                                             <td>{item.email}</td>
                                             <td>{item.typename}</td>
