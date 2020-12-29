@@ -5,7 +5,7 @@ const postData = {};
 //get all post Data
 postData.getPostData = async()=>{
     try{
-        const allusers = await pool.query('SELECT post_id, post_content, name as user_name FROM posts INNER JOIN "UserProfile" ON posts.user_id = "UserProfile".id ORDER BY post_id DESC;');
+        const allusers = await pool.query('SELECT post_id, post_content, name as user_name FROM posts INNER JOIN "UserProfile" ON posts.user_id = "UserProfile".id WHERE posts.group_id IS NULL ORDER BY post_id DESC;');
         return allusers.rows;
     }catch(err){
         console.log(err.message);

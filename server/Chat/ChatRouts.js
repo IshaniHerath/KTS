@@ -10,7 +10,7 @@ chatRouter.post('/',async(req,res) => {
     res.end();
 });
 
-chatRouter.delete('/:chat_id',async(req,res) => {
+chatRouter.delete('/del',async(req,res) => {
     await ChatRepository.deleteRoom(req.body);
     res.end();
 });

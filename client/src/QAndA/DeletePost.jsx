@@ -7,6 +7,7 @@ class DeletePost extends Component {
         this.state = {
             items: [],
             isLoaded: false,
+            type: this.props.type
             
         }
     }
@@ -25,6 +26,7 @@ class DeletePost extends Component {
                     'Content-Type': 'application/json'
                 }
             });
+            window.alert("Post successfully deleted. Please switch the tab to view the change");
         }else{
             window.alert("You dont have the access to delete this post.");
         }
