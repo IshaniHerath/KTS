@@ -333,11 +333,12 @@ class UserProfile extends Component {
                             ProgramId: this.state.selectedProgram.id,
                         };
                     } else if (this.state.selectedType.name === 'Lecturer') {
+                        // console.log("selectedDepartment.id , ", this.state.selectedDepartment.id)
                         userProfile = {
                             UserId: this.state.userId,
                             UserName: this.state.fullName,
                             ProgramId: this.state.selectedProgram.id,
-                            DepartmentId: this.state.selectedDepartment.id,
+                            // DepartmentId: this.state.selectedDepartment.id,
                             Type: this.state.typeId,
                             Email: this.state.email,
                         };
@@ -472,24 +473,24 @@ class UserProfile extends Component {
                                     </div>
                                 )}
 
-                                {(this.state.selectedType && this.state.selectedType.name === "Lecturer") && (
-                                    <div className="row personal-data-field">
-                                        <label htmlFor="" className="mandatory">Department : </label>
+                                {/*{(this.state.selectedType && this.state.selectedType.name === "Lecturer") && (*/}
+                                {/*    <div className="row personal-data-field">*/}
+                                {/*        <label htmlFor="" className="mandatory">Department : </label>*/}
 
-                                        <ComboBox
-                                            className="ml-3"
-                                            data={this.state.AllDepartments}
-                                            textField="name"
-                                            dataItemKey="id"
-                                            value={this.state.selectedDepartment}
-                                            onChange={this.handleOnChangeCombo}
-                                            name="selectedDepartment"
-                                            placeholder="Please Select"
-                                            filterable={true}
-                                            required={true}
-                                        />
-                                    </div>
-                                )}
+                                {/*        <ComboBox*/}
+                                {/*            className="ml-3"*/}
+                                {/*            data={this.state.AllDepartments}*/}
+                                {/*            textField="name"*/}
+                                {/*            dataItemKey="id"*/}
+                                {/*            value={this.state.selectedDepartment}*/}
+                                {/*            onChange={this.handleOnChangeCombo}*/}
+                                {/*            name="selectedDepartment"*/}
+                                {/*            placeholder="Please Select"*/}
+                                {/*            filterable={true}*/}
+                                {/*            required={true}*/}
+                                {/*        />*/}
+                                {/*    </div>*/}
+                                {/*)}*/}
 
                                 {(this.state.selectedType && this.state.selectedType.name === "Student") && (
                                     <div className="row personal-data-field">

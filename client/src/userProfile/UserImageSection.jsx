@@ -46,7 +46,7 @@ class UserImageSection extends Component {
                 <div className="col-md-12 ">
 
                     <img id='cover-preview' src={cover} height="200" alt="" className="main-cover-large"/>
-                    <input type="file" onChange={this.readURL_cover} className = "cover-button" />
+                    {/*<input type="file" onChange={this.readURL_cover} className = "cover-button" />*/}
 
                     <img id='preview' src={dp} height="200" alt="" className="main-dp-large"/>
                     <input type="file" onChange={this.readURL} className = "dp-button"/>

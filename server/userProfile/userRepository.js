@@ -96,8 +96,9 @@ userContext.saveUserDetails = async (user) => {
         console.log("User : ", user);
         try {
             const newUser = await pool.query(
-                'Update "UserProfile" set name = ($1), email = ($2), type = ($3), programid = ($4), departmentid = ($5) where id = ' + (user.UserId)+ ';',
-                [user.UserName, user.Email, user.Type, user.ProgramId, user.DepartmentId]
+                'Update "UserProfile" set name = ($1), email = ($2), type = ($3), programid = ($4) where id = ' + (user.UserId)+ ';',
+                // 'Update "UserProfile" set name = ($1), email = ($2), type = ($3), programid = ($4), departmentid = ($5) where id = ' + (user.UserId)+ ';',
+                [user.UserName, user.Email, user.Type, user.ProgramId]
             );
             console.log("newUser : ", newUser.rows);
             return (newUser.rows);
