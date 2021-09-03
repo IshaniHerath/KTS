@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Avatar from "@material-ui/core/Avatar";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 class Replies extends Component {
 
@@ -32,9 +34,14 @@ class Replies extends Component {
                      {items.map(item => (
                         <div className='box'>
                             <label>{item.replay_content}</label>
-                        </div>   
-                       ))}
-                </div> 
+                            <Avatar
+                                // onClick={() => this.deleteAnnouncement(item)}
+                            >
+                                <DeleteIcon style={{float: "right"}}/>
+                            </Avatar>
+                        </div>
+                     ))}
+                </div>
             );
         }
     

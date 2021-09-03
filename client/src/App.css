@@ -72,7 +72,7 @@
 
 .sub-card {
     /*height: 22px;*/
-    width: 50%;
+    width: 90%;
     border-radius: 4px;
     padding: 15px;
     margin: 10px;
@@ -348,6 +348,7 @@
 }
 
 .box {
+    text-align: left;
     padding: 2px 6px 4px 6px;
     color: #555555;
     background-color: #eeeeee;
@@ -366,6 +367,8 @@
 }
 
 .textarea{
+    width: 90%;
+    margin-left: 10px;
     font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
     font-size: 16px;
     background: rgb(225, 243, 248);
@@ -386,7 +389,9 @@
 }
 
 .postp{
-    width: 50%;
+    text-align: left;
+    font-size: x-large;
+    /*width: 50%;*/
 }
 .iconsallignment{
     text-align: left;
@@ -411,7 +416,7 @@
 
 .post-card {
     /*height: 22px;*/
-    width: 50%;
+    width: 90%;
     border-radius: 4px;
     padding: 15px;
     margin-top: 10px;
