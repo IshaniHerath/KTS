@@ -9,7 +9,7 @@
     "server": "nodemon ./server/index.js",
     "dev": "concurrently \"yarn server\" \"yarn client\"",
     "start": "nodemon index.js",
-    "build": "npm run build"
+    "build": "yarn run build"
   },
   "author": "",
   "license": "ISC",
