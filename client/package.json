@@ -27,7 +27,7 @@
     "express": "latest",
     "jquery": "^3.5.1",
     "material-ui": "^0.20.2",
-    "moment": "^2.27.0",
+    "moment": "^2.29.4",
     "pg": "^7.18.2",
     "popper.js": "^1.16.1",
     "react": "^16.5.2",
